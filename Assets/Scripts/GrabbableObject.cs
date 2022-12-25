@@ -23,7 +23,7 @@ public class GrabbableObject : MonoBehaviour
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-        firstHandPlacement = new GameObject().transform;
+        firstHandPlacement = new GameObject("Hand 1 Placement").transform;
         firstHandPlacement.parent = transform;
     }
 
