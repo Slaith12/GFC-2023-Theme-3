@@ -347,8 +347,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5bbddd1d9cc4d34dbae270eeccdcfd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followStrength: 20
-  interpTime: 0.1
 --- !u!4 &901744958
 Transform:
   m_ObjectHideFlags: 0
@@ -433,6 +431,7 @@ GameObject:
   - component: {fileID: 1338640718}
   - component: {fileID: 1338640717}
   - component: {fileID: 1338640716}
+  - component: {fileID: 1338640720}
   m_Layer: 0
   m_Name: Item
   m_TagString: grabbable
@@ -557,3 +556,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1338640720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338640715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afada58151ada484ca5d5c566a31a168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  secondHandPlacement: {fileID: 0}
+  followStrength: 150
+  interpTime: 0.1
