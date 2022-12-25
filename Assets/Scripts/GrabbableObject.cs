@@ -12,7 +12,7 @@ public class GrabbableObject : MonoBehaviour
     [SerializeField] Transform secondHandPlacement;
     [Space]
     [SerializeField] float followStrength = 20;
-    [SerializeField] float interpTime = 0.1f;
+    [SerializeField] float lookAheadTime = 0.1f;
 
     public Vector2 firstHandPosition { get { return firstHandPlacement.position; } private set { firstHandPlacement.position = value; } }
     public Vector2 secondHandPosition { get { return secondHandPlacement.position; } }
@@ -31,7 +31,7 @@ public class GrabbableObject : MonoBehaviour
     {
         if (currentHolder == null)
             return;
-        Vector2 interpolatedPos = firstHandPosition + rigidbody.velocity * interpTime;
+        Vector2 interpolatedPos = firstHandPosition + rigidbody.velocity * lookAheadTime;
         Vector2 movementVector = currentHolder.targetLocation - interpolatedPos;
         rigidbody.AddForceAtPosition(movementVector * followStrength, firstHandPosition);
     }

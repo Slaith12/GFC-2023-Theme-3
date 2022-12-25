@@ -570,4 +570,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   secondHandPlacement: {fileID: 0}
   followStrength: 150
-  interpTime: 0.1
+  lookAheadTime: 0.1
