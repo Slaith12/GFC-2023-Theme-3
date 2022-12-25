@@ -234,6 +234,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &219928073 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2353633178434348929, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
+  m_PrefabInstance: {fileID: 1096576907}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &219928077 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2353633178434348928, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
+  m_PrefabInstance: {fileID: 1096576907}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &219928078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219928073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5bbddd1d9cc4d34dbae270eeccdcfd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firstHand: {fileID: 1073228795}
+  firstHandDefaultPos: {fileID: 1322896086}
+  handTravelTime: 0.1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,50 +343,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &901744956
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 901744958}
-  - component: {fileID: 901744957}
-  m_Layer: 0
-  m_Name: Mouse Grab
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &901744957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 901744956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5bbddd1d9cc4d34dbae270eeccdcfd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &901744958
+--- !u!4 &1073228795 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2353633178042569729, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
+  m_PrefabInstance: {fileID: 1096576907}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 901744956}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9137746, y: -1.1125889, z: -1.2916281}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1096576907
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -371,7 +357,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2353633178434348928, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2353633178434348928, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -419,6 +405,68 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
+--- !u!1 &1288335298
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1288335299}
+  m_Layer: 0
+  m_Name: Hand 2 Default Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1288335299
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288335298}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.41, y: -0.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 219928077}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1322896085
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1322896086}
+  m_Layer: 0
+  m_Name: Hand 1 Default Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1322896086
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1322896085}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.43, y: -1.26, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 219928077}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1338640715
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +480,7 @@ GameObject:
   - component: {fileID: 1338640717}
   - component: {fileID: 1338640716}
   - component: {fileID: 1338640720}
+  - component: {fileID: 1338640721}
   m_Layer: 0
   m_Name: Item
   m_TagString: grabbable
@@ -549,7 +598,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1338640715}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.13, y: -0.7, z: 0}
+  m_LocalPosition: {x: -4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -571,3 +620,18 @@ MonoBehaviour:
   secondHandPlacement: {fileID: 0}
   followStrength: 150
   lookAheadTime: 0.1
+--- !u!114 &1338640721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1338640715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd98677dfb1132b4f8aaf015f25838fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnX: -20
+  spawnLocation: {x: -4, y: -1}
+  spawnVelocity: {x: 0, y: 0}

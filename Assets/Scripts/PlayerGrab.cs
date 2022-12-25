@@ -9,7 +9,13 @@ public class PlayerGrab : MonoBehaviour, IGrabber
 {
     public Vector2 targetLocation => GetCursorPos();
 
+    [SerializeField] Transform firstHand;
+    [SerializeField] Transform firstHandDefaultPos;
+    [SerializeField] float handTravelTime;
+
     private GrabbableObject currentGrabbed;
+    private bool grabbingObject;
+    private float interpTime;
 
     // Update is called once per frame
     void Update()
@@ -21,6 +27,30 @@ public class PlayerGrab : MonoBehaviour, IGrabber
         if(Input.GetMouseButtonUp(0))
         {
             ReleaseCurrentObject();
+        }
+        if (grabbingObject)
+        {
+            if (interpTime > 0f)
+            {
+                interpTime -= Time.deltaTime;
+                firstHand.position = Vector2.Lerp(currentGrabbed.firstHandPosition, firstHandDefaultPos.position, interpTime / handTravelTime);
+            }
+            else
+            {
+                firstHand.position = currentGrabbed.firstHandPosition;
+            }
+        }
+        else
+        {
+            if(interpTime > 0f)
+            {
+                interpTime -= Time.deltaTime;
+                firstHand.position = Vector2.Lerp(firstHandDefaultPos.position, currentGrabbed.firstHandPosition, interpTime / handTravelTime);
+            }
+            else
+            {
+                firstHand.position = firstHandDefaultPos.position;
+            }
         }
     }
 
@@ -34,16 +64,20 @@ public class PlayerGrab : MonoBehaviour, IGrabber
             if (grabbable == null)
                 continue;
             grabbable.Grab(this, cursorPos);
+            grabbingObject = true;
             currentGrabbed = grabbable;
+            interpTime = handTravelTime;
             return;
         }
     }
 
     private void ReleaseCurrentObject()
     {
-        if (currentGrabbed == null)
+        if (!grabbingObject)
             return;
         currentGrabbed.Release();
+        grabbingObject = false;
+        interpTime = handTravelTime;
         return;
     }
 
