@@ -256,6 +256,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5bbddd1d9cc4d34dbae270eeccdcfd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_followStrength: 150
+  m_lookAheadTime: 0.1
   firstHand: {fileID: 1073228795}
   firstHandDefaultPos: {fileID: 1322896086}
   handTravelTime: 0.1
@@ -618,8 +620,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   secondHandPlacement: {fileID: 0}
-  followStrength: 150
-  lookAheadTime: 0.1
 --- !u!114 &1338640721
 MonoBehaviour:
   m_ObjectHideFlags: 0
