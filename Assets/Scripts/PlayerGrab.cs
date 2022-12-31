@@ -65,7 +65,7 @@ public class PlayerGrab : MonoBehaviour, IGrabber
         Collider2D[] hits = Physics2D.OverlapPointAll(cursorPos);
         foreach (Collider2D hit in hits)
         {
-            GrabbableObject grabbable = hit.GetComponent<GrabbableObject>();
+            GrabbableObject grabbable = hit.GetComponentInParent<GrabbableObject>();
             if (grabbable == null)
                 continue;
             grabbable.Grab(this, cursorPos);
