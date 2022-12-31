@@ -16,21 +16,42 @@ public class GrabbableObject : MonoBehaviour
     public IGrabber currentHolder { get; private set; } //null if not being held
 
     private new Rigidbody2D rigidbody;
+    //script will need to do some COM trickery to stablize the object when held so the following fields are helpful in making sure the object still behaves properly
+    private Vector2 standardCOM; //the proper COM of the object
+    private float standardInertia; //the inertia of the object when rotated around its proper COM
 
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        rigidbody.gravityScale = 0; //gravity will be simulated in script;
         firstHandPlacement = new GameObject("Hand 1 Placement").transform;
         firstHandPlacement.parent = transform;
+        standardCOM = rigidbody.centerOfMass;
+        standardInertia = rigidbody.inertia;
     }
 
     private void FixedUpdate()
     {
+        SimulateGravity();
         if (currentHolder == null)
             return;
         Vector2 interpolatedPos = firstHandPosition + rigidbody.velocity * currentHolder.lookAheadTime;
         Vector2 movementVector = currentHolder.targetLocation - interpolatedPos;
         rigidbody.AddForceAtPosition(movementVector * currentHolder.followStrength, firstHandPosition);
+    }
+
+    private void SimulateGravity()
+    {
+        rigidbody.AddForceAtPosition(Physics2D.gravity*rigidbody.mass, transform.localToWorldMatrix.MultiplyPoint(standardCOM)); //the matrix scares me and i'm not 100% sure it actually does what I think it's doing
+    }
+
+    private void ConstrainRotation()
+    {
+        float eulerAngle = transform.eulerAngles.z;
+        while (eulerAngle > 180)
+            eulerAngle -= 360;
+        while (eulerAngle < -180)
+            eulerAngle += 360;
     }
 
     public bool Grab(IGrabber grabber, Vector2 grabPosition)
@@ -39,11 +60,30 @@ public class GrabbableObject : MonoBehaviour
             return false;
         currentHolder = grabber;
         firstHandPosition = grabPosition;
+        AdjustRotationCenter();
         return true;
     }
 
     public void Release()
     {
         currentHolder = null;
+        AdjustRotationCenter();
+    }
+
+    private void AdjustRotationCenter()
+    {
+        if (currentHolder == null)
+        {
+            rigidbody.centerOfMass = standardCOM;
+            rigidbody.inertia = standardInertia;
+        }
+        else
+        {
+            //object will rotate around the first hand, and unity always rotates objects around the center of mass
+            Vector2 newCenterOfRotation = firstHandPlacement.localPosition;
+            rigidbody.centerOfMass = newCenterOfRotation;
+            float distanceSquared = (newCenterOfRotation - standardCOM).sqrMagnitude;
+            rigidbody.inertia = standardInertia + rigidbody.mass * distanceSquared; //parallel axis theorem wow
+        }
     }
 }
