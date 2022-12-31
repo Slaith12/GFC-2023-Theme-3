@@ -227,8 +227,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 142495990}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -5, z: 0}
-  m_LocalScale: {x: 20, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -10, z: 0}
+  m_LocalScale: {x: 200, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5bbddd1d9cc4d34dbae270eeccdcfd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_followStrength: 150
+  m_followStrength: 600
   m_lookAheadTime: 0.1
   firstHand: {fileID: 811374917}
   firstHandDefaultPos: {fileID: 1322896086}
@@ -314,7 +314,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -371,7 +371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5774149070118783808, guid: 0c27bf68c22322a4abe45fc26b38117b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.34
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5774149070118783808, guid: 0c27bf68c22322a4abe45fc26b38117b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -547,11 +547,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8144264930520557739, guid: 55c823c5dc01e214091781f91a024713, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.19
+      value: -9.8
       objectReference: {fileID: 0}
     - target: {fileID: 8144264930520557739, guid: 55c823c5dc01e214091781f91a024713, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.83
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8144264930520557739, guid: 55c823c5dc01e214091781f91a024713, type: 3}
       propertyPath: m_LocalPosition.z
