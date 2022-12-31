@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8144264930520557739}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &5852109613298315413
 BoxCollider2D:
@@ -40,7 +40,7 @@ BoxCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1352940811116678685}
   m_Enabled: 1
-  m_Density: 6.6454544
+  m_Density: 2
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
@@ -87,7 +87,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8144264930520557739}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5202788594117602984
 GameObject:
@@ -119,7 +119,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8144264930520557739}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &8995467869894331729
 BoxCollider2D:
@@ -129,7 +129,7 @@ BoxCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5202788594117602984}
   m_Enabled: 1
-  m_Density: 8.972727
+  m_Density: 2.7
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
@@ -220,7 +220,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3321957891483966033, guid: 49564bf50b95a45429f326fa4499d2b0, type: 3}
       propertyPath: m_Mass
-      value: 50.85945
+      value: 15.305
       objectReference: {fileID: 0}
     - target: {fileID: 5225058065120200855, guid: 49564bf50b95a45429f326fa4499d2b0, type: 3}
       propertyPath: m_Name
@@ -228,7 +228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7446233910584370479, guid: 49564bf50b95a45429f326fa4499d2b0, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7446233910584370479, guid: 49564bf50b95a45429f326fa4499d2b0, type: 3}
       propertyPath: m_LocalPosition.y
