@@ -10,9 +10,20 @@ public class GrabbableObject : MonoBehaviour
     private Transform firstHandPlacement; //instantiated by this script, moves to where player grabs object.
     [Tooltip("Where the player would place their second hand on the object. Leave blank if it's a 1 handed object.")]
     [SerializeField] Transform secondHandPlacement;
+    [SerializeField] float targetRotation;
 
-    public Vector2 firstHandPosition { get { return firstHandPlacement.position; } private set { firstHandPlacement.position = value; } }
-    public Vector2 secondHandPosition { get { return secondHandPlacement.position; } }
+    public Vector2 firstHandPosition { get => firstHandPlacement.position;  private set => firstHandPlacement.position = value; }
+    public Vector2 secondHandPosition
+    {
+        get
+        {
+            if (isTwoHanded)
+                return secondHandPlacement.position;
+            Debug.LogError("Tried getting second hand position of 1-handed object. Be sure to check the isTwoHanded property before checking secondHandPosition");
+            return Vector2.zero;
+        }
+    }
+    public bool isTwoHanded { get => secondHandPlacement != null; }
     public IGrabber currentHolder { get; private set; } //null if not being held
 
     private new Rigidbody2D rigidbody;
@@ -38,6 +49,7 @@ public class GrabbableObject : MonoBehaviour
         Vector2 interpolatedPos = firstHandPosition + rigidbody.velocity * currentHolder.lookAheadTime;
         Vector2 movementVector = currentHolder.targetLocation - interpolatedPos;
         rigidbody.AddForceAtPosition(movementVector * currentHolder.followStrength, firstHandPosition);
+        float interpolatedRotation = transform.eulerAngles.z + rigidbody.angularVelocity * currentHolder.lookAheadTime;
     }
 
     private void SimulateGravity()

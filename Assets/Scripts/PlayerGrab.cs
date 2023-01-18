@@ -14,8 +14,10 @@ public class PlayerGrab : MonoBehaviour, IGrabber
     [SerializeField] float m_lookAheadTime = 0.1f;
     public float lookAheadTime { get => m_lookAheadTime; }
 
-    [SerializeField] Transform firstHand;
+    [SerializeField] Transform firstHand; //i am considering making the hand objects un-parented in Awake to make sure they don't move weirdly with the player
     [SerializeField] Transform firstHandDefaultPos;
+    [SerializeField] Transform secondHand;
+    [SerializeField] Transform secondHandDefaultPos;
     [SerializeField] float handTravelTime;
 
     private GrabbableObject currentGrabbed;
@@ -33,30 +35,7 @@ public class PlayerGrab : MonoBehaviour, IGrabber
         {
             ReleaseCurrentObject();
         }
-        if (grabbingObject)
-        {
-            if (interpTime > 0f)
-            {
-                interpTime -= Time.deltaTime;
-                firstHand.position = Vector2.Lerp(currentGrabbed.firstHandPosition, firstHandDefaultPos.position, interpTime / handTravelTime);
-            }
-            else
-            {
-                firstHand.position = currentGrabbed.firstHandPosition;
-            }
-        }
-        else
-        {
-            if(interpTime > 0f)
-            {
-                interpTime -= Time.deltaTime;
-                firstHand.position = Vector2.Lerp(firstHandDefaultPos.position, currentGrabbed.firstHandPosition, interpTime / handTravelTime);
-            }
-            else
-            {
-                firstHand.position = firstHandDefaultPos.position;
-            }
-        }
+        MoveHands();
     }
 
     private void GrabSelectedObject()
@@ -85,6 +64,43 @@ public class PlayerGrab : MonoBehaviour, IGrabber
         interpTime = handTravelTime;
         return;
     }
+
+    private void MoveHands()
+    {
+        if (grabbingObject)
+        {
+            if (interpTime > 0f)
+            {
+                interpTime -= Time.deltaTime;
+                firstHand.position = Vector2.Lerp(currentGrabbed.firstHandPosition, firstHandDefaultPos.position, interpTime / handTravelTime);
+                if(currentGrabbed.isTwoHanded)
+                    secondHand.position = Vector2.Lerp(currentGrabbed.secondHandPosition, secondHandDefaultPos.position, interpTime / handTravelTime);
+            }
+            else
+            {
+                firstHand.position = currentGrabbed.firstHandPosition;
+                if (currentGrabbed.isTwoHanded)
+                    secondHand.position = currentGrabbed.secondHandPosition;
+            }
+        }
+        else
+        {
+            if (interpTime > 0f)
+            {
+                interpTime -= Time.deltaTime;
+                firstHand.position = Vector2.Lerp(firstHandDefaultPos.position, currentGrabbed.firstHandPosition, interpTime / handTravelTime);
+                if(currentGrabbed.isTwoHanded)
+                {
+                    secondHand.position = Vector2.Lerp(secondHandDefaultPos.position, currentGrabbed.secondHandPosition, interpTime / handTravelTime);
+                }
+            }
+            else
+            {
+                firstHand.position = firstHandDefaultPos.position;
+                secondHand.position = secondHandDefaultPos.position;
+            }
+        }
+    }    
 
     private Vector2 GetCursorPos()
     {
