@@ -7,8 +7,11 @@ public class Enemy : DamageDealer
     // Start is called before the first frame update
     [SerializeField] Collider2D col;
     [SerializeField] Rigidbody2D rb;
+    [SerializeField] float moveSpeed;
+    [SerializeField] float offset;
+    Vector3 targetPos;
 
-    [SerializeField] Player player;
+    public Player player;
 
     void Start()
     {
@@ -18,8 +21,12 @@ public class Enemy : DamageDealer
     // Update is called once per frame
     void Update()
     {
-        rb.MovePosition(player.transform.position);
+
+
+        transform.position += player.transform.position * moveSpeed * Time.deltaTime;
     }
+
+
 
 
 
