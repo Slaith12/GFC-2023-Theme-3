@@ -329,6 +329,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Damage Potion
       objectReference: {fileID: 0}
+    - target: {fileID: 4368452254706863695, guid: 0c27bf68c22322a4abe45fc26b38117b, type: 3}
+      propertyPath: rotationOffsetFactor
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5774149070118783808, guid: 0c27bf68c22322a4abe45fc26b38117b, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -382,6 +386,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5382202639551607324, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
+      propertyPath: m_followStrength
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 5382202639551607324, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
       propertyPath: m_torqueStrength
       value: 1
@@ -451,13 +459,25 @@ PrefabInstance:
       propertyPath: targetRotation
       value: -15
       objectReference: {fileID: 0}
+    - target: {fileID: 2141466155829882276, guid: 55c823c5dc01e214091781f91a024713, type: 3}
+      propertyPath: rotationOffsetFactor
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 3356729875171201854, guid: 55c823c5dc01e214091781f91a024713, type: 3}
       propertyPath: m_Name
       value: Scrap Hammer
       objectReference: {fileID: 0}
+    - target: {fileID: 7660834326211281845, guid: 55c823c5dc01e214091781f91a024713, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8144264930520557739, guid: 55c823c5dc01e214091781f91a024713, type: 3}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144264930520557739, guid: 55c823c5dc01e214091781f91a024713, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8144264930520557739, guid: 55c823c5dc01e214091781f91a024713, type: 3}
       propertyPath: m_LocalPosition.x

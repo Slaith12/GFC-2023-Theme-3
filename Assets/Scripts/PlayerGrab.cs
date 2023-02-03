@@ -11,6 +11,7 @@ public class PlayerGrab : MonoBehaviour, IGrabber
     [field: Header("Grab Attributes")]
     [SerializeField] float m_followStrength = 150; //these m variables are here so that they are capitalized in the editor
     public float followStrength { get => m_followStrength; }
+    public float rotationOffset { get => GetRotationOffset(); }
     [SerializeField] float m_torqueStrength = 10;
     public float torqueStrength { get => m_torqueStrength; }
     [SerializeField] float m_lookAheadTime = 0.1f;
@@ -102,7 +103,16 @@ public class PlayerGrab : MonoBehaviour, IGrabber
                 secondHand.position = secondHandDefaultPos.position;
             }
         }
-    }    
+    }
+
+    private float GetRotationOffset()
+    {
+        Vector2 posOffset = targetLocation - (Vector2)firstHandDefaultPos.position;
+        Vector2 horizontal = Vector2.right;
+        if (posOffset.x < 0)
+            horizontal = Vector2.left;
+        return Vector2.SignedAngle(horizontal, posOffset);
+    }
 
     private Vector2 GetCursorPos()
     {

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: Fix rotation interpolation to work properly near -180/180 angles
 //TODO: Change Grab and Release methods to work with networking (make sure all clients know when an object is grabbed/released, preferably also knowing who did it)
 //TODO: Add input validation to Grab and Release methods to make sure the objects calling those methods are actually capable of grabbing/releasing object [this may be better done in the player controller]
 [RequireComponent(typeof(Rigidbody2D))]
@@ -12,6 +13,8 @@ public class GrabbableObject : MonoBehaviour
     [SerializeField] Transform secondHandPlacement;
     [Range(-180, 180)]
     [SerializeField] float targetRotation;
+    [Tooltip("Do not put above 2 for now, causes rotation to bug at high angles.")]
+    [SerializeField] float rotationOffsetFactor;
     [SerializeField] float airResistance = 1;
 
     public Vector2 firstHandPosition { get => firstHandPlacement.position;  private set => firstHandPlacement.position = value; }
@@ -53,13 +56,13 @@ public class GrabbableObject : MonoBehaviour
         Vector2 movementVector = currentHolder.targetLocation - interpolatedPos;
         rigidbody.AddForce(movementVector * currentHolder.followStrength);
         Debug.Log($"angle: {ConstrainAngle(transform.eulerAngles.z)}");
-        float interpolatedRotation = ConstrainAngle(transform.eulerAngles.z) + rigidbody.angularVelocity * Mathf.Rad2Deg * currentHolder.lookAheadTime;
+        float interpolatedRotation = ConstrainAngle(transform.eulerAngles.z) + rigidbody.angularVelocity * currentHolder.lookAheadTime;
         Debug.Log($"interpolated angle: {interpolatedRotation}");
-        float rotationTorque = targetRotation - interpolatedRotation;
+        float rotationTorque = targetRotation + (currentHolder.rotationOffset * rotationOffsetFactor) - interpolatedRotation;
         Debug.Log($"torque: {rotationTorque}");
         //Debug.Log(rotationTorque);
-        //rigidbody.AddTorque(rotationTorque * currentHolder.torqueStrength * rigidbody.inertia);
-        rigidbody.angularVelocity = rotationTorque * Mathf.Deg2Rad;
+        rigidbody.AddTorque(rotationTorque * currentHolder.torqueStrength * rigidbody.inertia);
+        //rigidbody.angularVelocity = rotationTorque;
         Debug.Log($"angular velocity: {rigidbody.angularVelocity}");
     }
 
