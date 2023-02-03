@@ -7,5 +7,6 @@ public interface IGrabber
 {
     public Vector2 targetLocation { get; }
     public float followStrength { get; }
+    public float torqueStrength { get; }
     public float lookAheadTime { get; }
 }

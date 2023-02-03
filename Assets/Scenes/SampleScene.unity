@@ -382,6 +382,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5382202639551607324, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
+      propertyPath: m_torqueStrength
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6509648461270836674, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
       propertyPath: m_Name
       value: Red Astronaut
@@ -439,6 +443,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2141466155829882276, guid: 55c823c5dc01e214091781f91a024713, type: 3}
+      propertyPath: airResistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2141466155829882276, guid: 55c823c5dc01e214091781f91a024713, type: 3}
+      propertyPath: targetRotation
+      value: -15
+      objectReference: {fileID: 0}
     - target: {fileID: 3356729875171201854, guid: 55c823c5dc01e214091781f91a024713, type: 3}
       propertyPath: m_Name
       value: Scrap Hammer
@@ -457,6 +469,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8144264930520557739, guid: 55c823c5dc01e214091781f91a024713, type: 3}
       propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144264930520557739, guid: 55c823c5dc01e214091781f91a024713, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144264930520557739, guid: 55c823c5dc01e214091781f91a024713, type: 3}
+      propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8144264930520557739, guid: 55c823c5dc01e214091781f91a024713, type: 3}

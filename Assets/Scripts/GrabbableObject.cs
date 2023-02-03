@@ -10,7 +10,9 @@ public class GrabbableObject : MonoBehaviour
     private Transform firstHandPlacement; //instantiated by this script, moves to where player grabs object.
     [Tooltip("Where the player would place their second hand on the object. Leave blank if it's a 1 handed object.")]
     [SerializeField] Transform secondHandPlacement;
+    [Range(-180, 180)]
     [SerializeField] float targetRotation;
+    [SerializeField] float airResistance = 1;
 
     public Vector2 firstHandPosition { get => firstHandPlacement.position;  private set => firstHandPlacement.position = value; }
     public Vector2 secondHandPosition
@@ -44,26 +46,45 @@ public class GrabbableObject : MonoBehaviour
     private void FixedUpdate()
     {
         SimulateGravity();
+        SimulateAirResistance();
         if (currentHolder == null)
             return;
         Vector2 interpolatedPos = firstHandPosition + rigidbody.velocity * currentHolder.lookAheadTime;
         Vector2 movementVector = currentHolder.targetLocation - interpolatedPos;
-        rigidbody.AddForceAtPosition(movementVector * currentHolder.followStrength, firstHandPosition);
-        float interpolatedRotation = transform.eulerAngles.z + rigidbody.angularVelocity * currentHolder.lookAheadTime;
+        rigidbody.AddForce(movementVector * currentHolder.followStrength);
+        Debug.Log($"angle: {ConstrainAngle(transform.eulerAngles.z)}");
+        float interpolatedRotation = ConstrainAngle(transform.eulerAngles.z) + rigidbody.angularVelocity * Mathf.Rad2Deg * currentHolder.lookAheadTime;
+        Debug.Log($"interpolated angle: {interpolatedRotation}");
+        float rotationTorque = targetRotation - interpolatedRotation;
+        Debug.Log($"torque: {rotationTorque}");
+        //Debug.Log(rotationTorque);
+        //rigidbody.AddTorque(rotationTorque * currentHolder.torqueStrength * rigidbody.inertia);
+        rigidbody.angularVelocity = rotationTorque * Mathf.Deg2Rad;
+        Debug.Log($"angular velocity: {rigidbody.angularVelocity}");
     }
 
     private void SimulateGravity()
     {
-        rigidbody.AddForceAtPosition(Physics2D.gravity*rigidbody.mass, transform.localToWorldMatrix.MultiplyPoint(standardCOM)); //the matrix scares me and i'm not 100% sure it actually does what I think it's doing
+        ApplyForceAtCOM(Physics2D.gravity*rigidbody.mass);
     }
 
-    private void ConstrainRotation()
+    private void SimulateAirResistance()
     {
-        float eulerAngle = transform.eulerAngles.z;
-        while (eulerAngle > 180)
-            eulerAngle -= 360;
-        while (eulerAngle < -180)
-            eulerAngle += 360;
+        ApplyForceAtCOM(-rigidbody.velocity * airResistance);
+    }
+
+    private void ApplyForceAtCOM(Vector2 force)
+    {
+        rigidbody.AddForceAtPosition(force, transform.localToWorldMatrix.MultiplyPoint(standardCOM));
+    }
+
+    private float ConstrainAngle(float angle)
+    {
+        while (angle > 180)
+            angle -= 360;
+        while (angle < -180)
+            angle += 360;
+        return angle;
     }
 
     public bool Grab(IGrabber grabber, Vector2 grabPosition)

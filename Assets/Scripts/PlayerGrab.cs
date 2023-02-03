@@ -11,6 +11,8 @@ public class PlayerGrab : MonoBehaviour, IGrabber
     [field: Header("Grab Attributes")]
     [SerializeField] float m_followStrength = 150; //these m variables are here so that they are capitalized in the editor
     public float followStrength { get => m_followStrength; }
+    [SerializeField] float m_torqueStrength = 10;
+    public float torqueStrength { get => m_torqueStrength; }
     [SerializeField] float m_lookAheadTime = 0.1f;
     public float lookAheadTime { get => m_lookAheadTime; }
 
