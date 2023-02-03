@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: Move input handling to a dedicated PlayerController script to simplify organization (it's also easier to do all input handling in a single script when using the new input system)
 //TODO: Limit cursor position to a certain range around the player
 //TODO: Add controller support for GetCursorPos(). One implementation with a persistent cursor moved around normally by the joystick, and a second implementation where the cursor position = the position of the joystick (this allows fast mouse-like movement without having absurdly high sensitivity)
 public class PlayerGrab : MonoBehaviour, IGrabber
@@ -26,6 +27,7 @@ public class PlayerGrab : MonoBehaviour, IGrabber
     private GrabbableObject currentGrabbed;
     private bool grabbingObject;
     private float interpTime;
+    private bool facingRight;
 
     // Update is called once per frame
     void Update()
@@ -39,6 +41,7 @@ public class PlayerGrab : MonoBehaviour, IGrabber
             ReleaseCurrentObject();
         }
         MoveHands();
+        UpdateFacing();
     }
 
     private void GrabSelectedObject()
@@ -53,6 +56,8 @@ public class PlayerGrab : MonoBehaviour, IGrabber
             grabbable.Grab(this, cursorPos);
             grabbingObject = true;
             currentGrabbed = grabbable;
+            if (currentGrabbed.facingRight != this.facingRight)
+                currentGrabbed.Flip();
             interpTime = handTravelTime;
             return;
         }
@@ -102,6 +107,36 @@ public class PlayerGrab : MonoBehaviour, IGrabber
                 firstHand.position = firstHandDefaultPos.position;
                 secondHand.position = secondHandDefaultPos.position;
             }
+        }
+    }
+
+    private void UpdateFacing()
+    {
+        //note: all sprites face left by default
+        if(GetCursorPos().x > transform.position.x)
+        {
+            if (facingRight)
+                return;
+            facingRight = true;
+            Flip();
+        }
+        else
+        {
+            if (!facingRight)
+                return;
+            facingRight = false;
+            Flip();
+        }
+    }
+
+    private void Flip()
+    {
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
+        if (grabbingObject)
+        {
+            currentGrabbed.Flip();
         }
     }
 

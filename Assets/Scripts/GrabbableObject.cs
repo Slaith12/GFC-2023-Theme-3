@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //TODO: Fix rotation interpolation to work properly near -180/180 angles
+//TODO: Move all object handling code to the grabber script to reduce complexity and allow future implementation of different grabber behaviors
 //TODO: Change Grab and Release methods to work with networking (make sure all clients know when an object is grabbed/released, preferably also knowing who did it)
 //TODO: Add input validation to Grab and Release methods to make sure the objects calling those methods are actually capable of grabbing/releasing object [this may be better done in the player controller]
 [RequireComponent(typeof(Rigidbody2D))]
 public class GrabbableObject : MonoBehaviour
 {
+    enum FlipBehavior { FlipX, FlipY, NoFlip }
+
     private Transform firstHandPlacement; //instantiated by this script, moves to where player grabs object.
     [Tooltip("Where the player would place their second hand on the object. Leave blank if it's a 1 handed object.")]
     [SerializeField] Transform secondHandPlacement;
@@ -16,6 +19,7 @@ public class GrabbableObject : MonoBehaviour
     [Tooltip("Do not put above 2 for now, causes rotation to bug at high angles.")]
     [SerializeField] float rotationOffsetFactor;
     [SerializeField] float airResistance = 1;
+    [SerializeField] FlipBehavior flipBehavior;
 
     public Vector2 firstHandPosition { get => firstHandPlacement.position;  private set => firstHandPlacement.position = value; }
     public Vector2 secondHandPosition
@@ -30,6 +34,8 @@ public class GrabbableObject : MonoBehaviour
     }
     public bool isTwoHanded { get => secondHandPlacement != null; }
     public IGrabber currentHolder { get; private set; } //null if not being held
+
+    public bool facingRight { get; private set; }
 
     private new Rigidbody2D rigidbody;
     //script will need to do some COM trickery to stablize the object when held so the following fields are helpful in making sure the object still behaves properly
@@ -104,6 +110,34 @@ public class GrabbableObject : MonoBehaviour
     {
         currentHolder = null;
         AdjustRotationCenter();
+    }
+
+    public void Flip()
+    {
+        facingRight = !facingRight;
+        switch (flipBehavior)
+        {
+            case FlipBehavior.FlipX:
+                {
+                    Vector3 scale = transform.localScale;
+                    scale.x *= -1;
+                    transform.localScale = scale;
+                    transform.Rotate(0, 0, 180);
+                    break;
+                }
+            case FlipBehavior.FlipY:
+                {
+                    Vector3 scale = transform.localScale;
+                    scale.y *= -1;
+                    transform.localScale = scale;
+                    transform.Rotate(0, 0, 180);
+                    break;
+                }
+            case FlipBehavior.NoFlip:
+                {
+                    break;
+                }
+        }
     }
 
     private void AdjustRotationCenter()

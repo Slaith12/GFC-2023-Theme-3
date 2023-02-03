@@ -155,9 +155,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -311128021849328115, guid: 49564bf50b95a45429f326fa4499d2b0, type: 3}
+      propertyPath: airResistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -311128021849328115, guid: 49564bf50b95a45429f326fa4499d2b0, type: 3}
+      propertyPath: targetRotation
+      value: -15
+      objectReference: {fileID: 0}
+    - target: {fileID: -311128021849328115, guid: 49564bf50b95a45429f326fa4499d2b0, type: 3}
       propertyPath: secondHandPlacement
       value: 
       objectReference: {fileID: 403897680906800417}
+    - target: {fileID: -311128021849328115, guid: 49564bf50b95a45429f326fa4499d2b0, type: 3}
+      propertyPath: rotationOffsetFactor
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 884502756536326172, guid: 49564bf50b95a45429f326fa4499d2b0, type: 3}
       propertyPath: m_Size.x
       value: 5.5
