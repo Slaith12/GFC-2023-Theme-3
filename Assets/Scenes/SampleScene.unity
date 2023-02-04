@@ -386,14 +386,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Damage Potion
       objectReference: {fileID: 0}
-    - target: {fileID: 4368452254706863695, guid: 0c27bf68c22322a4abe45fc26b38117b, type: 3}
-      propertyPath: flipBehavior
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4368452254706863695, guid: 0c27bf68c22322a4abe45fc26b38117b, type: 3}
-      propertyPath: rotationOffsetFactor
-      value: 1.5
-      objectReference: {fileID: 0}
     - target: {fileID: 5774149070118783808, guid: 0c27bf68c22322a4abe45fc26b38117b, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -447,14 +439,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5382202639551607324, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
-      propertyPath: m_followStrength
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 5382202639551607324, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
-      propertyPath: m_torqueStrength
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6509648461270836674, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
       propertyPath: m_Name
       value: Red Astronaut

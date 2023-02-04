@@ -71,6 +71,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: a5d78a1613aed9b4aab7e91fde6c3902, type: 3}
+    - target: {fileID: 3563862017286690267, guid: bfe291db8439f564aa85387269914f31, type: 3}
+      propertyPath: m_followStrength
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3563862017286690267, guid: bfe291db8439f564aa85387269914f31, type: 3}
+      propertyPath: m_torqueStrength
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4040681690867447055, guid: bfe291db8439f564aa85387269914f31, type: 3}
       propertyPath: m_Sprite
       value: 
