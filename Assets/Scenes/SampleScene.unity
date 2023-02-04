@@ -325,10 +325,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2141466155829882276, guid: 55c823c5dc01e214091781f91a024713, type: 3}
-      propertyPath: rotationOffsetFactor
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3356729875171201854, guid: 55c823c5dc01e214091781f91a024713, type: 3}
       propertyPath: m_Name
       value: Scrap Hammer
