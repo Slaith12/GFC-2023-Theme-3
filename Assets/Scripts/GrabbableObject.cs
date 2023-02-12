@@ -58,18 +58,8 @@ public class GrabbableObject : MonoBehaviour
         SimulateAirResistance();
         if (currentHolder == null)
             return;
-        Vector2 interpolatedPos = firstHandPosition + rigidbody.velocity * currentHolder.lookAheadTime;
-        Vector2 movementVector = currentHolder.targetLocation - interpolatedPos;
-        rigidbody.AddForce(movementVector * currentHolder.followStrength);
-        Debug.Log($"angle: {ConstrainAngle(transform.eulerAngles.z)}");
-        float interpolatedRotation = ConstrainAngle(transform.eulerAngles.z) + rigidbody.angularVelocity * currentHolder.lookAheadTime;
-        Debug.Log($"interpolated angle: {interpolatedRotation}");
-        float rotationTorque = targetRotation + (currentHolder.rotationOffset * rotationOffsetFactor) - interpolatedRotation;
-        Debug.Log($"torque: {rotationTorque}");
-        //Debug.Log(rotationTorque);
-        rigidbody.AddTorque(rotationTorque * currentHolder.torqueStrength * rigidbody.inertia);
-        //rigidbody.angularVelocity = rotationTorque;
-        Debug.Log($"angular velocity: {rigidbody.angularVelocity}");
+        MoveTowardsCursor();
+        RotateTowardsTarget();
     }
 
     private void SimulateGravity()
@@ -80,6 +70,21 @@ public class GrabbableObject : MonoBehaviour
     private void SimulateAirResistance()
     {
         ApplyForceAtCOM(-rigidbody.velocity * airResistance);
+    }
+
+    private void MoveTowardsCursor()
+    {
+        Vector2 interpolatedPos = firstHandPosition + rigidbody.velocity * currentHolder.lookAheadTime;
+        Vector2 movementVector = currentHolder.targetLocation - interpolatedPos;
+        rigidbody.AddForce(movementVector * currentHolder.followStrength);
+    }
+
+    private void RotateTowardsTarget()
+    {
+        float interpolatedRotation = ConstrainAngle(transform.eulerAngles.z) + rigidbody.angularVelocity * currentHolder.lookAheadTime;
+        float currentTarget = targetRotation + (currentHolder.rotationOffset * rotationOffsetFactor);
+        float rotationTorque = currentTarget - interpolatedRotation * currentHolder.torqueStrength;
+        rigidbody.AddTorque(rotationTorque * rigidbody.inertia);
     }
 
     private void ApplyForceAtCOM(Vector2 force)
