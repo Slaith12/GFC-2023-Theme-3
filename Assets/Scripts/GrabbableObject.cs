@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//TODO: Fix rotation interpolation to work properly near -180/180 angles
 //TODO: Move all object handling code to the grabber script to reduce complexity and allow future implementation of different grabber behaviors
 //TODO: Change Grab and Release methods to work with networking (make sure all clients know when an object is grabbed/released, preferably also knowing who did it)
 //TODO: Add input validation to Grab and Release methods to make sure the objects calling those methods are actually capable of grabbing/releasing object [this may be better done in the player controller]
@@ -16,7 +15,6 @@ public class GrabbableObject : MonoBehaviour
     [SerializeField] Transform secondHandPlacement;
     [Range(-180, 180)]
     [SerializeField] float targetRotation;
-    [Tooltip("Do not put above 2 for now, causes rotation to bug at high angles.")]
     [SerializeField] float rotationOffsetFactor;
     [SerializeField] float airResistance = 1;
     [SerializeField] FlipBehavior flipBehavior;
@@ -82,7 +80,15 @@ public class GrabbableObject : MonoBehaviour
     private void RotateTowardsTarget()
     {
         float interpolatedRotation = ConstrainAngle(transform.eulerAngles.z) + rigidbody.angularVelocity * currentHolder.lookAheadTime;
-        float currentTarget = targetRotation + (currentHolder.rotationOffset * rotationOffsetFactor);
+        float currentTarget = ConstrainAngle(targetRotation + (currentHolder.rotationOffset * rotationOffsetFactor));
+        if(interpolatedRotation - currentTarget > 180) //this usually happens when the rotations end up on different ends of the constraints (-180 and +180)
+        {
+            currentTarget += 360;
+        }
+        else if(currentTarget - interpolatedRotation > 180)
+        {
+            currentTarget -= 360;
+        }
         float rotationTorque = currentTarget - interpolatedRotation * currentHolder.torqueStrength;
         rigidbody.AddTorque(rotationTorque * rigidbody.inertia);
     }
