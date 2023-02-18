@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: Have player hands rotate based on the held item rather than the player's body.
+//TODO: Completely detach hands from player while holding item (would fix visual bug when turning around with item, and allows for more control with code)
 //TODO: Move input handling to a dedicated PlayerController script to simplify organization (it's also easier to do all input handling in a single script when using the new input system)
 //TODO: Limit cursor position to a certain range around the player
 //TODO: Add controller support for GetCursorPos(). One implementation with a persistent cursor moved around normally by the joystick, and a second implementation where the cursor position = the position of the joystick (this allows fast mouse-like movement without having absurdly high sensitivity)
