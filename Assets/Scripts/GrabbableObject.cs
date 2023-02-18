@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//TODO: Fix rotation interpolation to work properly near -180/180 angles
+//TODO: Review grab/throw physics to see if they can be made more fun (idea: make acceleration faster when item is at lower speed to make controls snappier)
 //TODO: Move all object handling code to the grabber script to reduce complexity and allow future implementation of different grabber behaviors
 //TODO: Change Grab and Release methods to work with networking (make sure all clients know when an object is grabbed/released, preferably also knowing who did it)
 //TODO: Add input validation to Grab and Release methods to make sure the objects calling those methods are actually capable of grabbing/releasing object [this may be better done in the player controller]
@@ -16,7 +16,6 @@ public class GrabbableObject : MonoBehaviour
     [SerializeField] Transform secondHandPlacement;
     [Range(-180, 180)]
     [SerializeField] float targetRotation;
-    [Tooltip("Do not put above 2 for now, causes rotation to bug at high angles.")]
     [SerializeField] float rotationOffsetFactor;
     [SerializeField] float airResistance = 1;
     [SerializeField] FlipBehavior flipBehavior;
@@ -58,18 +57,8 @@ public class GrabbableObject : MonoBehaviour
         SimulateAirResistance();
         if (currentHolder == null)
             return;
-        Vector2 interpolatedPos = firstHandPosition + rigidbody.velocity * currentHolder.lookAheadTime;
-        Vector2 movementVector = currentHolder.targetLocation - interpolatedPos;
-        rigidbody.AddForce(movementVector * currentHolder.followStrength);
-        Debug.Log($"angle: {ConstrainAngle(transform.eulerAngles.z)}");
-        float interpolatedRotation = ConstrainAngle(transform.eulerAngles.z) + rigidbody.angularVelocity * currentHolder.lookAheadTime;
-        Debug.Log($"interpolated angle: {interpolatedRotation}");
-        float rotationTorque = targetRotation + (currentHolder.rotationOffset * rotationOffsetFactor) - interpolatedRotation;
-        Debug.Log($"torque: {rotationTorque}");
-        //Debug.Log(rotationTorque);
-        rigidbody.AddTorque(rotationTorque * currentHolder.torqueStrength * rigidbody.inertia);
-        //rigidbody.angularVelocity = rotationTorque;
-        Debug.Log($"angular velocity: {rigidbody.angularVelocity}");
+        MoveTowardsCursor();
+        RotateTowardsTarget();
     }
 
     private void SimulateGravity()
@@ -80,6 +69,29 @@ public class GrabbableObject : MonoBehaviour
     private void SimulateAirResistance()
     {
         ApplyForceAtCOM(-rigidbody.velocity * airResistance);
+    }
+
+    private void MoveTowardsCursor()
+    {
+        Vector2 interpolatedPos = firstHandPosition + rigidbody.velocity * currentHolder.lookAheadTime;
+        Vector2 movementVector = currentHolder.targetLocation - interpolatedPos;
+        rigidbody.AddForce(movementVector * currentHolder.followStrength);
+    }
+
+    private void RotateTowardsTarget()
+    {
+        float interpolatedRotation = ConstrainAngle(transform.eulerAngles.z) + rigidbody.angularVelocity * currentHolder.lookAheadTime;
+        float currentTarget = ConstrainAngle(targetRotation + (currentHolder.rotationOffset * rotationOffsetFactor));
+        if(interpolatedRotation - currentTarget > 180) //this usually happens when the rotations end up on different ends of the constraints (-180 and +180)
+        {
+            currentTarget += 360;
+        }
+        else if(currentTarget - interpolatedRotation > 180)
+        {
+            currentTarget -= 360;
+        }
+        float rotationTorque = currentTarget - interpolatedRotation * currentHolder.torqueStrength;
+        rigidbody.AddTorque(rotationTorque * rigidbody.inertia);
     }
 
     private void ApplyForceAtCOM(Vector2 force)
