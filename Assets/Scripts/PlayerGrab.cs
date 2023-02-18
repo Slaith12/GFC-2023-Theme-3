@@ -11,7 +11,7 @@ using UnityEngine;
 public class PlayerGrab : MonoBehaviour, IGrabber
 {
     public Vector2 targetLocation => GetCursorPos();
-    [field: Header("Grab Attributes")]
+    [Header("Grab Attributes")]
     [SerializeField] float m_followStrength = 150; //these m variables are here so that they are capitalized in the editor
     public float followStrength { get => m_followStrength; }
     public float rotationOffset { get => GetRotationOffset(); }

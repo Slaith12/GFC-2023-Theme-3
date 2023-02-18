@@ -19,7 +19,12 @@ public class StandardMelee : MonoBehaviour
     {
         if(collision.tag == "Enemy")
         {
-            Debug.Log("Hit!");
+            Vector2 knockbackVector;
+            if (collision.transform.position.x > this.transform.position.x)
+                knockbackVector = Vector2.right * knockback;
+            else
+                knockbackVector = Vector2.left * knockback;
+            collision.GetComponent<EnemyController>().Damage(damage, knockbackVector);
         }
     }
 }

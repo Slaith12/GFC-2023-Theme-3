@@ -329,6 +329,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrap Hammer
       objectReference: {fileID: 0}
+    - target: {fileID: 6969005063782314329, guid: 55c823c5dc01e214091781f91a024713, type: 3}
+      propertyPath: knockback
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 8144264930520557739, guid: 55c823c5dc01e214091781f91a024713, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -494,11 +498,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1060346256329970721, guid: 6717e6bae900c2f4a875dc6ada6c4999, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.399305
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1060346256329970721, guid: 6717e6bae900c2f4a875dc6ada6c4999, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.7904388
+      value: -4.52
       objectReference: {fileID: 0}
     - target: {fileID: 1060346256329970721, guid: 6717e6bae900c2f4a875dc6ada6c4999, type: 3}
       propertyPath: m_LocalPosition.z
@@ -531,6 +535,22 @@ PrefabInstance:
     - target: {fileID: 1060346256329970721, guid: 6717e6bae900c2f4a875dc6ada6c4999, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1152729765489090046, guid: 6717e6bae900c2f4a875dc6ada6c4999, type: 3}
+      propertyPath: maxSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1152729765489090046, guid: 6717e6bae900c2f4a875dc6ada6c4999, type: 3}
+      propertyPath: acceleration
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 1152729765489090046, guid: 6717e6bae900c2f4a875dc6ada6c4999, type: 3}
+      propertyPath: targetLocation.x
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1152729765489090046, guid: 6717e6bae900c2f4a875dc6ada6c4999, type: 3}
+      propertyPath: targetLocation.y
+      value: -4.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6717e6bae900c2f4a875dc6ada6c4999, type: 3}
