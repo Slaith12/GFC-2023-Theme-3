@@ -382,8 +382,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitbox: {fileID: 5488146057085986133}
+  minimumSpeed: 15
   damage: 2
-  knockback: 2
+  knockbackStrength: 15
 --- !u!4 &8144264930520557739 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1662003518012896002, guid: 49564bf50b95a45429f326fa4499d2b0, type: 3}

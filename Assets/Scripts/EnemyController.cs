@@ -10,29 +10,33 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] float maxSpeed;
     [SerializeField] float acceleration = 5;
-    [SerializeField] Vector2 targetLocation;
     private Vector2 targetVelocity;
 
     private new Rigidbody2D rigidbody;
+    private Transform player;
 
     void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        player = GameObject.FindGameObjectWithTag("Player").transform; //this won't work for multiplayer.
     }
 
     void FixedUpdate()
     {
-        targetVelocity = (targetLocation - (Vector2)transform.position).normalized * maxSpeed;
+        Vector3 targetLocation = player.position;
+        targetVelocity = (targetLocation - transform.position).normalized * maxSpeed;
         if (dead)
-            targetVelocity = Vector2.up * maxSpeed;
+            targetVelocity = Vector2.up * maxSpeed - Physics2D.gravity;
         Vector2 velocityDiff = targetVelocity - rigidbody.velocity;
+        Debug.Log($"Target Velocity: {targetVelocity} Acceleration Direction: {velocityDiff}");
         if (velocityDiff.magnitude < acceleration * Time.fixedDeltaTime)
         {
             rigidbody.velocity = targetVelocity;
+            Debug.Log("Setting velocity to target");
         }
         else
         {
-            rigidbody.velocity += velocityDiff.normalized * acceleration * Time.fixedDeltaTime;
+            rigidbody.AddForce(velocityDiff.normalized * acceleration * rigidbody.mass);
         }
     }
 
@@ -40,7 +44,10 @@ public class EnemyController : MonoBehaviour
     {
         health -= damage;
         if (health <= 0)
+        {
             dead = true;
+            acceleration += Physics2D.gravity.magnitude;
+        }
         rigidbody.velocity = knockback;
     }
 }

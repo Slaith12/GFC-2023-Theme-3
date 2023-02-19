@@ -83,6 +83,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 10
-  maxSpeed: 0
-  acceleration: 5
-  targetLocation: {x: 0, y: 0}
+  maxSpeed: 5
+  acceleration: 10
