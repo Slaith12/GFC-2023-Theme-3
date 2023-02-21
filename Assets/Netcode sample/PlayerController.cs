@@ -37,6 +37,7 @@ public class PlayerController : NetworkBehaviour
     //jump buffering
     [SerializeField] float jumpBufferLength = 0.15f;
     [SerializeField] float jumpBufferCount;
+
     void Start()
     {
 
@@ -61,6 +62,7 @@ public class PlayerController : NetworkBehaviour
         {
             hangCounter -= Time.deltaTime;
         }
+
 
 
         float moveInput = Input.GetAxisRaw("Horizontal");

@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField] float jumpForce;
     private float moveInput;
 
-    private Rigidbody2D rb;
+    [SerializeField] Rigidbody2D rb;
 
     //jump basics
     private bool facingRight = true;
@@ -22,9 +22,6 @@ public class Player : MonoBehaviour
     private int extraJumps;
     [SerializeField] int extraJumpsValue;
 
-    //gravity change
-    [SerializeField] float gravUp;
-    [SerializeField] float gravDown;
 
     [SerializeField] float jumpchange = 0.7f;
 
@@ -35,11 +32,15 @@ public class Player : MonoBehaviour
     //jump buffering
     [SerializeField] float jumpBufferLength = 0.15f;
     [SerializeField] float jumpBufferCount;
+
+    [SerializeField] Attractable playerAttract;
+
+    private float velY;
+
     void Start()
     {
 
         extraJumps = extraJumpsValue;
-        rb = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
@@ -51,7 +52,6 @@ public class Player : MonoBehaviour
         if (isGrounded)
         {
             hangCounter = hangtime;
-            rb.gravityScale = gravUp;
         }
         else
         {
@@ -62,7 +62,9 @@ public class Player : MonoBehaviour
         float moveInput = Input.GetAxisRaw("Horizontal");
 
         // the raw part makes it more snappy and responsive, but can be removed from the Input.GetAxisRaw
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        rb.velocity = new Vector2(moveInput * speed * Mathf.Sin(playerAttract.angle * Mathf.Deg2Rad + Mathf.PI), 
+            rb.velocity.y);
+
 
         if ((facingRight == false && moveInput < 0) || (facingRight == true && moveInput > 0))
         {
@@ -93,34 +95,34 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow) && extraJumps >= 0 || Input.GetKeyDown(KeyCode.W) && extraJumps >= 0)
         {
-            rb.velocity = Vector2.up * jumpForce;
+            Jump();
             extraJumps--;
 
         }
         else if (jumpBufferCount >= 0 && extraJumps > 0 && hangCounter > 0 || Input.GetKeyDown(KeyCode.W) && extraJumps > 0 && hangCounter > 0)
         {
-            rb.velocity = Vector2.up * jumpForce;
+            Jump();
             jumpBufferCount = 0;
         }
 
         if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W))
         {
-            if (rb.velocity.y > 0)
+            /* 
+            if (rb.velocity.y * Mathf.Cos(playerAttract.angle) > 0)
             {
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * jumpchange);
+                velY *= jumpchange;
                 extraJumps--;
                 //CreateDust();
-            }
+            }*/
 
-        }
-
-        if (!isGrounded && (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W) || rb.velocity.y == 0))
-        {
-            rb.gravityScale = gravDown;
         }
     }
 
-
+    void Jump() 
+    {
+        rb.AddForce(new Vector2 (jumpForce * Mathf.Sin(playerAttract.angle * Mathf.Deg2Rad + Mathf.PI),
+            jumpForce * Mathf.Cos(playerAttract.angle * Mathf.Deg2Rad + Mathf.PI)));
+    }
 
     void Flip()
     {
@@ -128,6 +130,11 @@ public class Player : MonoBehaviour
         Vector3 Scaler = transform.localScale;
         Scaler.x *= -1;
         transform.localScale = Scaler;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, (Vector2)transform.position + rb.velocity);
     }
 
 

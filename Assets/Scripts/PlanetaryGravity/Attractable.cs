@@ -11,6 +11,8 @@ public class Attractable : MonoBehaviour
     Collider2D m_collider;
     Rigidbody2D m_rigdibody;
 
+    public float angle;
+
     private void Awake()
     {
         m_transform = GetComponent<Transform>();
@@ -45,7 +47,7 @@ public class Attractable : MonoBehaviour
     void RotateToCenter()
     {
         Vector2 distanceVector = (Vector2)currentAttractor.planetTransform.position - (Vector2)m_transform.position;
-        float angle = Mathf.Atan2(distanceVector.y, distanceVector.x) * Mathf.Rad2Deg;
+        angle = Mathf.Atan2(distanceVector.y, distanceVector.x) * Mathf.Rad2Deg;
         m_transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
     }
 }
