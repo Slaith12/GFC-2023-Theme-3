@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     [SerializeField] float checkRadius;
     [SerializeField] LayerMask whatIsGround;
 
+
     //extra jumps
     private int extraJumps;
     [SerializeField] int extraJumpsValue;
@@ -35,7 +36,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] Attractable playerAttract;
 
-    private float velY;
+
 
     void Start()
     {
@@ -47,7 +48,6 @@ public class Player : MonoBehaviour
     {
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
-
 
         if (isGrounded)
         {
@@ -65,6 +65,13 @@ public class Player : MonoBehaviour
         rb.velocity = new Vector2(moveInput * speed * Mathf.Sin(playerAttract.angle * Mathf.Deg2Rad + Mathf.PI), 
             rb.velocity.y);
 
+        /*despite everything i've tried, jumping seems to still only affect the y direction
+        /i tried a few things out changing the above line which didn't work out - the issue is due to the x velocity
+        resetting every frame, but I don't know how to make it properly add the velocity in the x direction
+        also in general there are some issues with the jump*/
+
+        //there is also the issue of sin(0)=0 -> you can't jump at 0 degrees, or move left and right at 90 degrees
+
 
         if ((facingRight == false && moveInput < 0) || (facingRight == true && moveInput > 0))
         {
@@ -76,6 +83,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -116,12 +124,16 @@ public class Player : MonoBehaviour
             }*/
 
         }
+
+
     }
 
     void Jump() 
     {
-        rb.AddForce(new Vector2 (jumpForce * Mathf.Sin(playerAttract.angle * Mathf.Deg2Rad + Mathf.PI),
-            jumpForce * Mathf.Cos(playerAttract.angle * Mathf.Deg2Rad + Mathf.PI)));
+        rb.velocity = (new Vector2 (jumpForce * Mathf.Sin(playerAttract.angle * Mathf.Deg2Rad - Mathf.PI),
+            -jumpForce * Mathf.Cos(playerAttract.angle * Mathf.Deg2Rad + Mathf.PI)));
+
+        //main issues are with the jumping
     }
 
     void Flip()
