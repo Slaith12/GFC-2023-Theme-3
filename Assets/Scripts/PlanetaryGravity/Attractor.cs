@@ -15,11 +15,6 @@ public class Attractor : MonoBehaviour
         planetTransform = GetComponent<Transform>();
     }
 
-    void Update()
-    {
-        
-    }
-
     void FixedUpdate()
     {
         SetAttractedObjects();

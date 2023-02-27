@@ -4,20 +4,18 @@ using UnityEngine;
 
 public class Attractable : MonoBehaviour
 {
-    [SerializeField] private bool rotateToCenter = true;
-    [SerializeField] Attractor currentAttractor;
+    private bool rotateToCenter = true;
+    private Attractor currentAttractor;
 
-    Transform m_transform;
-    Collider2D m_collider;
-    Rigidbody2D m_rigdibody;
+    private Collider2D m_collider;
+    private Rigidbody2D m_rigidbody;
 
-    public float angle;
+    [HideInInspector] public float angle;
 
     private void Awake()
     {
-        m_transform = GetComponent<Transform>();
         m_collider = GetComponent<Collider2D>();
-        m_rigdibody = GetComponent<Rigidbody2D>();
+        m_rigidbody = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
@@ -30,15 +28,15 @@ public class Attractable : MonoBehaviour
         }
     }
 
-    public void Attract(Attractor artgra)
+    public void Attract(Attractor attractor)
     {
-        rotateToCenter = currentAttractor;
-        Vector2 attractionDir = (Vector2)artgra.planetTransform.position - m_rigdibody.position;
-        m_rigdibody.AddForce(attractionDir.normalized * -artgra.gravity * 100 * Time.fixedDeltaTime);
+        rotateToCenter = currentAttractor; //?????? I know what this line means but why is it here?
+        Vector2 attractionDir = (Vector2)attractor.planetTransform.position - m_rigidbody.position;
+        m_rigidbody.AddForce(attractionDir.normalized * -attractor.gravity * 100 * Time.fixedDeltaTime);
 
         if (currentAttractor == null)
         {
-            currentAttractor = artgra;
+            currentAttractor = attractor;
             
         }
 
@@ -46,8 +44,8 @@ public class Attractable : MonoBehaviour
 
     void RotateToCenter()
     {
-        Vector2 distanceVector = (Vector2)currentAttractor.planetTransform.position - (Vector2)m_transform.position;
+        Vector2 distanceVector = (Vector2)currentAttractor.planetTransform.position - (Vector2)transform.position;
         angle = Mathf.Atan2(distanceVector.y, distanceVector.x) * Mathf.Rad2Deg;
-        m_transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
+        transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
     }
 }
