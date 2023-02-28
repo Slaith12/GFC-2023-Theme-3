@@ -55,6 +55,24 @@ public partial class @GeneratedPlayerControls : IInputActionCollection2, IDispos
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Alternate Cursor Movement Mode"",
+                    ""type"": ""Button"",
+                    ""id"": ""5326d888-c31d-48c9-ab2e-219f25aee4cb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alternate Cursor Sensitivity Mode"",
+                    ""type"": ""Button"",
+                    ""id"": ""63370516-abaa-4899-b4ff-576219932c5a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Grab/Release"",
                     ""type"": ""Button"",
                     ""id"": ""94f0f0f8-9eda-4af3-9441-9f60b2214571"",
@@ -64,7 +82,7 @@ public partial class @GeneratedPlayerControls : IInputActionCollection2, IDispos
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Action"",
+                    ""name"": ""Item Action"",
                     ""type"": ""Button"",
                     ""id"": ""83382d85-a46e-45ce-9bda-35b5508c278d"",
                     ""expectedControlType"": ""Button"",
@@ -257,7 +275,7 @@ public partial class @GeneratedPlayerControls : IInputActionCollection2, IDispos
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Mouse & Keyboard"",
-                    ""action"": ""Action"",
+                    ""action"": ""Item Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -268,7 +286,29 @@ public partial class @GeneratedPlayerControls : IInputActionCollection2, IDispos
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Controller"",
-                    ""action"": ""Action"",
+                    ""action"": ""Item Action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""493bcc67-d413-44e0-9b37-196c58e573eb"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Alternate Cursor Sensitivity Mode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8bc994af-e7c0-4cce-a661-21aa46f8ebe0"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Controller"",
+                    ""action"": ""Alternate Cursor Movement Mode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -310,8 +350,10 @@ public partial class @GeneratedPlayerControls : IInputActionCollection2, IDispos
         m_InGame_Walk = m_InGame.FindAction("Walk", throwIfNotFound: true);
         m_InGame_MoveCursorMouse = m_InGame.FindAction("Move Cursor (Mouse)", throwIfNotFound: true);
         m_InGame_MoveCursorStick = m_InGame.FindAction("Move Cursor (Stick)", throwIfNotFound: true);
+        m_InGame_AlternateCursorMovementMode = m_InGame.FindAction("Alternate Cursor Movement Mode", throwIfNotFound: true);
+        m_InGame_AlternateCursorSensitivityMode = m_InGame.FindAction("Alternate Cursor Sensitivity Mode", throwIfNotFound: true);
         m_InGame_GrabRelease = m_InGame.FindAction("Grab/Release", throwIfNotFound: true);
-        m_InGame_Action = m_InGame.FindAction("Action", throwIfNotFound: true);
+        m_InGame_ItemAction = m_InGame.FindAction("Item Action", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -374,8 +416,10 @@ public partial class @GeneratedPlayerControls : IInputActionCollection2, IDispos
     private readonly InputAction m_InGame_Walk;
     private readonly InputAction m_InGame_MoveCursorMouse;
     private readonly InputAction m_InGame_MoveCursorStick;
+    private readonly InputAction m_InGame_AlternateCursorMovementMode;
+    private readonly InputAction m_InGame_AlternateCursorSensitivityMode;
     private readonly InputAction m_InGame_GrabRelease;
-    private readonly InputAction m_InGame_Action;
+    private readonly InputAction m_InGame_ItemAction;
     public struct InGameActions
     {
         private @GeneratedPlayerControls m_Wrapper;
@@ -383,8 +427,10 @@ public partial class @GeneratedPlayerControls : IInputActionCollection2, IDispos
         public InputAction @Walk => m_Wrapper.m_InGame_Walk;
         public InputAction @MoveCursorMouse => m_Wrapper.m_InGame_MoveCursorMouse;
         public InputAction @MoveCursorStick => m_Wrapper.m_InGame_MoveCursorStick;
+        public InputAction @AlternateCursorMovementMode => m_Wrapper.m_InGame_AlternateCursorMovementMode;
+        public InputAction @AlternateCursorSensitivityMode => m_Wrapper.m_InGame_AlternateCursorSensitivityMode;
         public InputAction @GrabRelease => m_Wrapper.m_InGame_GrabRelease;
-        public InputAction @Action => m_Wrapper.m_InGame_Action;
+        public InputAction @ItemAction => m_Wrapper.m_InGame_ItemAction;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -403,12 +449,18 @@ public partial class @GeneratedPlayerControls : IInputActionCollection2, IDispos
                 @MoveCursorStick.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorStick;
                 @MoveCursorStick.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorStick;
                 @MoveCursorStick.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorStick;
+                @AlternateCursorMovementMode.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorMovementMode;
+                @AlternateCursorMovementMode.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorMovementMode;
+                @AlternateCursorMovementMode.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorMovementMode;
+                @AlternateCursorSensitivityMode.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorSensitivityMode;
+                @AlternateCursorSensitivityMode.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorSensitivityMode;
+                @AlternateCursorSensitivityMode.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorSensitivityMode;
                 @GrabRelease.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrabRelease;
                 @GrabRelease.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrabRelease;
                 @GrabRelease.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrabRelease;
-                @Action.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnAction;
-                @Action.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnAction;
-                @Action.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnAction;
+                @ItemAction.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnItemAction;
+                @ItemAction.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnItemAction;
+                @ItemAction.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnItemAction;
             }
             m_Wrapper.m_InGameActionsCallbackInterface = instance;
             if (instance != null)
@@ -422,12 +474,18 @@ public partial class @GeneratedPlayerControls : IInputActionCollection2, IDispos
                 @MoveCursorStick.started += instance.OnMoveCursorStick;
                 @MoveCursorStick.performed += instance.OnMoveCursorStick;
                 @MoveCursorStick.canceled += instance.OnMoveCursorStick;
+                @AlternateCursorMovementMode.started += instance.OnAlternateCursorMovementMode;
+                @AlternateCursorMovementMode.performed += instance.OnAlternateCursorMovementMode;
+                @AlternateCursorMovementMode.canceled += instance.OnAlternateCursorMovementMode;
+                @AlternateCursorSensitivityMode.started += instance.OnAlternateCursorSensitivityMode;
+                @AlternateCursorSensitivityMode.performed += instance.OnAlternateCursorSensitivityMode;
+                @AlternateCursorSensitivityMode.canceled += instance.OnAlternateCursorSensitivityMode;
                 @GrabRelease.started += instance.OnGrabRelease;
                 @GrabRelease.performed += instance.OnGrabRelease;
                 @GrabRelease.canceled += instance.OnGrabRelease;
-                @Action.started += instance.OnAction;
-                @Action.performed += instance.OnAction;
-                @Action.canceled += instance.OnAction;
+                @ItemAction.started += instance.OnItemAction;
+                @ItemAction.performed += instance.OnItemAction;
+                @ItemAction.canceled += instance.OnItemAction;
             }
         }
     }
@@ -455,7 +513,9 @@ public partial class @GeneratedPlayerControls : IInputActionCollection2, IDispos
         void OnWalk(InputAction.CallbackContext context);
         void OnMoveCursorMouse(InputAction.CallbackContext context);
         void OnMoveCursorStick(InputAction.CallbackContext context);
+        void OnAlternateCursorMovementMode(InputAction.CallbackContext context);
+        void OnAlternateCursorSensitivityMode(InputAction.CallbackContext context);
         void OnGrabRelease(InputAction.CallbackContext context);
-        void OnAction(InputAction.CallbackContext context);
+        void OnItemAction(InputAction.CallbackContext context);
     }
 }

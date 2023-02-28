@@ -33,6 +33,24 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Alternate Cursor Movement Mode",
+                    "type": "Button",
+                    "id": "5326d888-c31d-48c9-ab2e-219f25aee4cb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Alternate Cursor Sensitivity Mode",
+                    "type": "Button",
+                    "id": "63370516-abaa-4899-b4ff-576219932c5a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Grab/Release",
                     "type": "Button",
                     "id": "94f0f0f8-9eda-4af3-9441-9f60b2214571",
@@ -42,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Action",
+                    "name": "Item Action",
                     "type": "Button",
                     "id": "83382d85-a46e-45ce-9bda-35b5508c278d",
                     "expectedControlType": "Button",
@@ -235,7 +253,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Mouse & Keyboard",
-                    "action": "Action",
+                    "action": "Item Action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -246,7 +264,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Controller",
-                    "action": "Action",
+                    "action": "Item Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "493bcc67-d413-44e0-9b37-196c58e573eb",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Alternate Cursor Sensitivity Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8bc994af-e7c0-4cce-a661-21aa46f8ebe0",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Alternate Cursor Movement Mode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
