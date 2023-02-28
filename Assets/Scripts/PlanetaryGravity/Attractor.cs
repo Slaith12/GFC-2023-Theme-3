@@ -7,13 +7,7 @@ public class Attractor : MonoBehaviour
     public LayerMask AttractionLayer;
     public float gravity = -10;
     [SerializeField] private float effectionRadius = 10;
-    public List<Collider2D> AttractedObjects = new List<Collider2D>();
-    [HideInInspector] public Transform planetTransform;
-
-    void Awake()
-    {
-        planetTransform = GetComponent<Transform>();
-    }
+    [HideInInspector] public List<Collider2D> AttractedObjects = new List<Collider2D>();
 
     void FixedUpdate()
     {
@@ -31,7 +25,7 @@ public class Attractor : MonoBehaviour
     {
         AttractedObjects.Clear();
 
-        AttractedObjects.AddRange(Physics2D.OverlapCircleAll(planetTransform.position, effectionRadius, AttractionLayer));
+        AttractedObjects.AddRange(Physics2D.OverlapCircleAll(transform.position, effectionRadius, AttractionLayer));
     }
 
     void AttractObjects()

@@ -7,9 +7,11 @@ public class Player : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float jumpForce;
 
-    private new Rigidbody2D rigidbody;
-
     private bool facingRight = true;
+
+    private Vector2 relativeVelocity 
+    { get => playerAttract.WorldToRelativeOffset(rigidbody.velocity); 
+      set => rigidbody.velocity = playerAttract.RelativeToWorldOffset(value); }
 
     //ground check
     [SerializeField] bool isGrounded;
@@ -17,49 +19,32 @@ public class Player : MonoBehaviour
     [SerializeField] float checkRadius;
     [SerializeField] LayerMask whatIsGround;
 
-    //I don't think we need coyote time and jump buffering since jumping isn't important at all in this game, these mechanics are meant more for platformers
-    //I'm keeping these here anyway because there's no harm in keeping them
-    //coyote time
-    [SerializeField] float hangtime;
-    private float hangTimer;
+    private bool jumpInput;
 
-    //jump buffering
-    [SerializeField] float jumpBufferLength = 0.15f;
-    [SerializeField] float jumpBufferTimer;
-
-    [SerializeField] Attractable playerAttract;
+    private Attractable playerAttract;
+    private new Rigidbody2D rigidbody;
 
     void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        playerAttract = GetComponent<Attractable>();
     }
 
     void FixedUpdate()
     {
-
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
 
-        if (isGrounded)
-        {
-            hangTimer = hangtime;
-        }
-        else
-        {
-            hangTimer -= Time.deltaTime;
-        }
-
-
         float moveInput = Input.GetAxis("Horizontal");
+        relativeVelocity = new Vector2(moveInput * speed, relativeVelocity.y);
 
-        rigidbody.velocity = new Vector2(moveInput * speed * Mathf.Sin(playerAttract.angle * Mathf.Deg2Rad + Mathf.PI), 
-            rigidbody.velocity.y);
-
-        /*despite everything i've tried, jumping seems to still only affect the y direction
-        /i tried a few things out changing the above line which didn't work out - the issue is due to the x velocity
-        resetting every frame, but I don't know how to make it properly add the velocity in the x direction
-        also in general there are some issues with the jump*/
-
-        //there is also the issue of sin(0)=0 -> you can't jump at 0 degrees, or move left and right at 90 degrees
+        if(jumpInput)
+        {
+            if (isGrounded)
+            {
+                Jump();
+            }
+            jumpInput = false;
+        }
 
 
         if ((facingRight == false && moveInput < 0) || (facingRight == true && moveInput > 0))
@@ -67,47 +52,20 @@ public class Player : MonoBehaviour
             Flip();
             //CreateDust();
         }
-
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space))
         {
-            jumpBufferTimer = jumpBufferLength;
+            jumpInput = true; //jumping is handled in FixedUpdate but GetKeyDown works better in Update
         }
-        else
-        {
-            jumpBufferTimer -= Time.deltaTime;
-        }
-
-        if (jumpBufferTimer >= 0 && hangTimer > 0)
-        {
-            Jump();
-            jumpBufferTimer = 0;
-        }
-
-        if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W))
-        {
-            /* 
-            if (rb.velocity.y * Mathf.Cos(playerAttract.angle) > 0)
-            {
-                velY *= jumpchange;
-                extraJumps--;
-                //CreateDust();
-            }*/
-
-        }
-
-
     }
 
-    void Jump() 
+    void Jump()
     {
-        rigidbody.velocity = (new Vector2 (jumpForce * Mathf.Sin(playerAttract.angle * Mathf.Deg2Rad - Mathf.PI),
-            -jumpForce * Mathf.Cos(playerAttract.angle * Mathf.Deg2Rad + Mathf.PI)));
-
-        //main issues are with the jumping
+        relativeVelocity = new Vector2 (relativeVelocity.x, jumpForce);
+        Debug.Log($"Jump velocity {rigidbody.velocity}");
     }
 
     void Flip()
@@ -120,8 +78,7 @@ public class Player : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(transform.position, (Vector2)transform.position + rigidbody.velocity);
+        if(Application.isPlaying)
+            Gizmos.DrawLine(transform.position, (Vector2)transform.position + rigidbody.velocity);
     }
-
-
 }

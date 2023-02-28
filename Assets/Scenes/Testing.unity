@@ -288,8 +288,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41a4599c00b81d1479fffd0545ab4120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateToCenter: 1
-  currentAttractor: {fileID: 0}
   angle: 0
 --- !u!1 &677593522
 GameObject:
@@ -437,8 +435,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41a4599c00b81d1479fffd0545ab4120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateToCenter: 1
-  currentAttractor: {fileID: 0}
   angle: 0
 --- !u!1 &978810600
 GameObject:
@@ -605,8 +601,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41a4599c00b81d1479fffd0545ab4120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateToCenter: 1
-  currentAttractor: {fileID: 0}
   angle: 0
 --- !u!1 &1292191414
 GameObject:
@@ -674,10 +668,9 @@ MonoBehaviour:
   AttractionLayer:
     serializedVersion: 2
     m_Bits: 128
-  gravity: -15
+  gravity: 15
   effectionRadius: 7
   AttractedObjects: []
-  planetTransform: {fileID: 0}
 --- !u!58 &1316235617
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -994,20 +987,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  jumpForce: 15
-  rb: {fileID: 1626102771}
+  jumpForce: 10
   isGrounded: 0
   groundCheck: {fileID: 1292191415}
   checkRadius: 0.3
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
-  extraJumpsValue: 0
-  jumpchange: 0.7
-  hangtime: 0
-  jumpBufferLength: 0.15
-  jumpBufferCount: 0
-  playerAttract: {fileID: 1626102772}
 --- !u!50 &1626102771
 Rigidbody2D:
   serializedVersion: 4
@@ -1041,8 +1027,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41a4599c00b81d1479fffd0545ab4120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateToCenter: 1
-  currentAttractor: {fileID: 0}
   angle: 0
 --- !u!1 &1844949082
 GameObject:
@@ -1100,10 +1084,9 @@ MonoBehaviour:
   AttractionLayer:
     serializedVersion: 2
     m_Bits: 128
-  gravity: -15
+  gravity: 15
   effectionRadius: 11
   AttractedObjects: []
-  planetTransform: {fileID: 0}
 --- !u!58 &1844949085
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1206,7 +1189,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &2027582820
 Rigidbody2D:
   serializedVersion: 4
@@ -1246,7 +1229,6 @@ MonoBehaviour:
   gravity: -1
   effectionRadius: 70
   AttractedObjects: []
-  planetTransform: {fileID: 0}
 --- !u!58 &2027582822
 CircleCollider2D:
   m_ObjectHideFlags: 0
