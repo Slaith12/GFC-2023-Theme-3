@@ -8,6 +8,9 @@ using UnityEngine.InputSystem;
 //the only purpose of this script is to handle inputs and display them to the controller. Changing input settings should be handled by a different script
 public class PlayerInputs
 {
+
+    #region Initialization
+
     private GeneratedPlayerControls controls;
     private Transform user;
 
@@ -59,6 +62,8 @@ public class PlayerInputs
         controls.InGame.Disable();
     }
 
+    #endregion
+
     #region Walking
 
     //this is something that PlayerController would have to constantly get (for movement), so make it a property
@@ -87,7 +92,7 @@ public class PlayerInputs
 
     public Vector2 cursorOffset { get; private set; }
 
-    public float cursorRange = 10; //this is a property of the player rather than an input setting, so make it public
+    public float cursorRange; //this is a property of the player rather than an input setting, so make it public
 
     //for stick controls only
     private float cursorSens;

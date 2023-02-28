@@ -373,3 +373,16 @@ MonoBehaviour:
   secondHand: {fileID: 1440544253444426684}
   secondHandDefaultPos: {fileID: 7674697371957406073}
   handTravelTime: 0.1
+--- !u!114 &-2077532076464256299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2419250617889489413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13df9bdd2c7fac54ea7bdb7422dfabb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_cursorRange: 10
