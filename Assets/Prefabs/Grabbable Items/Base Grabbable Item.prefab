@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7446233910584370479}
   - component: {fileID: 884502756536326172}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1662003518012896002}
   - component: {fileID: 3321957891483966033}
   - component: {fileID: -311128021849328115}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Base Grabbable Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,3 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   secondHandPlacement: {fileID: 0}
+  targetRotation: 0
+  rotationOffsetFactor: 0
+  airResistance: 1
+  flipBehavior: 0
