@@ -17,11 +17,13 @@ public class PlayerGrab : MonoBehaviour, IGrabber
     [SerializeField] float m_lookAheadTime = 0.1f;
     public float lookAheadTime { get => m_lookAheadTime; }
 
+    [Header("Hands/Indicators (Visual Only)")]
     [SerializeField] Transform firstHand; //i am considering making the hand objects un-parented in Awake to make sure they don't move weirdly with the player
     [SerializeField] Transform firstHandDefaultPos;
     [SerializeField] Transform secondHand;
     [SerializeField] Transform secondHandDefaultPos;
     [SerializeField] float handTravelTime;
+    [SerializeField] Transform grabCursor;
 
     private GrabbableObject currentGrabbed;
     private bool grabbingObject;
@@ -31,12 +33,18 @@ public class PlayerGrab : MonoBehaviour, IGrabber
     // Update is called once per frame
     void Update()
     {
+        grabCursor.position = targetLocation;
         MoveHands();
         UpdateFacing();
     }
 
     public void GrabObject(GrabbableObject grabbable, Vector2 pos)
     {
+        if(grabbingObject)
+        {
+            Debug.LogWarning("Attempted to grab object while already holding something. This is probably a bug.");
+            return;
+        }
         grabbable.Grab(this, pos);
         grabbingObject = true;
         currentGrabbed = grabbable;

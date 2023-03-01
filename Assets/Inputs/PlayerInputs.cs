@@ -39,15 +39,19 @@ public class PlayerInputs
     private void HookInputs()
     {
         controls.InGame.Walk.performed += ProcessWalk;
+        controls.InGame.Walk.canceled += ProcessWalk; //releasing the buttons calls canceled but not performed
 
         controls.InGame.MoveCursorMouse.performed += ProcessMoveCursorMouse;
         controls.InGame.MoveCursorStick.performed += ProcessMoveCursorStick;
+
         controls.InGame.AlternateCursorMovementMode.started += ToggleAltMove;
         controls.InGame.AlternateCursorMovementMode.canceled += ToggleAltMove;
+
         controls.InGame.AlternateCursorSensitivityMode.started += ToggleAltSens;
         controls.InGame.AlternateCursorSensitivityMode.canceled += ToggleAltSens;
 
         controls.InGame.GrabRelease.performed += ProcessGrabRelease;
+        controls.InGame.GrabRelease.canceled += ProcessGrabRelease;
 
         controls.InGame.ItemAction.performed += delegate { ItemAction?.Invoke(); }; //this input doesn't need any processing
     }
@@ -82,6 +86,7 @@ public class PlayerInputs
 
         if (Mathf.Abs(walkInput) <= walkDeadzoneMin)
             walkInput = 0;
+        //Debug.Log($"New Walk Input: {walkInput}");
     }
 
     #endregion
@@ -110,6 +115,7 @@ public class PlayerInputs
         cursorOffset = unclampedPos - (Vector2)user.position;
         if (cursorOffset.magnitude > cursorRange)
             cursorOffset = cursorOffset.normalized * cursorRange;
+        //Debug.Log($"Mouse move cursor to offset {cursorOffset}");
     }
 
     private void ProcessMoveCursorStick(InputAction.CallbackContext obj)
@@ -130,6 +136,7 @@ public class PlayerInputs
             if (cursorOffset.magnitude > cursorRange)
                 cursorOffset = cursorOffset.normalized * cursorRange;
         }
+        //Debug.Log($"Stick move cursor to offset {cursorOffset}");
     }
 
     private void ToggleAltSens(InputAction.CallbackContext obj)
@@ -158,9 +165,11 @@ public class PlayerInputs
 
     private void ProcessGrabRelease(InputAction.CallbackContext obj)
     {
+        //obj.performed = pressed, obj.cancelled = released
+
         if(toggleGrab)
         {
-            if(obj.started)
+            if(obj.performed)
             {
                 grabbing = !grabbing;
                 (grabbing ? Grab : Release)?.Invoke(); //this is probably the weirdest line I've ever written
@@ -168,15 +177,17 @@ public class PlayerInputs
         }
         else
         {
-            if(obj.started)
+            if(obj.performed)
             {
                 grabbing = true;
                 Grab?.Invoke();
+                //Debug.Log("Grab");
             }
             else
             {
                 grabbing = false;
                 Release?.Invoke();
+                //Debug.Log("Release");
             }
         }
     }

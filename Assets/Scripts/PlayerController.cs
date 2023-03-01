@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
         foreach (Collider2D hit in hits)
         {
             GrabbableObject grabbable = hit.GetComponentInParent<GrabbableObject>();
-            if (grabbable == null)
+            if (grabbable != null)
             {
                 playerGrab.GrabObject(grabbable, cursorPos);
                 return;
