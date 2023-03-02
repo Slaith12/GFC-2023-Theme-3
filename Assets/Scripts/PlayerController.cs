@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Mover), typeof(PlayerGrab))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] float moveSpeed = 5;
     [SerializeField] float m_cursorRange = 10;
     public float cursorRange { get => cursorRange; set { m_cursorRange = value; inputs.cursorRange = value; } }
 
     private PlayerInputs inputs;
+
+    private Mover mover;
     private PlayerGrab playerGrab;
 
     void Awake()
@@ -17,6 +21,7 @@ public class PlayerController : MonoBehaviour
         inputs.Release += Release;
         inputs.cursorRange = m_cursorRange;
 
+        mover = GetComponent<Mover>();
         playerGrab = GetComponent<PlayerGrab>();
     }
 
@@ -24,7 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         playerGrab.targetLocation = inputs.cursorOffset + (Vector2)transform.position;
 
-        //add walking code here
+        mover.targetVelocity = new Vector2(inputs.walkInput*moveSpeed, 0);
     }
 
     private void Grab()

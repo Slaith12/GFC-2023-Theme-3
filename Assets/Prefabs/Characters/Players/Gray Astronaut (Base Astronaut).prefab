@@ -449,6 +449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13df9bdd2c7fac54ea7bdb7422dfabb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 15
   m_cursorRange: 10
 --- !u!114 &3563862017286690267
 MonoBehaviour:
@@ -471,3 +472,18 @@ MonoBehaviour:
   secondHandDefaultPos: {fileID: 7674697371957406073}
   handTravelTime: 0.1
   grabCursor: {fileID: 4308187122961384101}
+--- !u!114 &5497750266473896418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2419250617889489413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be6a19fcc591c8648aea6c3d44cabafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  acceleration: 120
+  canFly: 0
+  targetVelocity: {x: 0, y: 0}
