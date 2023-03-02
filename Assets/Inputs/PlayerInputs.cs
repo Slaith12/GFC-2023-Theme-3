@@ -95,9 +95,26 @@ public class PlayerInputs
 
     //this is something that PlayerController would have to constantly get (for moving hands), so make it a property
 
-    public Vector2 cursorOffset { get; private set; }
+    private Vector2 m_cursorOffset;
+    public Vector2 cursorOffset { get
+        {
+            if(usingMouse)
+            {
+                Vector2 unclampedPos = Camera.main.ScreenToWorldPoint(cursorScreenPos);
+                //use stick control cursorOffset rather creating a local variable so that the cursor stays in the right place if the player switches to stick controls
+                m_cursorOffset = unclampedPos - (Vector2)user.position;
+                if (m_cursorOffset.magnitude > cursorRange)
+                    m_cursorOffset = m_cursorOffset.normalized * cursorRange;
+            }
+            return m_cursorOffset;
+        } }
+
+    private bool usingMouse; //the cursor position property acts slightly differently for mouse and stick controls.
 
     public float cursorRange; //this is a property of the player rather than an input setting, so make it public
+
+    //for mouse controls only
+    private Vector2 cursorScreenPos;
 
     //for stick controls only
     private float cursorSens;
@@ -111,15 +128,14 @@ public class PlayerInputs
 
     private void ProcessMoveCursorMouse(InputAction.CallbackContext obj)
     {
-        Vector2 unclampedPos = Camera.main.ScreenToWorldPoint(obj.ReadValue<Vector2>());
-        cursorOffset = unclampedPos - (Vector2)user.position;
-        if (cursorOffset.magnitude > cursorRange)
-            cursorOffset = cursorOffset.normalized * cursorRange;
-        //Debug.Log($"Mouse move cursor to offset {cursorOffset}");
+        usingMouse = true;
+        //don't convert to world space here so that the position still works if the camera moves without the input updating
+        cursorScreenPos = obj.ReadValue<Vector2>();
     }
 
     private void ProcessMoveCursorStick(InputAction.CallbackContext obj)
     {
+        usingMouse = false;
         Vector2 stickValue = obj.ReadValue<Vector2>();
         if(usingAltMove)
         {
@@ -127,14 +143,14 @@ public class PlayerInputs
                 stickValue *= altCursorRangeMult;
             if (stickValue.magnitude > 1)
                 stickValue.Normalize();
-            cursorOffset = stickValue * cursorRange;
+            m_cursorOffset = stickValue * cursorRange;
         }
         else
         {
             stickValue *= usingAltSens ? altCursorSens : cursorSens;
-            cursorOffset += stickValue;
-            if (cursorOffset.magnitude > cursorRange)
-                cursorOffset = cursorOffset.normalized * cursorRange;
+            m_cursorOffset += stickValue;
+            if (m_cursorOffset.magnitude > cursorRange)
+                m_cursorOffset = m_cursorOffset.normalized * cursorRange;
         }
         //Debug.Log($"Stick move cursor to offset {cursorOffset}");
     }
