@@ -5,12 +5,9 @@ using UnityEngine;
 
 //TODO: Have player hands rotate based on the held item rather than the player's body.
 //TODO: Completely detach hands from player while holding item (would fix visual bug when turning around with item, and allows for more control with code)
-//TODO: Move input handling to a dedicated PlayerController script to simplify organization (it's also easier to do all input handling in a single script when using the new input system)
-//TODO: Limit cursor position to a certain range around the player
-//TODO: Add controller support for GetCursorPos(). One implementation with a persistent cursor moved around normally by the joystick, and a second implementation where the cursor position = the position of the joystick (this allows fast mouse-like movement without having absurdly high sensitivity)
 public class PlayerGrab : MonoBehaviour, IGrabber
 {
-    public Vector2 targetLocation => GetCursorPos();
+    public Vector2 targetLocation { get; set; }
     [Header("Grab Attributes")]
     [SerializeField] float m_followStrength = 150; //these m variables are here so that they are capitalized in the editor
     public float followStrength { get => m_followStrength; }
@@ -20,11 +17,13 @@ public class PlayerGrab : MonoBehaviour, IGrabber
     [SerializeField] float m_lookAheadTime = 0.1f;
     public float lookAheadTime { get => m_lookAheadTime; }
 
+    [Header("Hands/Indicators (Visual Only)")]
     [SerializeField] Transform firstHand; //i am considering making the hand objects un-parented in Awake to make sure they don't move weirdly with the player
     [SerializeField] Transform firstHandDefaultPos;
     [SerializeField] Transform secondHand;
     [SerializeField] Transform secondHandDefaultPos;
     [SerializeField] float handTravelTime;
+    [SerializeField] Transform grabCursor;
 
     private GrabbableObject currentGrabbed;
     private bool grabbingObject;
@@ -34,38 +33,27 @@ public class PlayerGrab : MonoBehaviour, IGrabber
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            GrabSelectedObject();
-        }
-        if(Input.GetMouseButtonUp(0))
-        {
-            ReleaseCurrentObject();
-        }
+        grabCursor.position = targetLocation;
         MoveHands();
         UpdateFacing();
     }
 
-    private void GrabSelectedObject()
+    public void GrabObject(GrabbableObject grabbable, Vector2 pos)
     {
-        Vector2 cursorPos = GetCursorPos();
-        Collider2D[] hits = Physics2D.OverlapPointAll(cursorPos);
-        foreach (Collider2D hit in hits)
+        if(grabbingObject)
         {
-            GrabbableObject grabbable = hit.GetComponentInParent<GrabbableObject>();
-            if (grabbable == null)
-                continue;
-            grabbable.Grab(this, cursorPos);
-            grabbingObject = true;
-            currentGrabbed = grabbable;
-            if (currentGrabbed.facingRight != this.facingRight)
-                currentGrabbed.Flip();
-            interpTime = handTravelTime;
+            Debug.LogWarning("Attempted to grab object while already holding something. This is probably a bug.");
             return;
         }
+        grabbable.Grab(this, pos);
+        grabbingObject = true;
+        currentGrabbed = grabbable;
+        if (currentGrabbed.facingRight != this.facingRight)
+            currentGrabbed.Flip();
+        interpTime = handTravelTime;
     }
 
-    private void ReleaseCurrentObject()
+    public void ReleaseCurrentObject()
     {
         if (!grabbingObject)
             return;
@@ -112,10 +100,12 @@ public class PlayerGrab : MonoBehaviour, IGrabber
         }
     }
 
+    //this feels like it would be better in PlayerController but I'm too lazy to move it
+    //i don't think we'll need to touch this once we're done with the new input system stuff
     private void UpdateFacing()
     {
         //note: all sprites face left by default
-        if(GetCursorPos().x > transform.position.x)
+        if(targetLocation.x > transform.position.x)
         {
             if (facingRight)
                 return;
@@ -150,10 +140,4 @@ public class PlayerGrab : MonoBehaviour, IGrabber
             horizontal = Vector2.left;
         return Vector2.SignedAngle(horizontal, posOffset);
     }
-
-    private Vector2 GetCursorPos()
-    {
-        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    }
-
 }

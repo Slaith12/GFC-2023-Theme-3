@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//TODO: Review grab/throw physics to see if they can be made more fun (idea: make acceleration faster when item is at lower speed to make controls snappier)
-//TODO: Move all object handling code to the grabber script to reduce complexity and allow future implementation of different grabber behaviors
+//-TODO: Review grab/throw physics to see if they can be made more fun (idea: make acceleration faster when item is at lower speed to make controls snappier) [low priority, likely not needed]
+//-TODO: Move all object handling code to the grabber script to reduce complexity and allow future implementation of different grabber behaviors [low priority, likely won't have other grabbers, and grabbing is already complete]
 //TODO: Change Grab and Release methods to work with networking (make sure all clients know when an object is grabbed/released, preferably also knowing who did it)
-//TODO: Add input validation to Grab and Release methods to make sure the objects calling those methods are actually capable of grabbing/releasing object [this may be better done in the player controller]
 [RequireComponent(typeof(Rigidbody2D))]
 public class GrabbableObject : MonoBehaviour
 {
