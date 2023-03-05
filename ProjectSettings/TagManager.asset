@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - grabbable
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - Water
   - UI
   - Ground
-  - attractable
-  - 
+  - Item
+  - Hitbox
   - 
   - 
   - 
@@ -41,4 +42,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Foreground
+    uniqueID: 1967617085
     locked: 0
