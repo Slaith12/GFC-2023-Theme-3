@@ -24,7 +24,7 @@ public class Attractable : MonoBehaviour
         {
             RotateToCenter();
             Vector2 attractionDir = (Vector2)currentAttractor.transform.position - m_rigidbody.position;
-            m_rigidbody.AddForce(attractionDir.normalized * currentAttractor.gravity * 100 * Time.fixedDeltaTime);
+            m_rigidbody.AddForce(100 * currentAttractor.gravity * Time.fixedDeltaTime * attractionDir.normalized);
         }
     }
 

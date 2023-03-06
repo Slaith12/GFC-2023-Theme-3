@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: Merge this script with the PlayerController script. Main changes will be jumping (?) and the relativeVelocity change that uses playerAttract
 public class Player : MonoBehaviour
 {
     [SerializeField] float speed;
