@@ -15,12 +15,14 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public partial class @GeneratedPlayerControls : IInputActionCollection2, IDisposable
+namespace SKGG.Inputs
 {
-    public InputActionAsset asset { get; }
-    public @GeneratedPlayerControls()
+    public partial class @GeneratedPlayerControls : IInputActionCollection2, IDisposable
     {
-        asset = InputActionAsset.FromJson(@"{
+        public InputActionAsset asset { get; }
+        public @GeneratedPlayerControls()
+        {
+            asset = InputActionAsset.FromJson(@"{
     ""name"": ""Player Controls"",
     ""maps"": [
         {
@@ -345,177 +347,178 @@ public partial class @GeneratedPlayerControls : IInputActionCollection2, IDispos
         }
     ]
 }");
+            // InGame
+            m_InGame = asset.FindActionMap("InGame", throwIfNotFound: true);
+            m_InGame_Walk = m_InGame.FindAction("Walk", throwIfNotFound: true);
+            m_InGame_MoveCursorMouse = m_InGame.FindAction("Move Cursor (Mouse)", throwIfNotFound: true);
+            m_InGame_MoveCursorStick = m_InGame.FindAction("Move Cursor (Stick)", throwIfNotFound: true);
+            m_InGame_AlternateCursorMovementMode = m_InGame.FindAction("Alternate Cursor Movement Mode", throwIfNotFound: true);
+            m_InGame_AlternateCursorSensitivityMode = m_InGame.FindAction("Alternate Cursor Sensitivity Mode", throwIfNotFound: true);
+            m_InGame_GrabRelease = m_InGame.FindAction("Grab/Release", throwIfNotFound: true);
+            m_InGame_ItemAction = m_InGame.FindAction("Item Action", throwIfNotFound: true);
+        }
+
+        public void Dispose()
+        {
+            UnityEngine.Object.Destroy(asset);
+        }
+
+        public InputBinding? bindingMask
+        {
+            get => asset.bindingMask;
+            set => asset.bindingMask = value;
+        }
+
+        public ReadOnlyArray<InputDevice>? devices
+        {
+            get => asset.devices;
+            set => asset.devices = value;
+        }
+
+        public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+
+        public bool Contains(InputAction action)
+        {
+            return asset.Contains(action);
+        }
+
+        public IEnumerator<InputAction> GetEnumerator()
+        {
+            return asset.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Enable()
+        {
+            asset.Enable();
+        }
+
+        public void Disable()
+        {
+            asset.Disable();
+        }
+        public IEnumerable<InputBinding> bindings => asset.bindings;
+
+        public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
+        {
+            return asset.FindAction(actionNameOrId, throwIfNotFound);
+        }
+        public int FindBinding(InputBinding bindingMask, out InputAction action)
+        {
+            return asset.FindBinding(bindingMask, out action);
+        }
+
         // InGame
-        m_InGame = asset.FindActionMap("InGame", throwIfNotFound: true);
-        m_InGame_Walk = m_InGame.FindAction("Walk", throwIfNotFound: true);
-        m_InGame_MoveCursorMouse = m_InGame.FindAction("Move Cursor (Mouse)", throwIfNotFound: true);
-        m_InGame_MoveCursorStick = m_InGame.FindAction("Move Cursor (Stick)", throwIfNotFound: true);
-        m_InGame_AlternateCursorMovementMode = m_InGame.FindAction("Alternate Cursor Movement Mode", throwIfNotFound: true);
-        m_InGame_AlternateCursorSensitivityMode = m_InGame.FindAction("Alternate Cursor Sensitivity Mode", throwIfNotFound: true);
-        m_InGame_GrabRelease = m_InGame.FindAction("Grab/Release", throwIfNotFound: true);
-        m_InGame_ItemAction = m_InGame.FindAction("Item Action", throwIfNotFound: true);
-    }
-
-    public void Dispose()
-    {
-        UnityEngine.Object.Destroy(asset);
-    }
-
-    public InputBinding? bindingMask
-    {
-        get => asset.bindingMask;
-        set => asset.bindingMask = value;
-    }
-
-    public ReadOnlyArray<InputDevice>? devices
-    {
-        get => asset.devices;
-        set => asset.devices = value;
-    }
-
-    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
-
-    public bool Contains(InputAction action)
-    {
-        return asset.Contains(action);
-    }
-
-    public IEnumerator<InputAction> GetEnumerator()
-    {
-        return asset.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    public void Enable()
-    {
-        asset.Enable();
-    }
-
-    public void Disable()
-    {
-        asset.Disable();
-    }
-    public IEnumerable<InputBinding> bindings => asset.bindings;
-
-    public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
-    {
-        return asset.FindAction(actionNameOrId, throwIfNotFound);
-    }
-    public int FindBinding(InputBinding bindingMask, out InputAction action)
-    {
-        return asset.FindBinding(bindingMask, out action);
-    }
-
-    // InGame
-    private readonly InputActionMap m_InGame;
-    private IInGameActions m_InGameActionsCallbackInterface;
-    private readonly InputAction m_InGame_Walk;
-    private readonly InputAction m_InGame_MoveCursorMouse;
-    private readonly InputAction m_InGame_MoveCursorStick;
-    private readonly InputAction m_InGame_AlternateCursorMovementMode;
-    private readonly InputAction m_InGame_AlternateCursorSensitivityMode;
-    private readonly InputAction m_InGame_GrabRelease;
-    private readonly InputAction m_InGame_ItemAction;
-    public struct InGameActions
-    {
-        private @GeneratedPlayerControls m_Wrapper;
-        public InGameActions(@GeneratedPlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Walk => m_Wrapper.m_InGame_Walk;
-        public InputAction @MoveCursorMouse => m_Wrapper.m_InGame_MoveCursorMouse;
-        public InputAction @MoveCursorStick => m_Wrapper.m_InGame_MoveCursorStick;
-        public InputAction @AlternateCursorMovementMode => m_Wrapper.m_InGame_AlternateCursorMovementMode;
-        public InputAction @AlternateCursorSensitivityMode => m_Wrapper.m_InGame_AlternateCursorSensitivityMode;
-        public InputAction @GrabRelease => m_Wrapper.m_InGame_GrabRelease;
-        public InputAction @ItemAction => m_Wrapper.m_InGame_ItemAction;
-        public InputActionMap Get() { return m_Wrapper.m_InGame; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(InGameActions set) { return set.Get(); }
-        public void SetCallbacks(IInGameActions instance)
+        private readonly InputActionMap m_InGame;
+        private IInGameActions m_InGameActionsCallbackInterface;
+        private readonly InputAction m_InGame_Walk;
+        private readonly InputAction m_InGame_MoveCursorMouse;
+        private readonly InputAction m_InGame_MoveCursorStick;
+        private readonly InputAction m_InGame_AlternateCursorMovementMode;
+        private readonly InputAction m_InGame_AlternateCursorSensitivityMode;
+        private readonly InputAction m_InGame_GrabRelease;
+        private readonly InputAction m_InGame_ItemAction;
+        public struct InGameActions
         {
-            if (m_Wrapper.m_InGameActionsCallbackInterface != null)
+            private @GeneratedPlayerControls m_Wrapper;
+            public InGameActions(@GeneratedPlayerControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Walk => m_Wrapper.m_InGame_Walk;
+            public InputAction @MoveCursorMouse => m_Wrapper.m_InGame_MoveCursorMouse;
+            public InputAction @MoveCursorStick => m_Wrapper.m_InGame_MoveCursorStick;
+            public InputAction @AlternateCursorMovementMode => m_Wrapper.m_InGame_AlternateCursorMovementMode;
+            public InputAction @AlternateCursorSensitivityMode => m_Wrapper.m_InGame_AlternateCursorSensitivityMode;
+            public InputAction @GrabRelease => m_Wrapper.m_InGame_GrabRelease;
+            public InputAction @ItemAction => m_Wrapper.m_InGame_ItemAction;
+            public InputActionMap Get() { return m_Wrapper.m_InGame; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(InGameActions set) { return set.Get(); }
+            public void SetCallbacks(IInGameActions instance)
             {
-                @Walk.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnWalk;
-                @Walk.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnWalk;
-                @Walk.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnWalk;
-                @MoveCursorMouse.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorMouse;
-                @MoveCursorMouse.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorMouse;
-                @MoveCursorMouse.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorMouse;
-                @MoveCursorStick.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorStick;
-                @MoveCursorStick.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorStick;
-                @MoveCursorStick.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorStick;
-                @AlternateCursorMovementMode.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorMovementMode;
-                @AlternateCursorMovementMode.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorMovementMode;
-                @AlternateCursorMovementMode.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorMovementMode;
-                @AlternateCursorSensitivityMode.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorSensitivityMode;
-                @AlternateCursorSensitivityMode.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorSensitivityMode;
-                @AlternateCursorSensitivityMode.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorSensitivityMode;
-                @GrabRelease.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrabRelease;
-                @GrabRelease.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrabRelease;
-                @GrabRelease.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrabRelease;
-                @ItemAction.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnItemAction;
-                @ItemAction.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnItemAction;
-                @ItemAction.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnItemAction;
-            }
-            m_Wrapper.m_InGameActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @Walk.started += instance.OnWalk;
-                @Walk.performed += instance.OnWalk;
-                @Walk.canceled += instance.OnWalk;
-                @MoveCursorMouse.started += instance.OnMoveCursorMouse;
-                @MoveCursorMouse.performed += instance.OnMoveCursorMouse;
-                @MoveCursorMouse.canceled += instance.OnMoveCursorMouse;
-                @MoveCursorStick.started += instance.OnMoveCursorStick;
-                @MoveCursorStick.performed += instance.OnMoveCursorStick;
-                @MoveCursorStick.canceled += instance.OnMoveCursorStick;
-                @AlternateCursorMovementMode.started += instance.OnAlternateCursorMovementMode;
-                @AlternateCursorMovementMode.performed += instance.OnAlternateCursorMovementMode;
-                @AlternateCursorMovementMode.canceled += instance.OnAlternateCursorMovementMode;
-                @AlternateCursorSensitivityMode.started += instance.OnAlternateCursorSensitivityMode;
-                @AlternateCursorSensitivityMode.performed += instance.OnAlternateCursorSensitivityMode;
-                @AlternateCursorSensitivityMode.canceled += instance.OnAlternateCursorSensitivityMode;
-                @GrabRelease.started += instance.OnGrabRelease;
-                @GrabRelease.performed += instance.OnGrabRelease;
-                @GrabRelease.canceled += instance.OnGrabRelease;
-                @ItemAction.started += instance.OnItemAction;
-                @ItemAction.performed += instance.OnItemAction;
-                @ItemAction.canceled += instance.OnItemAction;
+                if (m_Wrapper.m_InGameActionsCallbackInterface != null)
+                {
+                    @Walk.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnWalk;
+                    @Walk.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnWalk;
+                    @Walk.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnWalk;
+                    @MoveCursorMouse.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorMouse;
+                    @MoveCursorMouse.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorMouse;
+                    @MoveCursorMouse.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorMouse;
+                    @MoveCursorStick.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorStick;
+                    @MoveCursorStick.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorStick;
+                    @MoveCursorStick.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnMoveCursorStick;
+                    @AlternateCursorMovementMode.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorMovementMode;
+                    @AlternateCursorMovementMode.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorMovementMode;
+                    @AlternateCursorMovementMode.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorMovementMode;
+                    @AlternateCursorSensitivityMode.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorSensitivityMode;
+                    @AlternateCursorSensitivityMode.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorSensitivityMode;
+                    @AlternateCursorSensitivityMode.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnAlternateCursorSensitivityMode;
+                    @GrabRelease.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrabRelease;
+                    @GrabRelease.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrabRelease;
+                    @GrabRelease.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnGrabRelease;
+                    @ItemAction.started -= m_Wrapper.m_InGameActionsCallbackInterface.OnItemAction;
+                    @ItemAction.performed -= m_Wrapper.m_InGameActionsCallbackInterface.OnItemAction;
+                    @ItemAction.canceled -= m_Wrapper.m_InGameActionsCallbackInterface.OnItemAction;
+                }
+                m_Wrapper.m_InGameActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Walk.started += instance.OnWalk;
+                    @Walk.performed += instance.OnWalk;
+                    @Walk.canceled += instance.OnWalk;
+                    @MoveCursorMouse.started += instance.OnMoveCursorMouse;
+                    @MoveCursorMouse.performed += instance.OnMoveCursorMouse;
+                    @MoveCursorMouse.canceled += instance.OnMoveCursorMouse;
+                    @MoveCursorStick.started += instance.OnMoveCursorStick;
+                    @MoveCursorStick.performed += instance.OnMoveCursorStick;
+                    @MoveCursorStick.canceled += instance.OnMoveCursorStick;
+                    @AlternateCursorMovementMode.started += instance.OnAlternateCursorMovementMode;
+                    @AlternateCursorMovementMode.performed += instance.OnAlternateCursorMovementMode;
+                    @AlternateCursorMovementMode.canceled += instance.OnAlternateCursorMovementMode;
+                    @AlternateCursorSensitivityMode.started += instance.OnAlternateCursorSensitivityMode;
+                    @AlternateCursorSensitivityMode.performed += instance.OnAlternateCursorSensitivityMode;
+                    @AlternateCursorSensitivityMode.canceled += instance.OnAlternateCursorSensitivityMode;
+                    @GrabRelease.started += instance.OnGrabRelease;
+                    @GrabRelease.performed += instance.OnGrabRelease;
+                    @GrabRelease.canceled += instance.OnGrabRelease;
+                    @ItemAction.started += instance.OnItemAction;
+                    @ItemAction.performed += instance.OnItemAction;
+                    @ItemAction.canceled += instance.OnItemAction;
+                }
             }
         }
-    }
-    public InGameActions @InGame => new InGameActions(this);
-    private int m_MouseKeyboardSchemeIndex = -1;
-    public InputControlScheme MouseKeyboardScheme
-    {
-        get
+        public InGameActions @InGame => new InGameActions(this);
+        private int m_MouseKeyboardSchemeIndex = -1;
+        public InputControlScheme MouseKeyboardScheme
         {
-            if (m_MouseKeyboardSchemeIndex == -1) m_MouseKeyboardSchemeIndex = asset.FindControlSchemeIndex("Mouse & Keyboard");
-            return asset.controlSchemes[m_MouseKeyboardSchemeIndex];
+            get
+            {
+                if (m_MouseKeyboardSchemeIndex == -1) m_MouseKeyboardSchemeIndex = asset.FindControlSchemeIndex("Mouse & Keyboard");
+                return asset.controlSchemes[m_MouseKeyboardSchemeIndex];
+            }
         }
-    }
-    private int m_ControllerSchemeIndex = -1;
-    public InputControlScheme ControllerScheme
-    {
-        get
+        private int m_ControllerSchemeIndex = -1;
+        public InputControlScheme ControllerScheme
         {
-            if (m_ControllerSchemeIndex == -1) m_ControllerSchemeIndex = asset.FindControlSchemeIndex("Controller");
-            return asset.controlSchemes[m_ControllerSchemeIndex];
+            get
+            {
+                if (m_ControllerSchemeIndex == -1) m_ControllerSchemeIndex = asset.FindControlSchemeIndex("Controller");
+                return asset.controlSchemes[m_ControllerSchemeIndex];
+            }
         }
-    }
-    public interface IInGameActions
-    {
-        void OnWalk(InputAction.CallbackContext context);
-        void OnMoveCursorMouse(InputAction.CallbackContext context);
-        void OnMoveCursorStick(InputAction.CallbackContext context);
-        void OnAlternateCursorMovementMode(InputAction.CallbackContext context);
-        void OnAlternateCursorSensitivityMode(InputAction.CallbackContext context);
-        void OnGrabRelease(InputAction.CallbackContext context);
-        void OnItemAction(InputAction.CallbackContext context);
+        public interface IInGameActions
+        {
+            void OnWalk(InputAction.CallbackContext context);
+            void OnMoveCursorMouse(InputAction.CallbackContext context);
+            void OnMoveCursorStick(InputAction.CallbackContext context);
+            void OnAlternateCursorMovementMode(InputAction.CallbackContext context);
+            void OnAlternateCursorSensitivityMode(InputAction.CallbackContext context);
+            void OnGrabRelease(InputAction.CallbackContext context);
+            void OnItemAction(InputAction.CallbackContext context);
+        }
     }
 }
