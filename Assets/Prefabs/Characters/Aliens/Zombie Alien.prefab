@@ -63,6 +63,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 4426266204870327349, guid: 937db85f3c7c47c4186163e62aea75bb, type: 3}
+      propertyPath: acceleration
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 937db85f3c7c47c4186163e62aea75bb, type: 3}
 --- !u!1 &1060346256329970720 stripped
@@ -84,18 +88,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 10
   maxSpeed: 5
---- !u!114 &2758931070891075335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060346256329970720}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be6a19fcc591c8648aea6c3d44cabafa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  acceleration: 10
-  canFly: 0
-  targetVelocity: {x: 0, y: 0}
