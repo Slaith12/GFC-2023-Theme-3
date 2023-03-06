@@ -10,13 +10,13 @@ public class Attractable : MonoBehaviour
     //this is only needed for attractors with overlapping fields, which shouldn't ever happen, but I'm including it just in case
     private List<Attractor> overlappedAttractors;
     
-    private Rigidbody2D m_rigidbody;
+    private new Rigidbody2D rigidbody;
 
     [HideInInspector] public float angle;
 
     private void Awake()
     {
-        m_rigidbody = GetComponent<Rigidbody2D>();
+        rigidbody = GetComponent<Rigidbody2D>();
         overlappedAttractors = new List<Attractor>();
     }
 
@@ -25,8 +25,10 @@ public class Attractable : MonoBehaviour
         if (currentAttractor != null)
         {
             if(rotateToCenter) RotateToCenter();
-            Vector2 attractionDir = (Vector2)currentAttractor.transform.position - m_rigidbody.position;
-            m_rigidbody.AddForce(100 * currentAttractor.gravity * Time.fixedDeltaTime * attractionDir.normalized);
+            Vector2 attractionDir = (Vector2)currentAttractor.transform.position - rigidbody.position;
+            //cancel out normal gravity and replace it with planet gravity
+            rigidbody.AddForce(Physics2D.gravity * -rigidbody.gravityScale);
+            rigidbody.AddForce((Physics2D.gravity.magnitude * attractionDir.normalized) * (rigidbody.gravityScale * currentAttractor.gravityScale));
         }
     }
 

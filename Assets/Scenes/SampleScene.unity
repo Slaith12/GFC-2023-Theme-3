@@ -218,10 +218,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scrap Hammer
       objectReference: {fileID: 0}
-    - target: {fileID: 5192463123045925368, guid: 55c823c5dc01e214091781f91a024713, type: 3}
-      propertyPath: m_GravityScale
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6969005063782314329, guid: 55c823c5dc01e214091781f91a024713, type: 3}
       propertyPath: knockback
       value: 15
@@ -319,10 +315,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7577461963722826259, guid: 0c27bf68c22322a4abe45fc26b38117b, type: 3}
-      propertyPath: m_GravityScale
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c27bf68c22322a4abe45fc26b38117b, type: 3}
 --- !u!1001 &1096576907
@@ -380,10 +372,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9145325057384100072, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
-      propertyPath: m_GravityScale
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c814ba26c409ef4580eb6393412106a, type: 3}
 --- !u!1 &1607302219
@@ -418,7 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a281c7f59f94ef746a480ecdc67fb4c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: 40
+  gravityScale: 1
 --- !u!58 &1607302221
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -571,10 +559,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1060346256329970721, guid: 6717e6bae900c2f4a875dc6ada6c4999, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3029595627145806090, guid: 6717e6bae900c2f4a875dc6ada6c4999, type: 3}
-      propertyPath: m_GravityScale
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Attractor : MonoBehaviour
 {
-    public float gravity = 10;
+    public float gravityScale = 1;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
