@@ -8,6 +8,7 @@ public class Attractor : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log($"Attracting {collision.name}");
         Attractable attractable = collision.GetComponent<Attractable>();
         if (attractable != null)
             attractable.Attract(this);
@@ -15,6 +16,7 @@ public class Attractor : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        Debug.Log($"Unattracting {collision.name}");
         Attractable attractable = collision.GetComponent<Attractable>();
         if (attractable != null)
             attractable.Unattract(this);

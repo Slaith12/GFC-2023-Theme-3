@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Attractable : MonoBehaviour
 {
+    [Tooltip("If this is set to true, make sure the object's rotation is frozen in the rigidbody or collision will not work. Do not ask why this is, I have no idea.")]
+    [SerializeField] bool rotateToCenter = true;
     private Attractor currentAttractor;
     //this is only needed for attractors with overlapping fields, which shouldn't ever happen, but I'm including it just in case
     private List<Attractor> overlappedAttractors;
@@ -22,7 +24,7 @@ public class Attractable : MonoBehaviour
     {
         if (currentAttractor != null)
         {
-            RotateToCenter();
+            if(rotateToCenter) RotateToCenter();
             Vector2 attractionDir = (Vector2)currentAttractor.transform.position - m_rigidbody.position;
             m_rigidbody.AddForce(100 * currentAttractor.gravity * Time.fixedDeltaTime * attractionDir.normalized);
         }

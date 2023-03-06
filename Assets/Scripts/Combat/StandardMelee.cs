@@ -24,7 +24,7 @@ public class StandardMelee : MonoBehaviour
     {
         if (rigidbody.velocity.magnitude < minimumSpeed)
             return;
-        if(collision.tag == "Enemy")
+        if(collision.CompareTag("Enemy"))
         {
             Vector2 hitOffset = collision.transform.position - hitbox.transform.position;
             Vector2 knockbackVector;
@@ -32,7 +32,7 @@ public class StandardMelee : MonoBehaviour
                 knockbackVector = Vector2.right * knockbackStrength;
             else
                 knockbackVector = Vector2.left * knockbackStrength;
-            collision.GetComponent<EnemyController>().Damage(damage, knockbackVector);
+            collision.GetComponent<Health>().Damage(damage, knockbackVector);
         }
     }
 }

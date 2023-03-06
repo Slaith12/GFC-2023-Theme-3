@@ -216,7 +216,7 @@ public class PlayerInputs
 
     public event Action ItemAction;
 
-    //this doesn't need any processing so the event is directly hooked to the input
+    //this doesn't need any processing so the event is directly hooked to the input in initialization
 
     #endregion
 }

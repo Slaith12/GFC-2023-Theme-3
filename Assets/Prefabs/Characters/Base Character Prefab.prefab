@@ -96,6 +96,8 @@ GameObject:
   - component: {fileID: -6015158266246075006}
   - component: {fileID: 6881882089197821819}
   - component: {fileID: -6515177713889161778}
+  - component: {fileID: 1587417371585290641}
+  - component: {fileID: 6365631960335023329}
   m_Layer: 0
   m_Name: Base Character Prefab
   m_TagString: Untagged
@@ -162,7 +164,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &-6515177713889161778
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -189,6 +191,35 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6, y: 10}
   m_EdgeRadius: 0
+--- !u!114 &1587417371585290641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8880264119906634321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41a4599c00b81d1479fffd0545ab4120, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotateToCenter: 1
+  angle: 0
+--- !u!114 &6365631960335023329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8880264119906634321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be6a19fcc591c8648aea6c3d44cabafa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  acceleration: 120
+  canFly: 0
+  targetVelocity: {x: 0, y: 0}
 --- !u!1 &8880264120307593803
 GameObject:
   m_ObjectHideFlags: 0

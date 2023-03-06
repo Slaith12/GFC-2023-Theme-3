@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Mover), typeof(PlayerGrab))]
+[RequireComponent(typeof(Mover), typeof(PlayerGrab), typeof(Health))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5;
+
     [SerializeField] float m_cursorRange = 10;
     public float cursorRange { get => cursorRange; set { m_cursorRange = value; inputs.cursorRange = value; } }
+
+    private bool jumpInput;
 
     private PlayerInputs inputs;
 
@@ -29,7 +32,20 @@ public class PlayerController : MonoBehaviour
     {
         playerGrab.targetLocation = inputs.cursorOffset + (Vector2)transform.position;
 
+        //y value doesn't matter since player can't fly, so mover doesn't change y
         mover.targetVelocity = new Vector2(inputs.walkInput*moveSpeed, 0);
+
+        if(jumpInput)
+        {
+            mover.Jump(0); //replace with actual variable
+            jumpInput = false;
+        }
+    }
+
+    //no button for jumping right now, can easily add one (will need to modify PlayerInputs script, same code as Item Action)
+    private void Jump()
+    {
+        jumpInput = true;
     }
 
     private void Grab()
