@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 516133240}
   - component: {fileID: 516133239}
   - component: {fileID: 516133244}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: enemy f
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +302,7 @@ GameObject:
   - component: {fileID: 677593525}
   - component: {fileID: 677593524}
   - component: {fileID: 677593528}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,7 +450,7 @@ GameObject:
   - component: {fileID: 978810602}
   - component: {fileID: 978810601}
   - component: {fileID: 978810606}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: enemy g
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -611,7 +611,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1292191415}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
@@ -665,12 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a281c7f59f94ef746a480ecdc67fb4c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttractionLayer:
-    serializedVersion: 2
-    m_Bits: 128
   gravity: 15
-  effectionRadius: 7
-  AttractedObjects: []
 --- !u!58 &1316235617
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -754,27 +749,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &1316235620
-Rigidbody2D:
-  serializedVersion: 4
+--- !u!58 &1316235620
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1316235615}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_Enabled: 1
+  m_Density: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 7
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1
 --- !u!1 &1561085844
 GameObject:
   m_ObjectHideFlags: 0
@@ -873,7 +863,7 @@ GameObject:
   - component: {fileID: 1626102770}
   - component: {fileID: 1626102771}
   - component: {fileID: 1626102772}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1040,7 +1030,7 @@ GameObject:
   - component: {fileID: 1844949086}
   - component: {fileID: 1844949085}
   - component: {fileID: 1844949084}
-  - component: {fileID: 1844949083}
+  - component: {fileID: 1844949088}
   m_Layer: 6
   m_Name: planet (1)
   m_TagString: Untagged
@@ -1048,27 +1038,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!50 &1844949083
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1844949082}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 7
 --- !u!114 &1844949084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1081,12 +1050,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a281c7f59f94ef746a480ecdc67fb4c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttractionLayer:
-    serializedVersion: 2
-    m_Bits: 128
   gravity: 15
-  effectionRadius: 11
-  AttractedObjects: []
 --- !u!58 &1844949085
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1170,6 +1134,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1844949088
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844949082}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.8
 --- !u!1 &2027582819
 GameObject:
   m_ObjectHideFlags: 0
@@ -1223,12 +1203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a281c7f59f94ef746a480ecdc67fb4c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttractionLayer:
-    serializedVersion: 2
-    m_Bits: 128
   gravity: -1
-  effectionRadius: 70
-  AttractedObjects: []
 --- !u!58 &2027582822
 CircleCollider2D:
   m_ObjectHideFlags: 0

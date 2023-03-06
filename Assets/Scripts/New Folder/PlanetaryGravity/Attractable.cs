@@ -4,42 +4,46 @@ using UnityEngine;
 
 public class Attractable : MonoBehaviour
 {
-    private bool rotateToCenter = true;
     private Attractor currentAttractor;
-
-    private Collider2D m_collider;
+    //this is only needed for attractors with overlapping fields, which shouldn't ever happen, but I'm including it just in case
+    private List<Attractor> overlappedAttractors;
+    
     private Rigidbody2D m_rigidbody;
 
     [HideInInspector] public float angle;
 
     private void Awake()
     {
-        m_collider = GetComponent<Collider2D>();
         m_rigidbody = GetComponent<Rigidbody2D>();
+        overlappedAttractors = new List<Attractor>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (currentAttractor != null)
         {
-            if (rotateToCenter) RotateToCenter();
-
-            if (!currentAttractor.AttractedObjects.Contains(m_collider)) currentAttractor = null;
+            RotateToCenter();
+            Vector2 attractionDir = (Vector2)currentAttractor.transform.position - m_rigidbody.position;
+            m_rigidbody.AddForce(attractionDir.normalized * currentAttractor.gravity * 100 * Time.fixedDeltaTime);
         }
     }
 
     public void Attract(Attractor attractor)
     {
-        rotateToCenter = currentAttractor; //?????? I know what this line means but why is it like this?
-        Vector2 attractionDir = (Vector2)attractor.transform.position - m_rigidbody.position;
-        m_rigidbody.AddForce(attractionDir.normalized * attractor.gravity * 100 * Time.fixedDeltaTime);
-
-        if (currentAttractor == null)
-        {
+        overlappedAttractors.Add(attractor);
+        if(currentAttractor == null)
             currentAttractor = attractor;
-            
-        }
+    }
 
+    public void Unattract(Attractor attractor)
+    {
+        overlappedAttractors.Remove(attractor);
+        if(currentAttractor == attractor)
+        {
+            currentAttractor = null;
+            if (overlappedAttractors.Count >= 1)
+                currentAttractor = overlappedAttractors[0];
+        }
     }
 
     /// <summary>
