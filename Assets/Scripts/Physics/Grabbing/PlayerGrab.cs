@@ -6,7 +6,7 @@ using UnityEngine;
 namespace SKGG.Physics
 {
     //TODO: Have player hands rotate based on the held item rather than the player's body.
-    //TODO: Completely detach hands from player while holding item (would fix visual bug when turning around with item, and allows for more control with code)
+    //TODO: --NOTE: Read the Netcode for Gameobjects "NetworkObject Parenting" article before doing this-- Completely detach hands from player while holding item (would fix visual bug when turning around with item, and allows for more control with code)
     public class PlayerGrab : MonoBehaviour, IGrabber
     {
         public Vector2 targetLocation { get; set; }

@@ -4,12 +4,13 @@ using SKGG.Movement;
 using SKGG.Physics;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace SKGG.Control
 {
     [RequireComponent(typeof(Mover), typeof(PlayerGrab), typeof(Health))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : NetworkBehaviour
     {
         [SerializeField] float moveSpeed = 5;
 
@@ -29,9 +30,31 @@ namespace SKGG.Control
             inputs.Grab += Grab;
             inputs.Release += Release;
             inputs.cursorRange = m_cursorRange;
+            inputs.Disable(); //don't enable controls until player is fully spawned
 
             mover = GetComponent<Mover>();
             playerGrab = GetComponent<PlayerGrab>();
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+            if (!IsOwner)
+            {
+                //only the owner (the controlling player) should have control over this astronaut
+                //Destroy(this) would also work here but I don't want to go that far
+                this.enabled = false;
+            }
+            else
+            {
+                inputs.Enable();
+            }
+        }
+
+        public override void OnDestroy()
+        {
+            inputs.Disable();
+            base.OnDestroy();
         }
 
         private void FixedUpdate()
