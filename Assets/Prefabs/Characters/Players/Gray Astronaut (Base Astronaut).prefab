@@ -321,6 +321,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6646081194150536608, guid: d668b0a750fc6164fa6132b8d0064aa8, type: 3}
+      propertyPath: attributes
+      value: 
+      objectReference: {fileID: 11400000, guid: b0e00f158518cb44e9ce1c3bb6280f92, type: 2}
     - target: {fileID: 7801420243522841496, guid: d668b0a750fc6164fa6132b8d0064aa8, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 951099334
@@ -457,8 +461,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13df9bdd2c7fac54ea7bdb7422dfabb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 15
-  m_cursorRange: 10
 --- !u!114 &3563862017286690267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,9 +473,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5bbddd1d9cc4d34dbae270eeccdcfd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_followStrength: 600
-  m_torqueStrength: 10
-  m_lookAheadTime: 0.1
   firstHand: {fileID: 5720178903939359645}
   firstHandDefaultPos: {fileID: 1897741183164595382}
   secondHand: {fileID: 1440544253444426684}

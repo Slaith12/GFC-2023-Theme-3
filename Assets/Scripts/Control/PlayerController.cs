@@ -1,3 +1,4 @@
+using SKGG.Attributes;
 using SKGG.Combat;
 using SKGG.Inputs;
 using SKGG.Movement;
@@ -12,12 +13,39 @@ namespace SKGG.Control
     [RequireComponent(typeof(Mover), typeof(PlayerGrab), typeof(Health))]
     public class PlayerController : NetworkBehaviour
     {
-        [SerializeField] float moveSpeed = 5;
+        private struct InputData : INetworkSerializable
+        {
+            public float walkInput;
+            public Vector2 cursorOffset;
+            public bool jumpInput;
+            public bool grabInput;
+            public bool releaseInput;
 
-        [SerializeField] float m_cursorRange = 10;
-        public float cursorRange { get => cursorRange; set { m_cursorRange = value; inputs.cursorRange = value; } }
+            public InputData(float walkInput, Vector2 cursorOffset, bool jumpInput, bool grabInput, bool releaseInput)
+            {
+                this.walkInput = walkInput;
+                this.cursorOffset = cursorOffset;
+                this.jumpInput = jumpInput;
+                this.grabInput = grabInput;
+                this.releaseInput = releaseInput;
+            }
+
+            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+            {
+                serializer.SerializeValue(ref walkInput);
+                serializer.SerializeValue(ref cursorOffset);
+                serializer.SerializeValue(ref jumpInput);
+                serializer.SerializeValue(ref grabInput);
+                serializer.SerializeValue(ref releaseInput);
+            }
+        }
+
+        private AttributeContainer attributeContainer;
+        private PlayerAttributes attributes { get => (PlayerAttributes)attributeContainer.attributes; }
 
         private bool jumpInput;
+        private bool grabInput;
+        private bool releaseInput;
 
         private PlayerInputs inputs;
 
@@ -26,29 +54,33 @@ namespace SKGG.Control
 
         void Awake()
         {
+            attributeContainer = GetComponent<AttributeContainer>();
+
             inputs = new PlayerInputs(transform);
-            inputs.Grab += Grab;
-            inputs.Release += Release;
-            inputs.cursorRange = m_cursorRange;
-            inputs.Disable(); //don't enable controls until player is fully spawned
+            inputs.Grab += GrabInput;
+            inputs.Release += ReleaseInput;
+            inputs.cursorRange = attributes.grabRange;
 
             mover = GetComponent<Mover>();
             playerGrab = GetComponent<PlayerGrab>();
         }
 
+        private void Start()
+        {
+            //NetworkManager.StartHost();
+        }
+
         public override void OnNetworkSpawn()
         {
-            base.OnNetworkSpawn();
             if (!IsOwner)
             {
-                //only the owner (the controlling player) should have control over this astronaut
-                //Destroy(this) would also work here but I don't want to go that far
-                this.enabled = false;
+                //GetComponent<NetworkObject>().ChangeOwnership(NetworkManager.LocalClientId);
             }
-            else
+            if (IsOwner)
             {
-                inputs.Enable();
+                inputs.Enable(); //inputs are disabled by default
             }
+            base.OnNetworkSpawn();
         }
 
         public override void OnDestroy()
@@ -59,22 +91,60 @@ namespace SKGG.Control
 
         private void FixedUpdate()
         {
-            playerGrab.targetLocation = inputs.cursorOffset + (Vector2)transform.position;
+            if(IsOwner)
+            {
+                InputData inputData = new InputData(inputs.walkInput, inputs.cursorOffset, jumpInput, grabInput, releaseInput);
+                SendInputDataServerRpc(inputData);
+                jumpInput = false;
+                grabInput = false;
+                releaseInput = false;
+            }
+        }
+
+        [ServerRpc]
+        private void SendInputDataServerRpc(InputData inputData)
+        {
+            SendsInputDataClientRpc(inputData);
+            ProcessInputs(inputData);
+        }
+
+        [ClientRpc]
+        private void SendsInputDataClientRpc(InputData inputData)
+        {
+            if (IsServer) //the host would've already processed the inputs
+                return;
+            ProcessInputs(inputData);
+        }
+
+        private void ProcessInputs(InputData inputData)
+        {
+            playerGrab.targetLocation = inputData.cursorOffset + (Vector2)transform.position;
 
             //y value doesn't matter since player can't fly, so mover doesn't change y
-            mover.targetVelocity = new Vector2(inputs.walkInput * moveSpeed, 0);
-
-            if (jumpInput)
+            mover.targetVelocity = new Vector2(inputData.walkInput * attributes.moveSpeed, 0);
+            if (inputData.jumpInput)
             {
                 mover.Jump(0); //replace with actual variable
-                jumpInput = false;
+            }
+            if (inputData.grabInput)
+            {
+                Grab();
+            }
+            if (inputData.releaseInput)
+            {
+                Release();
             }
         }
 
         //no button for jumping right now, can easily add one (will need to modify PlayerInputs script, same code as Item Action)
-        private void Jump()
+        private void JumpInput()
         {
             jumpInput = true;
+        }
+
+        private void GrabInput()
+        {
+            grabInput = true;
         }
 
         private void Grab()
@@ -90,6 +160,11 @@ namespace SKGG.Control
                     return;
                 }
             }
+        }
+
+        private void ReleaseInput()
+        {
+            releaseInput = true;
         }
 
         private void Release()

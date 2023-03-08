@@ -1,23 +1,25 @@
+using SKGG.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace SKGG.Physics
 {
     //TODO: Have player hands rotate based on the held item rather than the player's body.
     //TODO: --NOTE: Read the Netcode for Gameobjects "NetworkObject Parenting" article before doing this-- Completely detach hands from player while holding item (would fix visual bug when turning around with item, and allows for more control with code)
-    public class PlayerGrab : MonoBehaviour, IGrabber
+    [RequireComponent(typeof(AttributeContainer))]
+    public class PlayerGrab : NetworkBehaviour, IGrabber
     {
+        private AttributeContainer attributeContainer;
+        private PlayerAttributes attributes => (PlayerAttributes)attributeContainer.attributes;
+
         public Vector2 targetLocation { get; set; }
-        [Header("Grab Attributes")]
-        [SerializeField] float m_followStrength = 150; //these m variables are here so that they are capitalized in the editor
-        public float followStrength { get => m_followStrength; }
+        public float followStrength { get => attributes.pullStrength; }
         public float rotationOffset { get => GetRotationOffset(); }
-        [SerializeField] float m_torqueStrength = 10;
-        public float torqueStrength { get => m_torqueStrength; }
-        [SerializeField] float m_lookAheadTime = 0.1f;
-        public float lookAheadTime { get => m_lookAheadTime; }
+        public float torqueStrength { get => attributes.torqueStrength; }
+        public float lookAheadTime { get => attributes.lookAheadTime; }
 
         [Header("Hands/Indicators (Visual Only)")]
         [SerializeField] Transform firstHand; //i am considering making the hand objects un-parented in Awake to make sure they don't move weirdly with the player
@@ -31,6 +33,11 @@ namespace SKGG.Physics
         private bool grabbingObject;
         private float interpTime;
         private bool facingRight;
+
+        private void Awake()
+        {
+            attributeContainer = GetComponent<AttributeContainer>();
+        }
 
         // Update is called once per frame
         void Update()
