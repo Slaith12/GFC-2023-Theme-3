@@ -38,6 +38,11 @@ namespace SKGG.Control
                 serializer.SerializeValue(ref grabInput);
                 serializer.SerializeValue(ref releaseInput);
             }
+
+            public override string ToString()
+            {
+                return $"Walk: {walkInput}, Cursor: {cursorOffset}, Jump: {jumpInput}, Grab: {grabInput}, Release: {releaseInput}";
+            }
         }
 
         private AttributeContainer attributeContainer;
@@ -149,13 +154,16 @@ namespace SKGG.Control
 
         private void Grab()
         {
-            Vector2 cursorPos = (Vector2)transform.position + inputs.cursorOffset;
+            Vector2 cursorPos = playerGrab.targetLocation;
             Collider2D[] hits = Physics2D.OverlapPointAll(cursorPos);
+            //Debug.Log($"Found {hits.Length} items at location {cursorPos}");
             foreach (Collider2D hit in hits)
             {
+                //Debug.Log($"Checking item {hit.gameObject.name}");
                 GrabbableObject grabbable = hit.GetComponentInParent<GrabbableObject>();
                 if (grabbable != null)
                 {
+                    //Debug.Log($"Grabbing {hit.gameObject.name}");
                     playerGrab.GrabObject(grabbable, cursorPos);
                     return;
                 }
