@@ -1,4 +1,4 @@
-using SKGG.Attributes;
+using SKGG.ObjectInfo;
 using SKGG.Physics;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,11 +7,11 @@ using UnityEngine;
 
 namespace SKGG.Movement
 {
-    [RequireComponent(typeof(Rigidbody2D), typeof(Attractable), typeof(AttributeContainer))]
+    [RequireComponent(typeof(Rigidbody2D), typeof(Attractable))]
     public class Mover : MonoBehaviour
     {
-        private AttributeContainer attributeContainer;
-        private CharacterAttributes attributes { get => (CharacterAttributes)attributeContainer.attributes; }
+        private ICharacterInfo characterInfo;
+        private CharacterAttributes attributes { get => characterInfo.attributes; }
 
         [HideInInspector] public Vector2 targetVelocity;
         public Vector2 relativeVelocity
@@ -25,7 +25,7 @@ namespace SKGG.Movement
 
         private void Awake()
         {
-            attributeContainer = GetComponent<AttributeContainer>();
+            characterInfo = GetComponent<ICharacterInfo>();
             rigidbody = GetComponent<Rigidbody2D>();
             attractable = GetComponent<Attractable>();
         }

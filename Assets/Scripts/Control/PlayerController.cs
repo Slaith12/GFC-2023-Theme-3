@@ -1,4 +1,4 @@
-using SKGG.Attributes;
+using SKGG.ObjectInfo;
 using SKGG.Combat;
 using SKGG.Inputs;
 using SKGG.Movement;
@@ -45,8 +45,8 @@ namespace SKGG.Control
             }
         }
 
-        private AttributeContainer attributeContainer;
-        private PlayerAttributes attributes { get => (PlayerAttributes)attributeContainer.attributes; }
+        private PlayerInfo attributeContainer;
+        private PlayerAttributes attributes { get => attributeContainer.attributes; }
 
         private bool jumpInput;
         private bool grabInput;
@@ -59,11 +59,14 @@ namespace SKGG.Control
 
         void Awake()
         {
-            attributeContainer = GetComponent<AttributeContainer>();
+            attributeContainer = GetComponent<PlayerInfo>();
 
             inputs = new PlayerInputs(transform);
             inputs.Grab += GrabInput;
             inputs.Release += ReleaseInput;
+            //it's fine to access attributes here because for players the attributes are already set
+            //don't do this for anything that isn't a player though unless you KNOW it's going to be pre-set
+            //if you need to do something like this in initialization, do it in the Start function
             inputs.cursorRange = attributes.grabRange;
 
             mover = GetComponent<Mover>();

@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SKGG.Attributes
+namespace SKGG.ObjectInfo
 {
-    [CreateAssetMenu(menuName ="Attributes/Character")]
-    public class CharacterAttributes : AttributeList
+    [CreateAssetMenu(menuName = "ObjectInfo/Attributes/Standard Character")]
+    public class CharacterAttributes : ScriptableObject
     {
         [Header("Standard Movement")]
         public float moveSpeed = 5;

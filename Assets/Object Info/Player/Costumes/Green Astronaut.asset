@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b837e7e1a4438c649a1d843218812af6, type: 3}
+  m_Name: Green Astronaut
+  m_EditorClassIdentifier: 
+  animator: {fileID: 9100000, guid: f8b984cfaa38c314bbbdcbd1fa3002aa, type: 2}
+  head: {fileID: 21300000, guid: 9398bd9e5d597d1458423eb0dc3620ec, type: 3}
+  torso: {fileID: 21300000, guid: 8b217a9aed150ae4abd3653979420a3a, type: 3}
+  foot1: {fileID: 21300000, guid: d892fbc6f11a25e46be896d826e8974b, type: 3}
+  foot2: {fileID: 21300000, guid: d892fbc6f11a25e46be896d826e8974b, type: 3}
+  hand1Closed: {fileID: 21300000, guid: 905b387b4fe261c4e9d14c8051577793, type: 3}
+  hand1Open: {fileID: 21300000, guid: a3c5e10248b24ee4a88cbf341d5cacf1, type: 3}
+  triggerHand: {fileID: 21300000, guid: 10474088a4823df4a9fe6cf9c913aa50, type: 3}
+  hand2Closed: {fileID: 21300000, guid: 371d27c90ff442743b9d23afc28ae622, type: 3}
+  hand2Open: {fileID: 21300000, guid: 26b26bfd0724dd244b11bc3c8e9176dc, type: 3}

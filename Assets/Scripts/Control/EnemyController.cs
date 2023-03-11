@@ -1,4 +1,4 @@
-using SKGG.Attributes;
+using SKGG.ObjectInfo;
 using SKGG.Combat;
 using SKGG.Movement;
 using System.Collections;
@@ -10,8 +10,8 @@ namespace SKGG.Control
     [RequireComponent(typeof(Mover), typeof(Health))]
     public class EnemyController : MonoBehaviour
     {
-        private AttributeContainer attributeContainer;
-        private CharacterAttributes attributes { get => (CharacterAttributes)attributeContainer.attributes; }
+        private ICharacterInfo attributeContainer;
+        private CharacterAttributes attributes { get => attributeContainer.attributes; }
 
         private Mover mover;
         private Health health;
@@ -19,7 +19,7 @@ namespace SKGG.Control
 
         void Awake()
         {
-            attributeContainer = GetComponent<AttributeContainer>();
+            attributeContainer = GetComponent<ICharacterInfo>();
 
             mover = GetComponent<Mover>();
             health = GetComponent<Health>();

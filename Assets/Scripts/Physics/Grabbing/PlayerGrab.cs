@@ -1,4 +1,4 @@
-using SKGG.Attributes;
+using SKGG.ObjectInfo;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,11 +9,11 @@ namespace SKGG.Physics
 {
     //TODO: Have player hands rotate based on the held item rather than the player's body.
     //TODO: --NOTE: Read the Netcode for Gameobjects "NetworkObject Parenting" article before doing this-- Completely detach hands from player while holding item (would fix visual bug when turning around with item, and allows for more control with code)
-    [RequireComponent(typeof(AttributeContainer))]
+    [RequireComponent(typeof(PlayerInfo))]
     public class PlayerGrab : NetworkBehaviour, IGrabber
     {
-        private AttributeContainer attributeContainer;
-        private PlayerAttributes attributes => (PlayerAttributes)attributeContainer.attributes;
+        private PlayerInfo playerInfo;
+        private PlayerAttributes attributes => playerInfo.attributes;
 
         public Vector2 targetLocation { get; set; }
         public float followStrength { get => attributes.pullStrength; }
@@ -36,7 +36,7 @@ namespace SKGG.Physics
 
         private void Awake()
         {
-            attributeContainer = GetComponent<AttributeContainer>();
+            playerInfo = GetComponent<PlayerInfo>();
         }
 
         // Update is called once per frame

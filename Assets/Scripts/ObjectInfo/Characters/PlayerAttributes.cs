@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SKGG.Attributes
+namespace SKGG.ObjectInfo
 {
-    [CreateAssetMenu(menuName = "Attributes/Player")]
+    [CreateAssetMenu(menuName = "ObjectInfo/Attributes/Player")]
     public class PlayerAttributes : CharacterAttributes
     {
         [Header("Grabbing")]
