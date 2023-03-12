@@ -10,7 +10,7 @@ namespace SKGG.Physics
     //TODO: Have player hands rotate based on the held item rather than the player's body.
     //TODO: --NOTE: Read the Netcode for Gameobjects "NetworkObject Parenting" article before doing this-- Completely detach hands from player while holding item (would fix visual bug when turning around with item, and allows for more control with code)
     [RequireComponent(typeof(PlayerInfo))]
-    public class PlayerGrab : NetworkBehaviour, IGrabber
+    public class PlayerGrab : MonoBehaviour, IGrabber
     {
         private PlayerInfo playerInfo;
         private PlayerAttributes attributes => playerInfo.attributes;
