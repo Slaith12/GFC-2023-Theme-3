@@ -9,7 +9,6 @@ namespace SKGG.Netcode
     {
         private NetworkManager networkManager => NetworkManager.Singleton;
 
-        [SerializeField] GameObject[] playerPrefabs;
         private ulong[] costumeOwners;
 
         //don't do things with the network manager in awake
@@ -46,7 +45,7 @@ namespace SKGG.Netcode
                 }
             }
             costumeOwners[playerCostumeID] = clientId+1; //the +1 is so that 0 will 100% mean "unused"
-            NetworkObject newPlayerObject = Instantiate(playerPrefabs[playerCostumeID]).GetComponent<NetworkObject>();
+            NetworkObject newPlayerObject = ObjectManager.Singleton.SpawnPlayer(playerCostumeID, Vector2.zero, 0).GetComponent<NetworkObject>();
             newPlayerObject.SpawnAsPlayerObject(clientId);
         }
 

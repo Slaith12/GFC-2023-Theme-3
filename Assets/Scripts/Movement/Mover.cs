@@ -10,8 +10,8 @@ namespace SKGG.Movement
     [RequireComponent(typeof(Rigidbody2D), typeof(Attractable))]
     public class Mover : MonoBehaviour
     {
-        private ICharacterInfo characterInfo;
-        private CharacterAttributes attributes { get => characterInfo.attributes; }
+        private ICharacterInfoContainer characterInfo;
+        private CharacterAttributes attributes { get => characterInfo.descriptor.attributes; }
 
         [HideInInspector] public Vector2 targetVelocity;
         public Vector2 relativeVelocity
@@ -25,7 +25,7 @@ namespace SKGG.Movement
 
         private void Awake()
         {
-            characterInfo = GetComponent<ICharacterInfo>();
+            characterInfo = GetComponent<ICharacterInfoContainer>();
             rigidbody = GetComponent<Rigidbody2D>();
             attractable = GetComponent<Attractable>();
         }

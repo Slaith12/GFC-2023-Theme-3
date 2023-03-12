@@ -45,8 +45,8 @@ namespace SKGG.Control
             }
         }
 
-        private PlayerInfo attributeContainer;
-        private PlayerAttributes attributes { get => attributeContainer.attributes; }
+        private PlayerInfoContainer attributeContainer;
+        private PlayerAttributes attributes { get => attributeContainer.descriptor.attributes; }
 
         private bool jumpInput;
         private bool grabInput;
@@ -59,7 +59,7 @@ namespace SKGG.Control
 
         void Awake()
         {
-            attributeContainer = GetComponent<PlayerInfo>();
+            attributeContainer = GetComponent<PlayerInfoContainer>();
 
             inputs = new PlayerInputs(transform);
             inputs.Grab += GrabInput;

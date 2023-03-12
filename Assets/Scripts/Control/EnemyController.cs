@@ -10,8 +10,8 @@ namespace SKGG.Control
     [RequireComponent(typeof(Mover), typeof(Health))]
     public class EnemyController : MonoBehaviour
     {
-        private ICharacterInfo attributeContainer;
-        private CharacterAttributes attributes { get => attributeContainer.attributes; }
+        private NPCInfoContainer attributeContainer;
+        private CharacterAttributes attributes { get => attributeContainer.descriptor.attributes; }
 
         private Mover mover;
         private Health health;
@@ -19,7 +19,7 @@ namespace SKGG.Control
 
         void Awake()
         {
-            attributeContainer = GetComponent<ICharacterInfo>();
+            attributeContainer = GetComponent<NPCInfoContainer>();
 
             mover = GetComponent<Mover>();
             health = GetComponent<Health>();
