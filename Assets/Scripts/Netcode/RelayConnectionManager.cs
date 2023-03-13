@@ -1,105 +1,85 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TMPro;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
+using Unity.Networking.Transport.Relay;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+using Unity.Services.Relay;
+using Unity.Services.Relay.Models;
 using UnityEngine;
 
 namespace SKGG.Netcode
 {
-    //it would be more reasonable to call this "ConnectionManager" and call the current ConnectionManager "ServerManager"
-    //but I have changes to ConnectionManager on another branch so changing the name now will cause merge conflicts
-    public class RelayConnectionManager : MonoBehaviour
+    public static class RelayConnectionManager
     {
-        [SerializeField] GameObject playerTypeUI;
-        private bool isHost;
-        [SerializeField] GameObject connectionTypeUI;
-        [SerializeField] TMP_Text connectionPrompt;
-        [SerializeField] TMP_InputField joinCodeInput;
-        [SerializeField] TMP_Text joinCodeText;
+        public enum ConnectionResult { Successful, EmptyCode, InvalidCode, UnknownError }
 
-        const string defaultConnectionPrompt = "Select Connection Type";
+        //dtls is a secure connection according to unity, so that's the connection we're using
+        const string connectionType = "dtls";
 
-        private void Awake()
+        //"Task" is basically info on whether the function's finished yet.
+        //you can either use "await" to wait for the task to finish or save it to a variable to do other things and check in later to see if it's done
+        public static async Task Initialize()
         {
-            ShowPlayerTypeUI();
-        }
-
-        public void ShowPlayerTypeUI()
-        {
-            playerTypeUI.SetActive(true);
-            connectionTypeUI.SetActive(false);
-            joinCodeText.gameObject.SetActive(false);
-        }
-
-        public void ShowConnectionTypeUI(bool host)
-        {
-            isHost = host;
-            playerTypeUI.SetActive(false);
-            connectionTypeUI.SetActive(true);
-            connectionPrompt.text = defaultConnectionPrompt;
-            joinCodeInput.gameObject.SetActive(!host);
-            joinCodeText.gameObject.SetActive(false);
-        }
-
-        public void StartGameLocal()
-        {
-            connectionPrompt.text = "No. Choose Relay Server";
-        }
-
-        public void StartGameRelay()
-        {
-            connectionPrompt.text = "Loading...";
-            if (isHost)
+            if (UnityServices.State != ServicesInitializationState.Initialized)
             {
-                StartCoroutine(StartGameRelayHost());
+                await UnityServices.InitializeAsync();
             }
-            else
+            //Relay requires you sign in first
+            if(!AuthenticationService.Instance.IsSignedIn)
             {
-                StartCoroutine(StartGameRelayClient());
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
             }
         }
 
-        private IEnumerator StartGameRelayHost()
+        public static async Task<string> StartHost(int maxPlayers, string region = null)
         {
-            Task<string> hostTask = RelayConnection.StartHost(3);
-            while(!hostTask.IsCompleted)
-            {
-                yield return null;
-            }
-            string joinCode = hostTask.Result;
-            joinCodeText.text = $"Join Code: {joinCode}";
-            playerTypeUI.SetActive(false);
-            connectionTypeUI.SetActive(false);
-            joinCodeText.gameObject.SetActive(true);
+            await Initialize();
+
+            //the first parameter to CreateAllocationAsync is the number of connections besides the host to open, so it's 1 less than the max players
+            //null region = find closest available server
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers - 1, region);
+            //minor(?) optimization because I don't know how long this or the next steps take (i don't even know if the task starts if you do it like this)
+            Task<string> joinCode = RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+
+            UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+            transport.SetRelayServerData(new RelayServerData(allocation, connectionType));
+            NetworkManager.Singleton.StartHost();
+            return await joinCode;
         }
 
-        private IEnumerator StartGameRelayClient()
+        public static async Task<ConnectionResult> StartClient(string joinCode)
         {
-            string joinCode = joinCodeInput.text;
-            joinCodeText.text = $"Join Code: {joinCode}";
-            Task<RelayConnection.ConnectionResult> clientTask = RelayConnection.StartClient(joinCode);
-            while (!clientTask.IsCompleted)
+            try
             {
-                yield return null;
+                if (string.IsNullOrEmpty(joinCode))
+                {
+                    return ConnectionResult.EmptyCode;
+                }
+                await Initialize();
+
+                JoinAllocation allocation;
+
+                try { allocation = await RelayService.Instance.JoinAllocationAsync(joinCode); }
+                catch (RelayServiceException ex)
+                {
+                    Debug.LogError(ex.Message + "\n" + ex.StackTrace);
+                    return ConnectionResult.InvalidCode;
+                }
+
+                UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+                transport.SetRelayServerData(new RelayServerData(allocation, connectionType));
+                NetworkManager.Singleton.StartClient();
+                return ConnectionResult.Successful;
             }
-            RelayConnection.ConnectionResult result = clientTask.Result;
-            switch (result)
+            catch(Exception ex)
             {
-                case RelayConnection.ConnectionResult.Successful:
-                    break;
-                case RelayConnection.ConnectionResult.EmptyCode:
-                    connectionPrompt.text = "Please input a code";
-                    yield break;
-                case RelayConnection.ConnectionResult.InvalidCode:
-                    connectionPrompt.text = "Invalid code entered";
-                    yield break;
-                case RelayConnection.ConnectionResult.UnknownError:
-                    connectionPrompt.text = "An unknown error has occured";
-                    yield break;
+                Debug.LogError(ex.Message + "\n" + ex.StackTrace);
+                return ConnectionResult.UnknownError;
             }
-            playerTypeUI.SetActive(false);
-            connectionTypeUI.SetActive(false);
-            joinCodeText.gameObject.SetActive(true);
         }
     }
 }
