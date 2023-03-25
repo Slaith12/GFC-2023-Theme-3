@@ -82,11 +82,7 @@ namespace SKGG.Physics
             //the Release function assumes that the caller is the person grabbing the object, so make sure it isn't called when it isn't held by this
             if ((object)currentGrabbed.currentHolder == this) //ignore the warning here
             {
-                currentGrabbed.Release();
-            }
-            if (forceResync)
-            {
-                currentGrabbed.GetComponent<PositionSync>().ForceResync();
+                currentGrabbed.Release(forceResync);
             }
             grabbingObject = false;
             interpTime = handTravelTime;

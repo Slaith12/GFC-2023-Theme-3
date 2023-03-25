@@ -5,21 +5,21 @@ using UnityEngine;
 
 namespace SKGG.Netcode
 {
-    public class PositionSync : NetworkBehaviour
+    public class RotationSync : NetworkBehaviour
     {
         float ping => (float)(NetworkManager.LocalTime.Time - NetworkManager.ServerTime.Time);
 
         //remember that this values will be on a delay, so set the tolerances according to that.
         //movement is going to be client-authoritative because it's way easier to do it like that, and I don't think we'll
         //need to worry about cheating yet
-        //this is a band-aid fix to stop players from rubber-banding on their own screen. It's caused by current method of
+        //this is a band-aid fix to stop items from rubber-banding on their own screen. It's caused by current method of
         //sending inputs over the network not working perfectly.
         //This doesn't actually stop rubber-banding, it just makes it only seen on characters/items that aren't controlled by the player
-        private NetworkVariable<Vector2> trackedPosition = new NetworkVariable<Vector2>(writePerm: NetworkVariableWritePermission.Owner);
+        private NetworkVariable<float> trackedRotation = new NetworkVariable<float>(writePerm: NetworkVariableWritePermission.Owner);
 
-        [Tooltip("The max position deviation from the tracked position allowed before the object is forcibly resynced.\n" +
+        [Tooltip("The max deviation from the tracked rotation allowed before the object is forcibly resynced.\n" +
             "This value scales with velocity and ping, so it's safe to set it somewhat low.")]
-        [SerializeField] float positionTolerance = 0.5f;
+        [SerializeField] float rotationTolerance = 0.5f;
 
         //used for position checks
         LinkedList<float> recentVelocities;
@@ -42,7 +42,7 @@ namespace SKGG.Netcode
             fixedUpdateExecuted = true;
             if (!IsOwner)
             {
-                float currentVelocity = rigidbody.velocity.magnitude;
+                float currentVelocity = Mathf.Abs(rigidbody.angularVelocity);
                 if (currentVelocity > maxRecentVelocity)
                 {
                     maxRecentVelocity = currentVelocity;
@@ -53,7 +53,7 @@ namespace SKGG.Netcode
 
         void Update()
         {
-            if(!fixedUpdateExecuted)
+            if (!fixedUpdateExecuted)
             {
                 return;
             }
@@ -83,7 +83,7 @@ namespace SKGG.Netcode
 
         private void ServerSync()
         {
-            trackedPosition.Value = transform.position;
+            trackedRotation.Value = transform.eulerAngles.z;
         }
 
         private void ClientSync()
@@ -91,7 +91,7 @@ namespace SKGG.Netcode
             //the recent velocities list is trimmed in update rather than fixed update as an optimization, so that it's done a maximum of 1 time per frame
             //this isn't called when no fixed updates happened before this update so it doesn't affect higher frame rates
             TrimRecentVelocities();
-            if (((Vector2)transform.position - trackedPosition.Value).magnitude > positionTolerance + ping*maxRecentVelocity*1.1f)
+            if (Mathf.Abs(transform.eulerAngles.z - trackedRotation.Value) > rotationTolerance + ping * maxRecentVelocity * 1.1f)
             {
                 ForceResync();
             }
@@ -106,10 +106,10 @@ namespace SKGG.Netcode
                 maxRemovedVelocity = Mathf.Max(maxRemovedVelocity, recentVelocities.First.Value);
                 recentVelocities.RemoveFirst();
             }
-            if(maxRemovedVelocity == maxRecentVelocity)
+            if (maxRemovedVelocity == maxRecentVelocity)
             {
                 maxRecentVelocity = 0;
-                foreach(float speed in recentVelocities)
+                foreach (float speed in recentVelocities)
                 {
                     maxRecentVelocity = Mathf.Max(maxRecentVelocity, speed);
                 }
@@ -119,10 +119,10 @@ namespace SKGG.Netcode
         public void ForceResync()
         {
             Debug.Log($"Force syncing object {gameObject.name}");
-            transform.position = trackedPosition.Value;
+            transform.eulerAngles = new Vector3(0, 0, trackedRotation.Value);
             recentVelocities.Clear();
-            recentVelocities.AddFirst(rigidbody.velocity.magnitude);
-            maxRecentVelocity = rigidbody.velocity.magnitude;
+            recentVelocities.AddFirst(Mathf.Abs(rigidbody.angularVelocity));
+            maxRecentVelocity = recentVelocities.First.Value;
         }
     }
 }
