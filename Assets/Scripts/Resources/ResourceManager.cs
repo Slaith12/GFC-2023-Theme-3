@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//PLAYER RESOURCE MANAGEMENT
 public class ResourceManager : MonoBehaviour
 {
     /*keeps track of the resources that all players have.
