@@ -1,4 +1,5 @@
 using SKGG.Attributes;
+using SKGG.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,11 +8,14 @@ using UnityEngine;
 
 namespace SKGG.Physics
 {
+    //this file is only for the non-network code. If you're looking for the network code, look in the Scripts/Netcode/NetworkPlayerGrab file
+
     //TODO: Have player hands rotate based on the held item rather than the player's body.
     //TODO: --NOTE: Read the Netcode for Gameobjects "NetworkObject Parenting" article before doing this-- Completely detach hands from player while holding item (would fix visual bug when turning around with item, and allows for more control with code)
     [RequireComponent(typeof(AttributeContainer))]
-    public class PlayerGrab : NetworkBehaviour, IGrabber
+    public partial class PlayerGrab : NetworkBehaviour, IGrabber
     {
+
         private AttributeContainer attributeContainer;
         private PlayerAttributes attributes => (PlayerAttributes)attributeContainer.attributes;
 
@@ -38,8 +42,7 @@ namespace SKGG.Physics
         {
             attributeContainer = GetComponent<AttributeContainer>();
         }
-
-        // Update is called once per frame
+        
         void Update()
         {
             grabCursor.position = targetLocation;
@@ -54,7 +57,17 @@ namespace SKGG.Physics
                 Debug.LogWarning("Attempted to grab object while already holding something. This is probably a bug.");
                 return;
             }
-            grabbable.Grab(this, pos);
+            bool grabSuccessful = grabbable.Grab(this, pos);
+            if (!grabSuccessful)
+                return;
+            //the script needs to tell the other clients that the object was grabbed. the grab position is stored in the grabbed object, so it doesn't need to be passed
+            TriggerGrabEvent(grabbable);
+            UpdateAfterGrab(grabbable);
+        }
+
+        //this is here so that this is available normally to the client sided grab as well as give the network enforced grab a way to bypass the checks and rpc call
+        private void UpdateAfterGrab(GrabbableObject grabbable)
+        {
             grabbingObject = true;
             currentGrabbed = grabbable;
             if (currentGrabbed.facingRight != facingRight)
@@ -62,11 +75,19 @@ namespace SKGG.Physics
             interpTime = handTravelTime;
         }
 
-        public void ReleaseCurrentObject()
+        public void ReleaseCurrentObject(bool forceResync = false)
         {
             if (!grabbingObject)
                 return;
-            currentGrabbed.Release();
+            //the Release function assumes that the caller is the person grabbing the object, so make sure it isn't called when it isn't held by this
+            if ((object)currentGrabbed.currentHolder == this) //ignore the warning here
+            {
+                currentGrabbed.Release();
+            }
+            if (forceResync)
+            {
+                currentGrabbed.GetComponent<PositionSync>().ForceResync();
+            }
             grabbingObject = false;
             interpTime = handTravelTime;
             return;

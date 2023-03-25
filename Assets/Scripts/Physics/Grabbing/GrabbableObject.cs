@@ -33,7 +33,7 @@ namespace SKGG.Physics
             }
         }
         public bool isTwoHanded { get => secondHandPlacement != null; }
-        private IGrabber currentHolder; //null if not being held
+        public IGrabber currentHolder { get; private set; } //null if not being held
         public bool isCurrentlyHeld => currentHolder != null;
 
         public bool facingRight { get; private set; }
@@ -110,9 +110,9 @@ namespace SKGG.Physics
             return angle;
         }
 
-        public bool Grab(IGrabber grabber, Vector2 grabPosition)
+        public bool Grab(IGrabber grabber, Vector2 grabPosition, bool forceGrab = false)
         {
-            if (isCurrentlyHeld)
+            if (isCurrentlyHeld && !forceGrab)
                 return false;
             currentHolder = grabber;
             firstHandPosition = grabPosition;

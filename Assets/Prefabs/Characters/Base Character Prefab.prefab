@@ -97,11 +97,11 @@ GameObject:
   - component: {fileID: 6881882089197821819}
   - component: {fileID: -6515177713889161778}
   - component: {fileID: 7801420243522841496}
-  - component: {fileID: -1517817861320497318}
   - component: {fileID: 1326928554380925283}
-  - component: {fileID: -1452490371770689560}
   - component: {fileID: 1587417371585290641}
   - component: {fileID: 6365631960335023329}
+  - component: {fileID: 6646081194150536608}
+  - component: {fileID: -7649149917657505912}
   m_Layer: 0
   m_Name: Base Character Prefab
   m_TagString: Untagged
@@ -211,32 +211,6 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 1
   AutoObjectParentSync: 1
---- !u!114 &-1517817861320497318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8880264119906634321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 0
-  SyncRotAngleX: 0
-  SyncRotAngleY: 0
-  SyncRotAngleZ: 0
-  SyncScaleX: 0
-  SyncScaleY: 0
-  SyncScaleZ: 0
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  InLocalSpace: 0
-  Interpolate: 1
 --- !u!114 &1326928554380925283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,18 +225,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: -6015158266246075006}
---- !u!114 &-1452490371770689560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8880264119906634321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1587417371585290641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,9 +251,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6a19fcc591c8648aea6c3d44cabafa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 120
-  canFly: 0
   targetVelocity: {x: 0, y: 0}
+--- !u!114 &6646081194150536608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8880264119906634321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 269757290c1525d47853b84f7d6e08e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attributes: {fileID: 0}
+--- !u!114 &-7649149917657505912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8880264119906634321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea940221905032c49909b4e193567d7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positionTolerance: 0.5
 --- !u!1 &8880264120307593803
 GameObject:
   m_ObjectHideFlags: 0

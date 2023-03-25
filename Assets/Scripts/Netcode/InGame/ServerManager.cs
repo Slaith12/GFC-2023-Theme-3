@@ -5,7 +5,7 @@ using Unity.Netcode;
 
 namespace SKGG.Netcode
 {
-    public class ConnectionManager : MonoBehaviour
+    public class ServerManager : MonoBehaviour
     {
         private NetworkManager networkManager => NetworkManager.Singleton;
 
@@ -19,13 +19,6 @@ namespace SKGG.Netcode
             networkManager.OnClientConnectedCallback += SpawnPlayer;
             networkManager.NetworkConfig.PlayerPrefab = null; //the player prefab should be spawned by this script, not by NetworkManager
             networkManager.OnClientDisconnectCallback += DespawnPlayer;
-        }
-
-        //note: don't try to convert this to an InitServer function, network manager calls "OnServerStarted" AFTER "OnClientConnected",
-        //so it won't properly account for the host
-        private void EndServer()
-        {
-            costumeOwners = new ulong[4];
         }
 
         private void SpawnPlayer(ulong clientId)

@@ -2,6 +2,7 @@ using SKGG.Attributes;
 using SKGG.Combat;
 using SKGG.Inputs;
 using SKGG.Movement;
+using SKGG.Netcode;
 using SKGG.Physics;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,9 @@ using UnityEngine;
 
 namespace SKGG.Control
 {
+    //TODO: Fix method of input sending to reduce desyncs. Sending inputs during FixedUpdate doesn't work properly if game is <50 fps since multiple events are sent and played back in the same frame
+    //If we want, we can just do a band-aid fix for the above issue by snapping players' positions and velocities to the tracked values when an input change is detected
+    //We can also just do nothing since a band-aid fix already applied in PositionSync means the desyncs never cause the players themselves to rubberband, only other people
     [RequireComponent(typeof(Mover), typeof(PlayerGrab), typeof(Health))]
     public class PlayerController : NetworkBehaviour
     {
@@ -35,7 +39,8 @@ namespace SKGG.Control
                 serializer.SerializeValue(ref walkInput);
                 serializer.SerializeValue(ref cursorOffset);
                 serializer.SerializeValue(ref jumpInput);
-                serializer.SerializeValue(ref grabInput);
+                //grabbing is synced using a separate rpc to ensure delays don't cause the grabbing location to be desynced
+                //serializer.SerializeValue(ref grabInput);
                 serializer.SerializeValue(ref releaseInput);
             }
 
@@ -100,21 +105,22 @@ namespace SKGG.Control
             {
                 InputData inputData = new InputData(inputs.walkInput, inputs.cursorOffset, jumpInput, grabInput, releaseInput);
                 SendInputDataServerRpc(inputData);
+                ProcessInputs(inputData);
                 jumpInput = false;
                 grabInput = false;
                 releaseInput = false;
             }
         }
 
-        [ServerRpc]
-        private void SendInputDataServerRpc(InputData inputData)
+        [ServerRpc(RequireOwnership = true)]
+        private void SendInputDataServerRpc(InputData inputData, ServerRpcParams rpcParams = default)
         {
-            SendsInputDataClientRpc(inputData);
+            SendsInputDataClientRpc(inputData, RPCParamHelper.SendToAllButOneClient(rpcParams.Receive.SenderClientId));
             ProcessInputs(inputData);
         }
 
         [ClientRpc]
-        private void SendsInputDataClientRpc(InputData inputData)
+        private void SendsInputDataClientRpc(InputData inputData, ClientRpcParams rpcParams)
         {
             if (IsServer) //the host would've already processed the inputs
                 return;
