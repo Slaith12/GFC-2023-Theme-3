@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SKGG.Netcode
 {
@@ -16,6 +17,10 @@ namespace SKGG.Netcode
         [SerializeField] TMP_InputField joinCodeInput;
         [SerializeField] TMP_Text joinCodeText;
         [SerializeField] GameObject disconnectButton;
+        [Space]
+        [SerializeField] bool changeSceneOnConnect;
+        [SerializeField] int sceneToGoTo;
+        [SerializeField] GameObject loadingPanel;
 
         const string defaultConnectionPrompt = "Select Connection Type";
 
@@ -46,7 +51,15 @@ namespace SKGG.Netcode
 
         public void StartGameLocal()
         {
-            connectionPrompt.text = "Loading...";
+            if (changeSceneOnConnect)
+            {
+                loadingPanel.SetActive(true);
+                DontDestroyOnLoad(transform.parent.gameObject);
+            }
+            else
+            {
+                connectionPrompt.text = "Loading...";
+            }
             if(isHost)
             {
                 StartGameLocalHost();
@@ -59,7 +72,16 @@ namespace SKGG.Netcode
 
         public void StartGameRelay()
         {
-            connectionPrompt.text = "Loading...";
+            if (changeSceneOnConnect)
+            {
+                loadingPanel.SetActive(true);
+                //it has to use the parent gameobject because dontdestroyonload only works on root objects
+                DontDestroyOnLoad(transform.parent.gameObject);
+            }
+            else
+            {
+                connectionPrompt.text = "Loading...";
+            }
             if (isHost)
             {
                 StartCoroutine(StartGameRelayHost());
@@ -90,6 +112,14 @@ namespace SKGG.Netcode
 
         private IEnumerator StartGameRelayHost()
         {
+            if (changeSceneOnConnect)
+            {
+                AsyncOperation loadScene = SceneManager.LoadSceneAsync(sceneToGoTo);
+                while (!loadScene.isDone)
+                {
+                    yield return null;
+                }
+            }
             Task<string> hostTask = RelayConnectionManager.StartHost(4);
             while(!hostTask.IsCompleted)
             {
@@ -101,13 +131,18 @@ namespace SKGG.Netcode
             connectionTypeUI.SetActive(false);
             joinCodeText.gameObject.SetActive(true);
             disconnectButton.SetActive(true);
+            if(changeSceneOnConnect)
+            {
+                loadingPanel.SetActive(false);
+            }
         }
 
         private IEnumerator StartGameRelayClient()
         {
-            string joinCode = joinCodeInput.text;
+            string joinCode = joinCodeInput.text.ToUpper();
             joinCodeText.text = $"Join Code: {joinCode}";
-            Task<RelayConnectionManager.ConnectionResult> clientTask = RelayConnectionManager.StartClient(joinCode);
+
+            Task<RelayConnectionManager.ConnectionResult> clientTask = RelayConnectionManager.ConnectClient(joinCode);
             while (!clientTask.IsCompleted)
             {
                 yield return null;
@@ -119,23 +154,56 @@ namespace SKGG.Netcode
                     break;
                 case RelayConnectionManager.ConnectionResult.EmptyCode:
                     connectionPrompt.text = "Please input a code";
+                    if (changeSceneOnConnect)
+                    {
+                        loadingPanel.SetActive(false);
+                    }
                     yield break;
                 case RelayConnectionManager.ConnectionResult.InvalidCode:
                     connectionPrompt.text = "Invalid code entered";
+                    if (changeSceneOnConnect)
+                    {
+                        loadingPanel.SetActive(false);
+                    }
                     yield break;
                 case RelayConnectionManager.ConnectionResult.UnknownError:
                     connectionPrompt.text = "An unknown error has occured";
+                    if (changeSceneOnConnect)
+                    {
+                        loadingPanel.SetActive(false);
+                    }
                     yield break;
             }
+
+            if (changeSceneOnConnect)
+            {
+                AsyncOperation loadScene = SceneManager.LoadSceneAsync(sceneToGoTo);
+                while (!loadScene.isDone)
+                {
+                    yield return null;
+                }
+            }
+
+            NetworkManager.Singleton.StartClient();
             playerTypeUI.SetActive(false);
             connectionTypeUI.SetActive(false);
             joinCodeText.gameObject.SetActive(true);
             disconnectButton.SetActive(true);
+            if (changeSceneOnConnect)
+            {
+                loadingPanel.SetActive(false);
+            }
         }
 
         public void Disconnect()
         {
             NetworkManager.Singleton.Shutdown();
+            if(changeSceneOnConnect)
+            {
+                SceneManager.LoadSceneAsync(1);
+                Destroy(transform.parent.gameObject);
+                return;
+            }
             ShowPlayerTypeUI();
         }
     }

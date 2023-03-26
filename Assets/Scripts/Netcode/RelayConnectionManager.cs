@@ -51,35 +51,40 @@ namespace SKGG.Netcode
             return await joinCode;
         }
 
-        public static async Task<ConnectionResult> StartClient(string joinCode)
+        public static async Task<ConnectionResult> ConnectClient(string joinCode)
         {
+            if (string.IsNullOrEmpty(joinCode))
+            {
+                return ConnectionResult.EmptyCode;
+            }
+            await Initialize();
+
+            JoinAllocation allocation;
+
+            try { allocation = await RelayService.Instance.JoinAllocationAsync(joinCode); }
+            catch (RelayServiceException ex)
+            {
+                Debug.LogError(ex.Message + "\n" + ex.StackTrace);
+                return ConnectionResult.InvalidCode;
+            }
             try
             {
-                if (string.IsNullOrEmpty(joinCode))
-                {
-                    return ConnectionResult.EmptyCode;
-                }
-                await Initialize();
-
-                JoinAllocation allocation;
-
-                try { allocation = await RelayService.Instance.JoinAllocationAsync(joinCode); }
-                catch (RelayServiceException ex)
-                {
-                    Debug.LogError(ex.Message + "\n" + ex.StackTrace);
-                    return ConnectionResult.InvalidCode;
-                }
-
                 UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
                 transport.SetRelayServerData(new RelayServerData(allocation, connectionType));
-                NetworkManager.Singleton.StartClient();
-                return ConnectionResult.Successful;
             }
             catch(Exception ex)
             {
                 Debug.LogError(ex.Message + "\n" + ex.StackTrace);
                 return ConnectionResult.UnknownError;
             }
+            return ConnectionResult.Successful;
+        }
+
+        public static async Task<ConnectionResult> StartClient(string joinCode)
+        {
+            ConnectionResult result = await ConnectClient(joinCode);
+            NetworkManager.Singleton.StartClient();
+            return result;
         }
     }
 }
