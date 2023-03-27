@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Services.Lobbies;
 using UnityEngine;
 
-public class LobbyUIManager : MonoBehaviour
+public class LobbyUI : MonoBehaviour
 {
     [SerializeField] GameObject createLobbyPrompt;
     [SerializeField] TMP_Dropdown selectNumPlayers;
@@ -39,7 +40,7 @@ public class LobbyUIManager : MonoBehaviour
     {
         int numPlayers = selectNumPlayers.value + 1; //the "value" number will be 1 less than the number that the user inputted
         string password = choosePassword.text;
-        //create lobby with settings above
+        LobbyManager.CreateLobby(numPlayers, false);
     }
 
     public void BeginSearchWithCode()
