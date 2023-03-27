@@ -202,7 +202,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea940221905032c49909b4e193567d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionTolerance: 0.4
+  positionUpdateThreshold: 0.5
+  velocityUpdateThreshold: 1
+  updateOnSleep: 1
+  minPositionTolerance: 5
+  minVelocityNudge: 0.5
+  velocityNudgeScale: 0.1
 --- !u!114 &-749790300797258535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,4 +220,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea497532bef86674e8ba2a4426bf083a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationTolerance: 0.5
+  rotationUpdateThreshold: 0.5
+  velocityUpdateThreshold: 1
+  updateOnSleep: 1
+  minRotationTolerance: 15
+  minVelocityNudge: 0.7
+  velocityNudgeScale: 0.2

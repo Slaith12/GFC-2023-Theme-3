@@ -277,7 +277,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea940221905032c49909b4e193567d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionTolerance: 0.5
+  positionUpdateThreshold: 0.5
+  velocityUpdateThreshold: 1
+  updateOnSleep: 1
+  minPositionTolerance: 5
+  minVelocityNudge: 0.5
+  velocityNudgeScale: 0.1
 --- !u!1 &8880264120307593803
 GameObject:
   m_ObjectHideFlags: 0
