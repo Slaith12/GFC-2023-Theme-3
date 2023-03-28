@@ -205,9 +205,9 @@ MonoBehaviour:
   positionUpdateThreshold: 0.5
   velocityUpdateThreshold: 1
   updateOnSleep: 1
-  minPositionTolerance: 5
-  minVelocityNudge: 0.5
-  velocityNudgeScale: 0.1
+  minPositionTolerance: 3
+  minVelocityNudge: 0.9
+  velocityNudgeScale: 0.3
 --- !u!114 &-749790300797258535
 MonoBehaviour:
   m_ObjectHideFlags: 0
