@@ -1,5 +1,4 @@
 using SKGG.Attributes;
-using SKGG.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -79,8 +78,12 @@ namespace SKGG.Physics
         {
             if (!grabbingObject)
                 return;
+            if(!forceResync && IsOwner)
+            {
+                TriggerReleaseEvent();
+            }
             //the Release function assumes that the caller is the person grabbing the object, so make sure it isn't called when it isn't held by this
-            if ((object)currentGrabbed.currentHolder == this) //ignore the warning here
+            if ((object)currentGrabbed.currentHolder == this)
             {
                 currentGrabbed.Release(forceResync);
             }

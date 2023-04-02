@@ -124,6 +124,9 @@ namespace SKGG.Physics
             currentHolder = grabber;
             firstHandPosition = grabPosition;
             AdjustRotationCenter();
+            //temporarily ignore sync updates so that server can get caught up
+            positionSync.IgnoreUpdates(1);
+            rotationSync.IgnoreUpdates(1);
             return true;
         }
 
@@ -131,10 +134,18 @@ namespace SKGG.Physics
         {
             currentHolder = null;
             AdjustRotationCenter();
+            if (forceResync)
+            {
+                ForceResync();
+            }
+            //temporarily ignore sync updates so that server can get caught up
+            positionSync.IgnoreUpdates(1);
+            rotationSync.IgnoreUpdates(1);
         }
 
         public void ForceResync()
         {
+            //Debug.Log($"Object {gameObject.name} forcibly resynced by outside code.");
             positionSync.ForceResync();
             rotationSync.ForceResync();
         }

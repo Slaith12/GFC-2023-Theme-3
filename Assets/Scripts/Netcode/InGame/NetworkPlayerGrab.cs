@@ -1,4 +1,3 @@
-using SKGG.Attributes;
 using SKGG.Netcode;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +10,8 @@ namespace SKGG.Physics
     //this file is only for the network code. If you're looking for the non-network code, look in the Scripts/Physics/Grabbing/PlayerGrab file
     public partial class PlayerGrab : NetworkBehaviour
     {
+        #region Grab
+
         private void TriggerGrabEvent(GrabbableObject grabbable)
         {
             if (!IsOwner)
@@ -76,6 +77,18 @@ namespace SKGG.Physics
             GrabClientRpc(objectId, localPos, RPCParamHelper.SendToAllButOneClient(grabbingClientID));
         }
 
+        [ClientRpc]
+        private void GrabClientRpc(ulong objectId, Vector2 localPos, ClientRpcParams rpcParams)
+        {
+            if (IsServer) //the host would've already processed this
+                return;
+            NetworkObject grabbedObject = NetworkManager.SpawnManager.SpawnedObjects[objectId];
+            GrabbableObject grabbed = grabbedObject.GetComponent<GrabbableObject>();
+            Vector2 grabbedPos = grabbed.transform.localToWorldMatrix.MultiplyPoint(localPos);
+            grabbed.Grab(this, grabbedPos, forceGrab: true);
+            UpdateAfterGrab(grabbed);
+        }
+
         enum GrabFailReason { Unknown, GrabNotPermitted, ObjectNotFound, ObjectUngrabbable, ObjectAlreadyHeld, ObjectOutOfRange }
 
         [ClientRpc]
@@ -83,11 +96,11 @@ namespace SKGG.Physics
         {
             //if for whatever reason the player isn't grabbing the object, ignore the message since the point of this method
             //is to have the player stop holding the object.
-            if(!grabbingObject)
+            if (!grabbingObject)
             {
                 return;
             }
-            switch(reason)
+            switch (reason)
             {
                 case GrabFailReason.GrabNotPermitted:
                     //this means that the client tried to tell the server to have someone else grab an object.
@@ -101,7 +114,7 @@ namespace SKGG.Physics
                     //it's also possible that this is caused by the grabbed object despawning during the time the message was being sent.
                     //this would happen when crafting materials are either consumed for crafting or bundled into a sack
                     //in either case, the grabbed object should be destroyed since it shouldn't exist
-                    if(currentGrabbed != null && currentGrabbed.gameObject != null)
+                    if (currentGrabbed != null && currentGrabbed.gameObject != null)
                     {
                         Destroy(currentGrabbed.gameObject);
                     }
@@ -138,17 +151,57 @@ namespace SKGG.Physics
             }
         }
 
-        [ClientRpc]
-        private void GrabClientRpc(ulong objectId, Vector2 localPos, ClientRpcParams rpcParams)
-        {
-            if (IsServer) //the host would've already processed this
-                return;
-            NetworkObject grabbedObject = NetworkManager.SpawnManager.SpawnedObjects[objectId];
-            GrabbableObject grabbed = grabbedObject.GetComponent<GrabbableObject>();
-            Vector2 grabbedPos = grabbed.transform.localToWorldMatrix.MultiplyPoint(localPos);
-            grabbed.Grab(this, grabbedPos, forceGrab: true);
-            UpdateAfterGrab(grabbed);
+        #endregion
 
+        #region Release
+
+        private void TriggerReleaseEvent()
+        {
+            if(!IsOwner)
+            {
+                return;
+            }
+            Vector2 itemPos = currentGrabbed.transform.position;
+            Vector2 velocity = currentGrabbed.GetComponent<Rigidbody2D>().velocity;
+            float rotation = currentGrabbed.transform.eulerAngles.z;
+            float rotationVelocity = currentGrabbed.GetComponent<Rigidbody2D>().angularVelocity;
+            ReleaseServerRpc(itemPos, velocity, rotation, rotationVelocity);
         }
+
+        [ServerRpc]
+        private void ReleaseServerRpc(Vector2 itemPos, Vector2 velocity, float rotation, float rotationVelocity, ServerRpcParams rpcParams = default)
+        {
+            if(rpcParams.Receive.SenderClientId != OwnerClientId)
+            {
+                return;
+            }
+            if(!grabbingObject)
+            {
+                return;
+            }
+
+            NetworkObject grabbedObject = currentGrabbed.GetComponent<NetworkObject>();
+            Rigidbody2D grabbedBody = currentGrabbed.GetComponent<Rigidbody2D>();
+            grabbedObject.RemoveOwnership(); //makes the server the owner
+            grabbedObject.transform.position = itemPos;
+            grabbedBody.velocity = velocity;
+            grabbedObject.transform.eulerAngles = new Vector3(0, 0, rotation);
+            grabbedBody.angularVelocity = rotationVelocity;
+            if (!IsOwnedByServer) //make sure that a client called this. if the host called it, calling the function will cause an infinite loop
+            {
+                ReleaseCurrentObject();
+            }
+            ReleaseClientRpc(RPCParamHelper.SendToAllButOneClient(OwnerClientId));
+        }
+
+        [ClientRpc]
+        private void ReleaseClientRpc(ClientRpcParams rpcParams)
+        {
+            if (IsServer)
+                return;
+            ReleaseCurrentObject();
+        }
+
+        #endregion
     }
 }

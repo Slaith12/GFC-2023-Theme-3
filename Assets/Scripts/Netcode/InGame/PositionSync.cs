@@ -34,6 +34,7 @@ namespace SKGG.Netcode
         [Tooltip("The max position deviation from the tracked position allowed before the object is forcibly resynced.\n" +
             "Setting this too low can cause rubberbanding. Set it high and let velocity nudge deal with smaller desyncs.")]
         [SerializeField] float minPositionTolerance = 5;
+        [SerializeField] float positionToleranceScale = 0.8f;
         [Min(0)]
         [Tooltip("The minimum amount that the object is \"nudged\" towards the tracked position. Set this low enough so that it can't overpower the actual velocity")]
         [SerializeField] float minVelocityNudge = 0.5f;
@@ -46,6 +47,7 @@ namespace SKGG.Netcode
         float maxRecentVelocity;
 
         bool fixedUpdateExecuted;
+        float ignoreUpdatesTimer;
 
         private new Rigidbody2D rigidbody;
 
@@ -66,6 +68,7 @@ namespace SKGG.Netcode
                 trackedPosition.Value = position;
                 trackedVelocity.Value = velocity;
             }
+            IgnoreUpdates();
         }
 
         private void FixedUpdate()
@@ -75,7 +78,7 @@ namespace SKGG.Netcode
                 return;
             }
             fixedUpdateExecuted = true;
-            if (!IsOwner)
+            if (!IsOwner && ignoreUpdatesTimer <= 0)
             {
                 float currentVelocity = velocity.magnitude;
                 if (currentVelocity > maxRecentVelocity)
@@ -99,6 +102,10 @@ namespace SKGG.Netcode
 
         void Update()
         {
+            if (ignoreUpdatesTimer > 0)
+            {
+                ignoreUpdatesTimer -= Time.deltaTime;
+            }
             if(!fixedUpdateExecuted || !IsSpawned)
             {
                 return;
@@ -125,6 +132,11 @@ namespace SKGG.Netcode
                 recentVelocities.Clear();
                 maxRecentVelocity = 0;
             }
+        }
+
+        public void IgnoreUpdates(float time = 1)
+        {
+            ignoreUpdatesTimer = time;
         }
 
         private void ServerSync()
@@ -156,9 +168,11 @@ namespace SKGG.Netcode
             //the recent velocities list is trimmed in update rather than fixed update as an optimization, so that it's done a maximum of 1 time per frame
             //this isn't called when no fixed updates happened before this update so it doesn't affect higher frame rates
             TrimRecentVelocities();
-            if ((position - trackedPosition.Value).magnitude > minPositionTolerance + ping*maxRecentVelocity*1.1f)
+            if (ignoreUpdatesTimer <= 0 && (position - trackedPosition.Value).magnitude > minPositionTolerance + ping*maxRecentVelocity*positionToleranceScale)
             {
+                Debug.Log($"Large positional desync for {gameObject.name} detected. Tracked position is {trackedPosition.Value} while displayed position is {transform.position}. Forcing resync.");
                 ForceResync();
+                IgnoreUpdates(0.5f); //for some reason it can get very jumpy if it's allowed to resync multiple times quickly
             }
         }
 
@@ -183,7 +197,7 @@ namespace SKGG.Netcode
 
         public void ForceResync()
         {
-            Debug.Log($"Force syncing object {gameObject.name}");
+            //Debug.Log($"Force syncing object {gameObject.name}");
             position = trackedPosition.Value;
             velocity = trackedVelocity.Value;
             recentVelocities.Clear();

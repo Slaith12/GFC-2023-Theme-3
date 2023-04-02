@@ -37,11 +37,14 @@ namespace SKGG.Control
             public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
             {
                 serializer.SerializeValue(ref walkInput);
-                serializer.SerializeValue(ref cursorOffset);
-                serializer.SerializeValue(ref jumpInput);
-                //grabbing is synced using a separate rpc to ensure delays don't cause the grabbing location to be desynced
+                serializer.SerializeValue(ref cursorOffset); //this isn't sent properly, and walk input likely also isn't sent properly
+
+                //jumping is currently disabled
+                //serializer.SerializeValue(ref jumpInput);
+
+                //grabbing and releasing is synced using a separate rpc to ensure delays don't cause the grabbing location to be desynced
                 //serializer.SerializeValue(ref grabInput);
-                serializer.SerializeValue(ref releaseInput);
+                //serializer.SerializeValue(ref releaseInput);
             }
 
             public override string ToString()
