@@ -48,6 +48,7 @@ namespace SKGG.Netcode
 
         bool fixedUpdateExecuted;
         float ignoreUpdatesTimer;
+        bool ignoreNudges;
 
         private new Rigidbody2D rigidbody;
 
@@ -78,7 +79,7 @@ namespace SKGG.Netcode
                 return;
             }
             fixedUpdateExecuted = true;
-            if (!IsOwner && ignoreUpdatesTimer <= 0)
+            if (!IsOwner && (!ignoreNudges || ignoreUpdatesTimer <= 0))
             {
                 float currentVelocity = velocity.magnitude;
                 if (currentVelocity > maxRecentVelocity)
@@ -134,9 +135,10 @@ namespace SKGG.Netcode
             }
         }
 
-        public void IgnoreUpdates(float time = 1)
+        public void IgnoreUpdates(float time = 1, bool ignoreNudges = false)
         {
             ignoreUpdatesTimer = time;
+            this.ignoreNudges = ignoreNudges;
         }
 
         private void ServerSync()
