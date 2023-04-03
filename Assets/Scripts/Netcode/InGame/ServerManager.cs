@@ -27,16 +27,11 @@ namespace SKGG.Netcode
             if (!networkManager.IsServer)
                 return;
             //Debug.Log($"Connecting client {clientId}");
+            ReevaluatePlayers();
             int playerCostumeID = GetNewPlayerCostume();
             if(playerCostumeID == -1) //no costumes are available
             {
-                ReevaluatePlayers(); //make sure costume availability is properly updated
-                playerCostumeID = GetNewPlayerCostume(); //try again
-                if(playerCostumeID == -1)
-                {
-                    //should disconnect player, but I'm not doing that yet
-                    playerCostumeID = 4;
-                }
+                playerCostumeID = 4;
             }
             costumeOwners[playerCostumeID] = clientId+1; //the +1 is so that 0 will 100% mean "unused"
             NetworkObject newPlayerObject = Instantiate(playerPrefabs[playerCostumeID]).GetComponent<NetworkObject>();
@@ -73,8 +68,15 @@ namespace SKGG.Netcode
         {
             for (int i = 0; i < costumeOwners.Length; i++)
             {
-                if (networkManager.ConnectedClients[costumeOwners[i]] == null)
+                if(costumeOwners[i] == 0)
+                {
+                    continue;
+                }
+                ulong owner = costumeOwners[i] - 1;
+                if (!networkManager.ConnectedClients.ContainsKey(owner) || networkManager.ConnectedClients[owner] == null)
+                {
                     costumeOwners[i] = 0;
+                }
             }
         }
     }

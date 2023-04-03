@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace SKGG.Netcode
@@ -14,6 +15,7 @@ namespace SKGG.Netcode
         [SerializeField] TMP_Text connectionPrompt;
         [SerializeField] TMP_InputField joinCodeInput;
         [SerializeField] TMP_Text joinCodeText;
+        [SerializeField] GameObject disconnectButton;
 
         const string defaultConnectionPrompt = "Select Connection Type";
 
@@ -27,6 +29,7 @@ namespace SKGG.Netcode
             playerTypeUI.SetActive(true);
             connectionTypeUI.SetActive(false);
             joinCodeText.gameObject.SetActive(false);
+            disconnectButton.SetActive(false);
         }
 
         public void ShowConnectionTypeUI(bool host)
@@ -36,7 +39,9 @@ namespace SKGG.Netcode
             connectionTypeUI.SetActive(true);
             connectionPrompt.text = defaultConnectionPrompt;
             joinCodeInput.gameObject.SetActive(!host);
+            //joinCodeInput.text = "";
             joinCodeText.gameObject.SetActive(false);
+            disconnectButton.SetActive(false);
         }
 
         public void StartGameLocal()
@@ -71,6 +76,7 @@ namespace SKGG.Netcode
             playerTypeUI.SetActive(false);
             connectionTypeUI.SetActive(false);
             joinCodeText.gameObject.SetActive(false);
+            disconnectButton.SetActive(true);
         }
 
         private void StartGameLocalClient()
@@ -79,6 +85,7 @@ namespace SKGG.Netcode
             playerTypeUI.SetActive(false);
             connectionTypeUI.SetActive(false);
             joinCodeText.gameObject.SetActive(false);
+            disconnectButton.SetActive(true);
         }
 
         private IEnumerator StartGameRelayHost()
@@ -93,6 +100,7 @@ namespace SKGG.Netcode
             playerTypeUI.SetActive(false);
             connectionTypeUI.SetActive(false);
             joinCodeText.gameObject.SetActive(true);
+            disconnectButton.SetActive(true);
         }
 
         private IEnumerator StartGameRelayClient()
@@ -122,6 +130,13 @@ namespace SKGG.Netcode
             playerTypeUI.SetActive(false);
             connectionTypeUI.SetActive(false);
             joinCodeText.gameObject.SetActive(true);
+            disconnectButton.SetActive(true);
+        }
+
+        public void Disconnect()
+        {
+            NetworkManager.Singleton.Shutdown();
+            ShowPlayerTypeUI();
         }
     }
 }
