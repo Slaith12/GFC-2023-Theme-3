@@ -97,8 +97,8 @@ GameObject:
   - component: {fileID: 6868987796918891401}
   - component: {fileID: -311128021849328115}
   - component: {fileID: -8871001708759064209}
-  - component: {fileID: -7109625788867866541}
-  - component: {fileID: -749790300797258535}
+  - component: {fileID: -5007485998345692722}
+  - component: {fileID: 1962759290969637277}
   m_Layer: 7
   m_Name: Base Grabbable Item
   m_TagString: Untagged
@@ -190,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotateToCenter: 0
   angle: 0
---- !u!114 &-7109625788867866541
+--- !u!114 &-5007485998345692722
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,16 +199,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 5225058065120200855}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea940221905032c49909b4e193567d7e, type: 3}
+  m_Script: {fileID: 11500000, guid: ee06e3ba0b991c14bbb8693b155f1a87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionUpdateThreshold: 0.5
-  velocityUpdateThreshold: 1
-  updateOnSleep: 1
-  minPositionTolerance: 3
-  minVelocityNudge: 0.9
-  velocityNudgeScale: 0.3
---- !u!114 &-749790300797258535
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 0
+  SyncRotAngleX: 0
+  SyncRotAngleY: 0
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.05
+  RotAngleThreshold: 1
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+--- !u!114 &1962759290969637277
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -217,12 +225,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5225058065120200855}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea497532bef86674e8ba2a4426bf083a, type: 3}
+  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationUpdateThreshold: 0.5
-  velocityUpdateThreshold: 1
-  updateOnSleep: 1
-  minRotationTolerance: 15
-  minVelocityNudge: 0.7
-  velocityNudgeScale: 0.2

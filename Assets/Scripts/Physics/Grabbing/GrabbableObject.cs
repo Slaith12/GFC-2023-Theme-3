@@ -8,7 +8,7 @@ namespace SKGG.Physics
     //-TODO: Review grab/throw physics to see if they can be made more fun (idea: make acceleration faster when item is at lower speed to make controls snappier) [low priority, likely not needed]
     //-TODO: Move all object handling code to the grabber script to reduce complexity and allow future implementation of different grabber behaviors [low priority, likely won't have other grabbers, and grabbing is already complete]
     //TODO: Change Grab and Release methods to work with networking (make sure all clients know when an object is grabbed/released, preferably also knowing who did it)
-    [RequireComponent(typeof(Rigidbody2D), typeof(PositionSync), typeof(RotationSync))]
+    [RequireComponent(typeof(Rigidbody2D)/*, typeof(PositionSync), typeof(RotationSync)*/)]
     public class GrabbableObject : MonoBehaviour
     {
         enum FlipBehavior { FlipX, FlipY, NoFlip }
@@ -40,8 +40,8 @@ namespace SKGG.Physics
         public bool facingRight { get; private set; }
 
         private new Rigidbody2D rigidbody;
-        private PositionSync positionSync;
-        private RotationSync rotationSync;
+        //private PositionSync positionSync;
+        //private RotationSync rotationSync;
 
         //script will need to do some COM trickery to stablize the object when held so the following fields are helpful in making sure the object still behaves properly
         private Vector2 standardCOM; //the proper COM of the object
@@ -50,8 +50,8 @@ namespace SKGG.Physics
         private void Awake()
         {
             rigidbody = GetComponent<Rigidbody2D>();
-            positionSync = GetComponent<PositionSync>();
-            rotationSync = GetComponent<RotationSync>();
+            //positionSync = GetComponent<PositionSync>();
+            //rotationSync = GetComponent<RotationSync>();
 
             rigidbody.gravityScale = 0; //gravity will be simulated in script;
             firstHandPlacement = new GameObject("Hand 1 Placement").transform;
@@ -125,8 +125,8 @@ namespace SKGG.Physics
             firstHandPosition = grabPosition;
             AdjustRotationCenter();
             //temporarily ignore sync updates so that server can get caught up
-            positionSync.IgnoreUpdates(1);
-            rotationSync.IgnoreUpdates(1);
+            //positionSync.IgnoreUpdates(1);
+            //rotationSync.IgnoreUpdates(1);
             return true;
         }
 
@@ -139,15 +139,15 @@ namespace SKGG.Physics
                 ForceResync();
             }
             //temporarily ignore sync updates so that server can get caught up
-            positionSync.IgnoreUpdates(1);
-            rotationSync.IgnoreUpdates(1);
+            //positionSync.IgnoreUpdates(1);
+            //rotationSync.IgnoreUpdates(1);
         }
 
         public void ForceResync()
         {
             //Debug.Log($"Object {gameObject.name} forcibly resynced by outside code.");
-            positionSync.ForceResync();
-            rotationSync.ForceResync();
+            //positionSync.ForceResync();
+            //rotationSync.ForceResync();
         }
 
         public void Flip()

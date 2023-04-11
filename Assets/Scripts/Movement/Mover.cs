@@ -47,13 +47,11 @@ namespace SKGG.Movement
             }
         }
 
-        [ServerRpc]
         public void Knockback(Vector2 knockback)
         {
             relativeVelocity = knockback;
         }
 
-        [ServerRpc]
         public void Jump(float jumpPower)
         {
             relativeVelocity = new Vector2(relativeVelocity.x, jumpPower);

@@ -63,7 +63,8 @@ namespace SKGG.Physics
             Vector2 grabberPos = transform.position;
             Vector2 grabbedPos = grabbed.transform.localToWorldMatrix.MultiplyPoint(localPos);
             //give the player a bit of leeway with the grab range to account for delay
-            if((grabbedPos - grabberPos).magnitude > attributes.grabRange*1.1f)
+            //delay will be big for NGO's network transform
+            if ((grabbedPos - grabberPos).magnitude > attributes.grabRange * 1.8f)
             {
                 FailedGrabClientRpc(GrabFailReason.ObjectOutOfRange, RPCParamHelper.SendToOneClient(grabbingClientID));
                 return;

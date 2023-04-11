@@ -36,7 +36,8 @@ namespace SKGG.Control
 
             public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
             {
-                serializer.SerializeValue(ref walkInput);
+                //walk input shouldn't be sent while using ClientNetworkTransform
+                //serializer.SerializeValue(ref walkInput);
                 serializer.SerializeValue(ref cursorOffset); //this isn't sent properly, and walk input likely also isn't sent properly
 
                 //jumping is currently disabled
@@ -78,17 +79,8 @@ namespace SKGG.Control
             playerGrab = GetComponent<PlayerGrab>();
         }
 
-        private void Start()
-        {
-            //NetworkManager.StartHost();
-        }
-
         public override void OnNetworkSpawn()
         {
-            if (!IsOwner)
-            {
-                //GetComponent<NetworkObject>().ChangeOwnership(NetworkManager.LocalClientId);
-            }
             if (IsOwner)
             {
                 inputs.Enable(); //inputs are disabled by default
