@@ -194,5 +194,14 @@ namespace SKGG.Physics
                 rigidbody.inertia = standardInertia + rigidbody.mass * distanceSquared; //parallel axis theorem wow
             }
         }
+
+        private void OnValidate()
+        {
+            ClientNetworkTransform networkTransform = GetComponent<ClientNetworkTransform>();
+            if (networkTransform == null)
+                return;
+            networkTransform.SyncScaleX = (flipBehavior == FlipBehavior.FlipX);
+            networkTransform.SyncScaleY = (flipBehavior == FlipBehavior.FlipY);
+        }
     }
 }
