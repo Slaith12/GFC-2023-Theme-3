@@ -42,7 +42,7 @@ namespace SKGG.Netcode
             //the first parameter to CreateAllocationAsync is the number of connections besides the host to open, so it's 1 less than the max players
             //null region = find closest available server
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers - 1, region);
-            //minor(?) optimization because I don't know how long this or the next steps take (i don't even know if the task starts if you do it like this)
+            //minor(?) optimization because I don't know how long this or the next steps take
             Task<string> joinCode = RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
             UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();

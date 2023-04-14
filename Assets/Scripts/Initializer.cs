@@ -1,3 +1,4 @@
+using SKGG.Netcode;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,8 @@ public class Initializer : MonoBehaviour
 {
     void Start()
     {
-        //right now initialization is only here to instantiate the network manager, so it can finish immediately
+        PlayerPrefs.DeleteKey(ConnectionUI.savedCodeKey);
+        //right now initialization is mainly here to instantiate the network manager, so it can finish immediately
         FinishInitialization();
     }
 

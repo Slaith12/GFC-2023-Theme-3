@@ -23,9 +23,14 @@ namespace SKGG.Netcode
         [SerializeField] GameObject loadingPanel;
 
         const string defaultConnectionPrompt = "Select Connection Type";
+        public const string savedCodeKey = "Saved Passcode";
 
         private void Awake()
         {
+            if(changeSceneOnConnect && PlayerPrefs.HasKey(savedCodeKey))
+            {
+                joinCodeInput.text = PlayerPrefs.GetString(savedCodeKey);
+            }
             ShowPlayerTypeUI();
         }
 
@@ -185,6 +190,11 @@ namespace SKGG.Netcode
             }
 
             NetworkManager.Singleton.StartClient();
+            while(!NetworkManager.Singleton.IsConnectedClient || NetworkManager.Singleton.LocalClient.PlayerObject == null)
+            {
+                yield return null;
+            }
+
             playerTypeUI.SetActive(false);
             connectionTypeUI.SetActive(false);
             joinCodeText.gameObject.SetActive(true);
@@ -197,9 +207,11 @@ namespace SKGG.Netcode
 
         public void Disconnect()
         {
+            bool isHost = NetworkManager.Singleton.IsHost;
             NetworkManager.Singleton.Shutdown();
-            if(changeSceneOnConnect)
+            if(changeSceneOnConnect && !isHost)
             {
+                PlayerPrefs.SetString(savedCodeKey, joinCodeInput.text.ToUpper());
                 SceneManager.LoadSceneAsync(1);
                 Destroy(transform.parent.gameObject);
                 return;
