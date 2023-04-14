@@ -20,6 +20,11 @@ namespace SKGG.Netcode
             networkManager.NetworkConfig.PlayerPrefab = null; //the player prefab should be spawned by this script, not by NetworkManager
             networkManager.OnClientDisconnectCallback += DespawnPlayer;
         }
+        private void OnDestroy()
+        {
+            networkManager.OnClientConnectedCallback -= SpawnPlayer;
+            networkManager.OnClientDisconnectCallback -= DespawnPlayer;
+        }
 
         private void SpawnPlayer(ulong clientId)
         {

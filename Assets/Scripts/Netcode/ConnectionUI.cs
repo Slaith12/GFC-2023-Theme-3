@@ -209,9 +209,12 @@ namespace SKGG.Netcode
         {
             bool isHost = NetworkManager.Singleton.IsHost;
             NetworkManager.Singleton.Shutdown();
-            if(changeSceneOnConnect && !isHost)
+            if(changeSceneOnConnect)
             {
-                PlayerPrefs.SetString(savedCodeKey, joinCodeInput.text.ToUpper());
+                if (isHost)
+                {
+                    PlayerPrefs.SetString(savedCodeKey, joinCodeInput.text.ToUpper());
+                }
                 SceneManager.LoadSceneAsync(1);
                 Destroy(transform.parent.gameObject);
                 return;
