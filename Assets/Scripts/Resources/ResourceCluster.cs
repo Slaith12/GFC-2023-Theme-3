@@ -2,45 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceCluster : MonoBehaviour
+namespace SKGG.Crafting
 {
-    public Transform[] resourceSpawnPositions;
-    public GameObject[] resources;
-    float[] ResourceTimers;
-    [SerializeField] float maxTimer;
-    [SerializeField] float minTimer;
-
-
-    // Start is called before the first frame update
-    void Start()
+    public class ResourceCluster : MonoBehaviour
     {
-        for (int i = 0; i < resourceSpawnPositions.Length; i++) 
+
+        public int resourceAmount;
+        public SKGG.Combat.Health h;
+
+
+        void Start()
         {
-            Instantiate(resources[i], resourceSpawnPositions[i]);
+            h = GetComponent<SKGG.Combat.Health>();
         }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-        resourceTimerLogic();   
-    }
-
-    void resourceTimerLogic() 
-    {
-        for (int i = 0; i < ResourceTimers.Length; i++) 
+        // Update is called once per frame
+        void Update()
         {
-            ResourceTimers[i] -= Time.fixedDeltaTime;
-
-            if (ResourceTimers[i] <= 0 && !resources[i].activeInHierarchy)
-            {
-                ResourceTimers[i] = Random.Range(minTimer, maxTimer);
-                resources[i].SetActive(true);
-            }
+            this.enabled = !h.dead;
         }
+
+        private void OnDisable()
+        {
+
+        }
+
+
+
     }
-
-
 
 }

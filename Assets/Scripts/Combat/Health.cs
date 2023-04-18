@@ -9,6 +9,7 @@ namespace SKGG.Combat
     {
         [SerializeField] int health = 10;
         [HideInInspector] public bool dead;
+        [SerializeField] GameObject resourceDrop;
 
         private Mover mover;
 
@@ -28,6 +29,7 @@ namespace SKGG.Combat
             if (health <= 0)
             {
                 dead = true;
+                Instantiate(resourceDrop);
             }
             if (mover != null)
                 mover.Knockback(knockback);

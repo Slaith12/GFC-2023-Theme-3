@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace SKGG.Combat
+namespace SKGG.Crafting
 {
     public class Crafting : MonoBehaviour
     {
         public Resource[] ingredients;
 
-        public Dictionary<Resource[], Weapon> weapons;
+        public Dictionary<Resource[], SKGG.Combat.Weapon> weapons;
 
         // Start is called before the first frame update
         void Start()
@@ -30,8 +30,9 @@ namespace SKGG.Combat
 
         private void OnMouseDown()
         {
-            Weapon crafted = weapons[ingredients];
+            SKGG.Combat.Weapon crafted = weapons[ingredients];
 
+            //CHANGE TO SPAWN
             Instantiate(crafted);
             foreach (var ingr in ingredients)
             {

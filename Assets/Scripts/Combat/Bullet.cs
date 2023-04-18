@@ -27,9 +27,10 @@ namespace SKGG.Combat
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.IsTouchingLayers(6))
+            if(!collision.IsTouchingLayers(7))
                 Destroy(this.gameObject);
         }
+        
     }
 
 }
