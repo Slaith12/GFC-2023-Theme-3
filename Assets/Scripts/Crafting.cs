@@ -7,14 +7,17 @@ namespace SKGG.Crafting
 {
     public class Crafting : MonoBehaviour
     {
-        public Resource[] ingredients;
+        public List<Resource> ingredients;
 
-        public Dictionary<Resource[], SKGG.Combat.Weapon> weapons;
+        public Dictionary<List<Resource>, GameObject> weapons;
+
+        [SerializeField] GameObject crabHammer;
+        [SerializeField] List<Resource> crabIngr;
 
         // Start is called before the first frame update
         void Start()
         {
-
+            weapons.Add(crabIngr, crabHammer);   
         }
 
         // Update is called once per frame
@@ -23,14 +26,25 @@ namespace SKGG.Crafting
 
         }
 
-        private void OnTriggerStay2D(Collider2D collision)
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            ingredients = GetComponent<Resource[]>();
+            if (collision.GetComponent<Resource>() != null) 
+            {
+                ingredients.Add(collision.GetComponent<Resource>());
+            }
+        }
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (collision.GetComponent<Resource>() != null)
+            {
+                ingredients.Remove(collision.GetComponent<Resource>());
+            }
         }
 
         private void OnMouseDown()
         {
-            SKGG.Combat.Weapon crafted = weapons[ingredients];
+            GameObject crafted = weapons[ingredients];
 
             //CHANGE TO SPAWN
             Instantiate(crafted);
