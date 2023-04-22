@@ -1,3 +1,4 @@
+using SKGG.Netcode;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace SKGG.Physics
     //-TODO: Review grab/throw physics to see if they can be made more fun (idea: make acceleration faster when item is at lower speed to make controls snappier) [low priority, likely not needed]
     //-TODO: Move all object handling code to the grabber script to reduce complexity and allow future implementation of different grabber behaviors [low priority, likely won't have other grabbers, and grabbing is already complete]
     //TODO: Change Grab and Release methods to work with networking (make sure all clients know when an object is grabbed/released, preferably also knowing who did it)
-    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Rigidbody2D)/*, typeof(PositionSync), typeof(RotationSync)*/)]
     public class GrabbableObject : MonoBehaviour
     {
         enum FlipBehavior { FlipX, FlipY, NoFlip }
@@ -34,10 +35,14 @@ namespace SKGG.Physics
         }
         public bool isTwoHanded { get => secondHandPlacement != null; }
         public IGrabber currentHolder { get; private set; } //null if not being held
+        public bool isCurrentlyHeld => currentHolder != null;
 
         public bool facingRight { get; private set; }
 
         private new Rigidbody2D rigidbody;
+        //private PositionSync positionSync;
+        //private RotationSync rotationSync;
+
         //script will need to do some COM trickery to stablize the object when held so the following fields are helpful in making sure the object still behaves properly
         private Vector2 standardCOM; //the proper COM of the object
         private float standardInertia; //the inertia of the object when rotated around its proper COM
@@ -45,6 +50,9 @@ namespace SKGG.Physics
         private void Awake()
         {
             rigidbody = GetComponent<Rigidbody2D>();
+            //positionSync = GetComponent<PositionSync>();
+            //rotationSync = GetComponent<RotationSync>();
+
             rigidbody.gravityScale = 0; //gravity will be simulated in script;
             firstHandPlacement = new GameObject("Hand 1 Placement").transform;
             firstHandPlacement.parent = transform;
@@ -109,20 +117,37 @@ namespace SKGG.Physics
             return angle;
         }
 
-        public bool Grab(IGrabber grabber, Vector2 grabPosition)
+        public bool Grab(IGrabber grabber, Vector2 grabPosition, bool forceGrab = false)
         {
-            if (currentHolder != null)
+            if (isCurrentlyHeld && !forceGrab)
                 return false;
             currentHolder = grabber;
             firstHandPosition = grabPosition;
             AdjustRotationCenter();
+            //temporarily ignore sync updates so that server can get caught up
+            //positionSync.IgnoreUpdates(1);
+            //rotationSync.IgnoreUpdates(1);
             return true;
         }
 
-        public void Release()
+        public void Release(bool forceResync = false)
         {
             currentHolder = null;
             AdjustRotationCenter();
+            if (forceResync)
+            {
+                ForceResync();
+            }
+            //temporarily ignore sync updates so that server can get caught up
+            //positionSync.IgnoreUpdates(1);
+            //rotationSync.IgnoreUpdates(1);
+        }
+
+        public void ForceResync()
+        {
+            //Debug.Log($"Object {gameObject.name} forcibly resynced by outside code.");
+            //positionSync.ForceResync();
+            //rotationSync.ForceResync();
         }
 
         public void Flip()
@@ -168,6 +193,15 @@ namespace SKGG.Physics
                 float distanceSquared = (newCenterOfRotation - standardCOM).sqrMagnitude;
                 rigidbody.inertia = standardInertia + rigidbody.mass * distanceSquared; //parallel axis theorem wow
             }
+        }
+
+        private void OnValidate()
+        {
+            ClientNetworkTransform networkTransform = GetComponent<ClientNetworkTransform>();
+            if (networkTransform == null)
+                return;
+            networkTransform.SyncScaleX = (flipBehavior == FlipBehavior.FlipX);
+            networkTransform.SyncScaleY = (flipBehavior == FlipBehavior.FlipY);
         }
     }
 }

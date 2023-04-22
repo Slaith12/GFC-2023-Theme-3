@@ -1,16 +1,17 @@
+using SKGG.Attributes;
 using SKGG.Physics;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace SKGG.Movement
 {
-    [RequireComponent(typeof(Rigidbody2D), typeof(Attractable))]
+    [RequireComponent(typeof(Rigidbody2D), typeof(Attractable), typeof(AttributeContainer))]
     public class Mover : MonoBehaviour
     {
-        [SerializeField] float acceleration = 5;
-        [Tooltip("Can the character move in both the x and y directions or only the x direction?")]
-        [SerializeField] bool canFly;
+        private AttributeContainer attributeContainer;
+        private CharacterAttributes attributes { get => (CharacterAttributes)attributeContainer.attributes; }
 
         [HideInInspector] public Vector2 targetVelocity;
         public Vector2 relativeVelocity
@@ -24,6 +25,7 @@ namespace SKGG.Movement
 
         private void Awake()
         {
+            attributeContainer = GetComponent<AttributeContainer>();
             rigidbody = GetComponent<Rigidbody2D>();
             attractable = GetComponent<Attractable>();
         }
@@ -32,16 +34,16 @@ namespace SKGG.Movement
         {
             Vector2 velocityDiff = targetVelocity - relativeVelocity;
             //non-flying characters can't change their y velocity normally
-            if (!canFly)
+            if (!attributes.canFly)
                 velocityDiff.y = 0;
 
-            if (velocityDiff.magnitude < acceleration * Time.fixedDeltaTime)
+            if (velocityDiff.magnitude < attributes.acceleration * Time.fixedDeltaTime)
             {
                 relativeVelocity += velocityDiff;
             }
             else
             {
-                relativeVelocity += acceleration * Time.fixedDeltaTime * velocityDiff.normalized; //apparently this ordering improves performance according to VS.
+                relativeVelocity += attributes.acceleration * Time.fixedDeltaTime * velocityDiff.normalized; //apparently this ordering improves performance according to VS.
             }
         }
 

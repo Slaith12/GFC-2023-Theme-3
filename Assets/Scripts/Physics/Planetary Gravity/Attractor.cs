@@ -10,7 +10,7 @@ namespace SKGG.Physics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            Debug.Log($"Attracting {collision.name}");
+            //Debug.Log($"Attracting {collision.name}");
             Attractable attractable = collision.GetComponent<Attractable>();
             if (attractable != null)
                 attractable.Attract(this);
@@ -18,7 +18,7 @@ namespace SKGG.Physics
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            Debug.Log($"Unattracting {collision.name}");
+            //Debug.Log($"Unattracting {collision.name}");
             Attractable attractable = collision.GetComponent<Attractable>();
             if (attractable != null)
                 attractable.Unattract(this);

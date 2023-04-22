@@ -23,7 +23,6 @@ namespace SKGG.Inputs
             this.user = user;
             InitSettings();
             HookInputs();
-            Enable();
         }
 
         //ideally this should read from a settings file but it's gonna be hardcoded for now.

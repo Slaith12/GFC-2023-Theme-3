@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 684040557713992524, guid: 937db85f3c7c47c4186163e62aea75bb, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
+      objectReference: {fileID: 0}
     - target: {fileID: 2163711379247370748, guid: 937db85f3c7c47c4186163e62aea75bb, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -86,5 +90,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a64eb9c438e0ef48b7c6384cacaa366, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6166166909041711039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060346256329970720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d10baa61a601f3f41867594924975b58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   health: 10
-  maxSpeed: 5
+  dead: 0

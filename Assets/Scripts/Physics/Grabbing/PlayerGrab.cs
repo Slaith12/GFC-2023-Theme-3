@@ -1,23 +1,28 @@
+using SKGG.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace SKGG.Physics
 {
+    //this file is only for the non-network code. If you're looking for the network code, look in the Scripts/Netcode/NetworkPlayerGrab file
+
     //TODO: Have player hands rotate based on the held item rather than the player's body.
-    //TODO: Completely detach hands from player while holding item (would fix visual bug when turning around with item, and allows for more control with code)
-    public class PlayerGrab : MonoBehaviour, IGrabber
+    //TODO: --NOTE: Read the Netcode for Gameobjects "NetworkObject Parenting" article before doing this-- Completely detach hands from player while holding item (would fix visual bug when turning around with item, and allows for more control with code)
+    [RequireComponent(typeof(AttributeContainer))]
+    public partial class PlayerGrab : NetworkBehaviour, IGrabber
     {
+
+        private AttributeContainer attributeContainer;
+        private PlayerAttributes attributes => (PlayerAttributes)attributeContainer.attributes;
+
         public Vector2 targetLocation { get; set; }
-        [Header("Grab Attributes")]
-        [SerializeField] float m_followStrength = 150; //these m variables are here so that they are capitalized in the editor
-        public float followStrength { get => m_followStrength; }
+        public float followStrength { get => attributes.pullStrength; }
         public float rotationOffset { get => GetRotationOffset(); }
-        [SerializeField] float m_torqueStrength = 10;
-        public float torqueStrength { get => m_torqueStrength; }
-        [SerializeField] float m_lookAheadTime = 0.1f;
-        public float lookAheadTime { get => m_lookAheadTime; }
+        public float torqueStrength { get => attributes.torqueStrength; }
+        public float lookAheadTime { get => attributes.lookAheadTime; }
 
         [Header("Hands/Indicators (Visual Only)")]
         [SerializeField] Transform firstHand; //i am considering making the hand objects un-parented in Awake to make sure they don't move weirdly with the player
@@ -32,7 +37,11 @@ namespace SKGG.Physics
         private float interpTime;
         private bool facingRight;
 
-        // Update is called once per frame
+        private void Awake()
+        {
+            attributeContainer = GetComponent<AttributeContainer>();
+        }
+        
         void Update()
         {
             grabCursor.position = targetLocation;
@@ -47,7 +56,17 @@ namespace SKGG.Physics
                 Debug.LogWarning("Attempted to grab object while already holding something. This is probably a bug.");
                 return;
             }
-            grabbable.Grab(this, pos);
+            bool grabSuccessful = grabbable.Grab(this, pos);
+            if (!grabSuccessful)
+                return;
+            //the script needs to tell the other clients that the object was grabbed. the grab position is stored in the grabbed object, so it doesn't need to be passed
+            TriggerGrabEvent(grabbable);
+            UpdateAfterGrab(grabbable);
+        }
+
+        //this is here so that this is available normally to the client sided grab as well as give the network enforced grab a way to bypass the checks and rpc call
+        private void UpdateAfterGrab(GrabbableObject grabbable)
+        {
             grabbingObject = true;
             currentGrabbed = grabbable;
             if (currentGrabbed.facingRight != facingRight)
@@ -55,11 +74,19 @@ namespace SKGG.Physics
             interpTime = handTravelTime;
         }
 
-        public void ReleaseCurrentObject()
+        public void ReleaseCurrentObject(bool forceResync = false)
         {
             if (!grabbingObject)
                 return;
-            currentGrabbed.Release();
+            if(!forceResync && IsOwner)
+            {
+                TriggerReleaseEvent();
+            }
+            //the Release function assumes that the caller is the person grabbing the object, so make sure it isn't called when it isn't held by this
+            if ((object)currentGrabbed.currentHolder == this)
+            {
+                currentGrabbed.Release(forceResync);
+            }
             grabbingObject = false;
             interpTime = handTravelTime;
             return;
