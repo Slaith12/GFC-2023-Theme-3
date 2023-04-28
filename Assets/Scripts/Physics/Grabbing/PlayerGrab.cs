@@ -49,7 +49,7 @@ namespace SKGG.Physics
             UpdateFacing();
         }
 
-        public void GrabObject(GrabbableObject grabbable, Vector2 pos)
+        public void GrabObject(GrabbableObject grabbable, Vector2 pos, bool offline = false)
         {
             if (grabbingObject)
             {
@@ -60,7 +60,10 @@ namespace SKGG.Physics
             if (!grabSuccessful)
                 return;
             //the script needs to tell the other clients that the object was grabbed. the grab position is stored in the grabbed object, so it doesn't need to be passed
-            TriggerGrabEvent(grabbable);
+            if (!offline)
+            {
+                TriggerGrabEvent(grabbable);
+            }
             UpdateAfterGrab(grabbable);
         }
 
@@ -74,11 +77,11 @@ namespace SKGG.Physics
             interpTime = handTravelTime;
         }
 
-        public void ReleaseCurrentObject(bool forceResync = false)
+        public void ReleaseCurrentObject(bool forceResync = false, bool offline = false)
         {
             if (!grabbingObject)
                 return;
-            if(!forceResync && IsOwner)
+            if(!offline && !forceResync)
             {
                 TriggerReleaseEvent();
             }

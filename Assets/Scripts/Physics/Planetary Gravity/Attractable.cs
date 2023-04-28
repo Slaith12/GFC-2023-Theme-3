@@ -19,6 +19,7 @@ namespace SKGG.Physics
         private void Awake()
         {
             rigidbody = GetComponent<Rigidbody2D>();
+            angle = 270; //upright
             overlappedAttractors = new List<Attractor>();
         }
 
@@ -66,7 +67,7 @@ namespace SKGG.Physics
         }
 
         /// <summary>
-        /// Take a vector offset in relative rotated) coordinates and convert it to world coordinates
+        /// Take a vector offset in relative (rotated) coordinates and convert it to world coordinates
         /// </summary>
         public Vector2 RelativeToWorldOffset(Vector2 vector)
         {

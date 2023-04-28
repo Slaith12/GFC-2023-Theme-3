@@ -54,6 +54,8 @@ namespace SKGG.Control
             }
         }
 
+        public static List<Transform> players;
+
         private AttributeContainer attributeContainer;
         private PlayerAttributes attributes { get => (PlayerAttributes)attributeContainer.attributes; }
 
@@ -62,6 +64,7 @@ namespace SKGG.Control
         private bool releaseInput;
 
         private PlayerInputs inputs;
+        private bool offline;
 
         private Mover mover;
         private PlayerGrab playerGrab;
@@ -70,6 +73,12 @@ namespace SKGG.Control
         {
             attributeContainer = GetComponent<AttributeContainer>();
 
+            if (players == null)
+            {
+                players = new List<Transform>();
+            }
+            players.Add(transform);
+
             inputs = new PlayerInputs(transform);
             inputs.Grab += GrabInput;
             inputs.Release += ReleaseInput;
@@ -77,6 +86,15 @@ namespace SKGG.Control
 
             mover = GetComponent<Mover>();
             playerGrab = GetComponent<PlayerGrab>();
+        }
+
+        private void Start()
+        {
+            if(NetworkManager == null)
+            {
+                offline = true;
+                inputs.Enable();
+            }
         }
 
         public override void OnNetworkSpawn()
@@ -91,15 +109,19 @@ namespace SKGG.Control
         public override void OnDestroy()
         {
             inputs.Disable();
+            players.Remove(transform);
             base.OnDestroy();
         }
 
         private void FixedUpdate()
         {
-            if(IsOwner)
+            if(offline || IsOwner)
             {
                 InputData inputData = new InputData(inputs.walkInput, inputs.cursorOffset, jumpInput, grabInput, releaseInput);
-                SendInputDataServerRpc(inputData);
+                if (!offline)
+                {
+                    SendInputDataServerRpc(inputData);
+                }
                 ProcessInputs(inputData);
                 jumpInput = false;
                 grabInput = false;
@@ -165,7 +187,7 @@ namespace SKGG.Control
                 if (grabbable != null)
                 {
                     //Debug.Log($"Grabbing {hit.gameObject.name}");
-                    playerGrab.GrabObject(grabbable, cursorPos);
+                    playerGrab.GrabObject(grabbable, cursorPos, offline);
                     return;
                 }
             }
@@ -178,7 +200,7 @@ namespace SKGG.Control
 
         private void Release()
         {
-            playerGrab.ReleaseCurrentObject();
+            playerGrab.ReleaseCurrentObject(offline: offline);
         }
     }
 }
