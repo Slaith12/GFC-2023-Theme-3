@@ -11,8 +11,9 @@ namespace SKGG.Combat
         [SerializeField] Hitbox hitbox;
         [Tooltip("The speed the weapon needs to be travelling to register as a hit.")]
         [SerializeField] float minimumSpeed = 3;
-        [SerializeField] int damage; //yes health values will be integers
-        [SerializeField] float knockbackStrength;
+        [SerializeField] string targetTag = "Enemy";
+        public int damage; //yes health values will be integers
+        public float knockbackStrength;
 
         private new Rigidbody2D rigidbody;
 
@@ -24,9 +25,9 @@ namespace SKGG.Combat
 
         private void OnHit(Hitbox hitbox, Collider2D collision)
         {
-            if (rigidbody.velocity.magnitude < minimumSpeed)
+            if (minimumSpeed > 0 && (rigidbody == null || rigidbody.velocity.magnitude < minimumSpeed))
                 return;
-            if (collision.CompareTag("Enemy"))
+            if (collision.CompareTag(targetTag))
             {
                 Vector2 hitOffset = collision.transform.position - hitbox.transform.position;
                 Vector2 knockbackVector;

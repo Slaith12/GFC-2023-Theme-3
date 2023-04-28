@@ -1,5 +1,76 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6675818440285415887
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8211845339072932819}
+  - component: {fileID: 4638717048770642021}
+  - component: {fileID: 8863711485966227248}
+  m_Layer: 0
+  m_Name: Hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8211845339072932819
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6675818440285415887}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 6, y: 10, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1060346256329970721}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &4638717048770642021
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6675818440285415887}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &8863711485966227248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6675818440285415887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f16d1bed2320a7446bc40946d67dae00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1202486682975264421
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67,6 +138,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 4107734217562514804, guid: 937db85f3c7c47c4186163e62aea75bb, type: 3}
+      propertyPath: attributes
+      value: 
+      objectReference: {fileID: 11400000, guid: 5de699057a2ba00428c1a10ef7fbfe43, type: 2}
     - target: {fileID: 4426266204870327349, guid: 937db85f3c7c47c4186163e62aea75bb, type: 3}
       propertyPath: acceleration
       value: 10
@@ -90,6 +165,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a64eb9c438e0ef48b7c6384cacaa366, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5296263024993705816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060346256329970720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04228310cda5fa8438bb250ddbca7641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitbox: {fileID: 8863711485966227248}
+  minimumSpeed: 0
+  targetTag: Player
+  damage: 1
+  knockbackStrength: 50
 --- !u!114 &6166166909041711039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,3 +196,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 10
   dead: 0
+--- !u!4 &1060346256329970721 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2163711379751979652, guid: 937db85f3c7c47c4186163e62aea75bb, type: 3}
+  m_PrefabInstance: {fileID: 1202486682975264421}
+  m_PrefabAsset: {fileID: 0}
