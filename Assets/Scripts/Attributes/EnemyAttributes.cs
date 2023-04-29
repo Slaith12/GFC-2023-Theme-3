@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SKGG.Attributes
 {
-    [CreateAssetMenu(menuName = "Attributes/Enemy")]
+    [CreateAssetMenu(menuName = "Attributes/Enemy/Ground")]
     public class EnemyAttributes : CharacterAttributes
     {
         [Header("Wandering")]
@@ -13,7 +13,9 @@ namespace SKGG.Attributes
         public float minWanderDistance = 5f;
         public float maxWanderDistance = 12f;
         [Tooltip("How far from its target location the enemy can stop when wandering")]
-        public float maxWanderOffset = 0.75f;
+        public float minWanderOffset = 0.5f;
+        [Tooltip("How far from its target location the enemy can be before it starts wandering towards it")]
+        public float maxWanderOffset = 1f;
         [Tooltip("Minimum time the enemy waits while wandering.")]
         public float minWanderDelay = 1.5f;
         [Tooltip("Maximum time the enemy waits while wandering.")]
@@ -26,9 +28,5 @@ namespace SKGG.Attributes
         public float attentionRange = 7f;
         [Tooltip("How often the enemy checks around itself for people")]
         public float recheckTime;
-
-        [Header("Combat")]
-        public int damage;
-        public float knockback;
     }
 }

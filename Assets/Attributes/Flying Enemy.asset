@@ -9,19 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b92cffb4d41a5e40aa19b7669e94df1, type: 3}
-  m_Name: Zombie Alien
+  m_Script: {fileID: 11500000, guid: 9c2637ce8b89fbe4a8873be443523ba7, type: 3}
+  m_Name: Flying Enemy
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 8
   acceleration: 10
-  canFly: 0
-  wanderSpeed: 4
+  canFly: 1
+  wanderSpeed: 5
   minWanderDistance: 5
   maxWanderDistance: 12
   minWanderOffset: 0.5
-  maxWanderOffset: 1
-  minWanderDelay: 1.5
-  maxWanderDelay: 3
-  sightRange: 20
-  attentionRange: 30
+  maxWanderOffset: 1.5
+  minWanderDelay: 3
+  maxWanderDelay: 5
+  sightRange: 5
+  attentionRange: 7
   recheckTime: 2
+  driftSpeed: 2
+  driftMagnitude: 1
+  driftPeriod: 0.5
+  minWanderHeight: 15
+  maxWanderHeight: 20

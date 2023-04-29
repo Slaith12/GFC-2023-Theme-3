@@ -8,7 +8,7 @@ using UnityEngine;
 namespace SKGG.Control
 {
     [RequireComponent(typeof(Mover), typeof(Health))]
-    public class EnemyController : MonoBehaviour
+    public abstract class EnemyController : MonoBehaviour
     {
         protected List<Transform> players => PlayerController.players;
 
@@ -17,6 +17,8 @@ namespace SKGG.Control
 
         protected Vector2 targetLocation;
         protected Transform targettedPlayer;
+        public virtual bool targettingPlayer { get => targettedPlayer != null; }
+        protected bool isIdle;
         protected float idleTimer;
         protected float recheckTimer;
         private bool facingRight;
@@ -31,18 +33,24 @@ namespace SKGG.Control
             health = GetComponent<Health>();
             health.OnDeath += OnDeath;
             targetLocation = transform.position;
+            Init();
+        }
+
+        protected virtual void Init()
+        {
+
         }
 
         void FixedUpdate()
         {
             recheckTimer -= Time.fixedDeltaTime;
-            if(recheckTimer <= 0)
+            if (recheckTimer <= 0)
             {
                 Recheck();
                 recheckTimer = attributes.recheckTime;
             }
 
-            if(targettedPlayer == null)
+            if (targettedPlayer == null)
             {
                 Wander();
             }
@@ -51,7 +59,7 @@ namespace SKGG.Control
                 Chase();
             }
 
-            if(targetLocation.x != transform.position.x && (targetLocation.x > transform.position.x) != facingRight)
+            if (!isIdle && (targetLocation.x != transform.position.x && (targetLocation.x > transform.position.x) != facingRight))
             {
                 Flip();
             }
@@ -68,17 +76,17 @@ namespace SKGG.Control
             if (players == null || players.Count == 0)
                 return;
 
-            float targetDistance = targettedPlayer != null ? (targettedPlayer.position - transform.position).magnitude : attributes.attentionRange*2;
+            float targetDistance = targettedPlayer != null ? (targettedPlayer.position - transform.position).magnitude : attributes.attentionRange * 2;
             if (targetDistance > attributes.attentionRange)
             {
                 targettedPlayer = null;
             }
-            foreach(Transform player in players)
+            foreach (Transform player in players)
             {
                 float playerDistance = (player.position - transform.position).magnitude;
                 if (playerDistance <= attributes.sightRange)
                 {
-                    if(playerDistance < targetDistance)
+                    if (playerDistance < targetDistance)
                     {
                         targettedPlayer = player;
                         targetDistance = playerDistance;
@@ -96,11 +104,20 @@ namespace SKGG.Control
         protected virtual void Wander()
         {
             Vector2 targetOffset = targetLocation - (Vector2)transform.position;
-            if (targetOffset.magnitude < attributes.maxWanderOffset)
+            if (targetOffset.magnitude < attributes.minWanderOffset)
+            {
+                isIdle = true;
+            }
+            else if (targetOffset.magnitude > attributes.maxWanderOffset)
+            {
+                isIdle = false;
+            }
+
+            if(isIdle)
             {
                 Idle();
                 idleTimer -= Time.fixedDeltaTime;
-                if(idleTimer <= 0)
+                if (idleTimer <= 0)
                 {
                     FindNewWanderTarget();
                 }
@@ -112,57 +129,14 @@ namespace SKGG.Control
             }
         }
 
-        protected virtual void Idle()
-        {
-            targetLocation = transform.position; //prevent the alien from oscillating around its target location if it overshoots
-            mover.targetVelocity = Vector2.zero;
-        }
-
-        protected virtual void FindNewWanderTarget()
-        {
-            float distance = Mathf.Lerp(attributes.minWanderDistance, attributes.maxWanderDistance, Random.value);
-            Vector2 moveOffset;
-            //25% chance to move in a random direction (100% if there's no players)
-            //75% chance to move towards a random player
-            if (Random.value < 0.25f || players == null || players.Count == 0)
-            {
-                Debug.Log("Moving in a random direction");
-                if (Random.value < 0.5f)
-                    moveOffset = Vector2.left * distance;
-                else
-                    moveOffset = Vector2.right * distance;
-            }
-            else
-            {
-                Debug.Log("Moving towards a random player");
-                float[] playerWeights = new float[players.Count];
-                float totalWeight = 0;
-                for (int i = 0; i < players.Count; i++)
-                {
-                    float squarePlayerDistance = (players[i].position - transform.position).sqrMagnitude;
-                    playerWeights[i] = 1 / squarePlayerDistance;
-                    totalWeight += playerWeights[i];
-                }
-                float weight = Random.Range(0, totalWeight);
-                int index = 0;
-                while (weight > playerWeights[index])
-                {
-                    weight -= playerWeights[index];
-                    index++;
-                }
-                Transform chosenPlayer = players[index];
-                //25% chance for enemy to go away from selected player
-                if ((chosenPlayer.position.x > transform.position.x) != (Random.value < 0.25f))
-                {
-                    moveOffset = Vector2.right * distance;
-                }
-                else
-                {
-                    moveOffset = Vector2.left * distance;
-                }
-            }
-            targetLocation = (Vector2)transform.position + moveOffset;
-        }
+        ///<summary>
+        /// The enemy's behavior when it is not moving anywhere
+        ///</summary>
+        /// <remarks>
+        /// Remember that this is called in FixedUpdate, so you should use Time.fixedDeltaTime instead of Time.deltaTime
+        /// </remarks>
+        protected abstract void Idle();
+        protected abstract void FindNewWanderTarget();
 
         /// <summary>
         /// The enemy's behavior when it detects someone
@@ -172,9 +146,15 @@ namespace SKGG.Control
         /// </remarks>
         protected virtual void Chase()
         {
-            targetLocation = targettedPlayer.position; //this variable would be different for different enemy types
+            isIdle = false;
+            GetChaseTarget();
             //the way target velocity is calculated is slightly problematic with the planets but enemy ai needs to be expanded anyways so I'm leaving it like this
             mover.targetVelocity = (targetLocation - (Vector2)transform.position).normalized * attributes.moveSpeed;
+        }
+
+        protected virtual void GetChaseTarget()
+        {
+            targetLocation = targettedPlayer.position; //this variable would be different for different enemy types
         }
 
         protected virtual void Flip()
@@ -189,21 +169,6 @@ namespace SKGG.Control
         {
             mover.targetVelocity = Vector2.zero;
             this.enabled = false;
-        }
-
-        private void OnValidate()
-        {
-            AttributeContainer attributeContainer = GetComponent<AttributeContainer>();
-            if (attributeContainer == null)
-                return;
-            EnemyAttributes attributes = (EnemyAttributes)attributeContainer.attributes;
-            StandardMelee melee = GetComponent<StandardMelee>();
-            //different enemy types may remove the standard melee
-            if (melee != null && attributes != null)
-            {
-                melee.damage = attributes.damage;
-                melee.knockbackStrength = attributes.knockback;
-            }
         }
     }
 }
