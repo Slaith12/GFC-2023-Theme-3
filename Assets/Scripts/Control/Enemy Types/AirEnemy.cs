@@ -17,7 +17,7 @@ namespace SKGG.Control
         protected override void Init()
         {
             base.Init();
-            hoverHeight = attributes.minWanderHeight;
+            hoverHeight = attributes.minWanderHeight + FindGroundHeight(transform.position.x);
         }
 
         ///<inheritdoc/>
@@ -93,6 +93,12 @@ namespace SKGG.Control
             {
                 targetLocation.y = hoverHeight;
             }
+        }
+
+        protected override void OnDeath()
+        {
+            GetComponent<Rigidbody2D>().gravityScale = 1f;
+            base.OnDeath();
         }
     }
 }

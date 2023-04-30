@@ -167,7 +167,7 @@ namespace SKGG.Control
 
         protected virtual void OnDeath()
         {
-            mover.targetVelocity = Vector2.zero;
+            mover.enabled = false;
             this.enabled = false;
         }
     }

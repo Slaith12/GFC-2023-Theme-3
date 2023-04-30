@@ -406,10 +406,6 @@ PrefabInstance:
       value: Gray Astronaut (Base Astronaut)
       objectReference: {fileID: 0}
     - target: {fileID: 8880264119906634321, guid: d668b0a750fc6164fa6132b8d0064aa8, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8880264119906634321, guid: d668b0a750fc6164fa6132b8d0064aa8, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}

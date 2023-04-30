@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8880264119739077325}
   - component: {fileID: 8880264119739077324}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Foot 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 6646081194150536608}
   - component: {fileID: 2064912841807408841}
   - component: {fileID: -2714371278553901198}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Base Character Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,7 +314,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8880264120307593802}
   - component: {fileID: 8880264120307593801}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Torso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -398,7 +398,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8880264120465853585}
   - component: {fileID: 8880264120465853584}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Foot 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -482,7 +482,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8880264120477831465}
   - component: {fileID: 8880264120477831464}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}

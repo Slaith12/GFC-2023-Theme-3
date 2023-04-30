@@ -22,11 +22,12 @@ MonoBehaviour:
   maxWanderOffset: 1.5
   minWanderDelay: 3
   maxWanderDelay: 5
-  sightRange: 5
-  attentionRange: 7
+  sightRange: 25
+  attentionRange: 40
   recheckTime: 2
   driftSpeed: 2
   driftMagnitude: 1
   driftPeriod: 0.5
   minWanderHeight: 15
   maxWanderHeight: 20
+  descentThreshold: 12
