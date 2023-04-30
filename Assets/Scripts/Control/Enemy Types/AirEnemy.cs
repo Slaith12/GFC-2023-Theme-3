@@ -7,6 +7,8 @@ namespace SKGG.Control
 {
     public class AirEnemy : EnemyController
     {
+        protected const int ENVIRONMENT_MASK = 1 << 6;
+
         protected new FlierAttributes attributes => (FlierAttributes)base.attributes;
 
         private float driftTimer;
@@ -81,9 +83,27 @@ namespace SKGG.Control
             hoverHeight = targetLocation.y;
         }
 
-        protected float FindGroundHeight(float xPos, float minSpaceAbove = 0)
+        //This assumes that there's always solid ground, so if we do varied terrain or an indoor setting this would need to be changed
+        protected float FindGroundHeight(float xPos, float minSpaceAbove = 0.1f)
         {
-            return -15;
+            Vector2 searchPos = new Vector2(xPos, transform.position.y);
+            RaycastHit2D hit = Physics2D.Raycast(searchPos, Vector2.down, float.PositiveInfinity, ENVIRONMENT_MASK);
+            while(true)
+            {
+                bool spaceObstructed = Physics2D.Raycast(hit.point, Vector2.up, minSpaceAbove, ENVIRONMENT_MASK);
+                if(spaceObstructed)
+                {
+                    searchPos.y += minSpaceAbove;
+                    hit = Physics2D.Raycast(searchPos, Vector2.down, float.PositiveInfinity, ENVIRONMENT_MASK);
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            Debug.Log(hit.point.y);
+            return hit.point.y;
         }
 
         protected override void GetChaseTarget()
